@@ -3,7 +3,9 @@ using Cosmos.System.Graphics;
 using Cosmos.System.Graphics.Fonts;
 using CrystalOS.SystemFiles;
 using IL2CPU.API.Attribs;
-using SoundTest;
+using CrystalOS2;
+using CrystalOS2.Applications.Task_Scheduler;
+using CrystalOS2.SystemFiles;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -37,8 +39,12 @@ namespace CrystalOS.Applications.Programmers_Dream
         public static List<string> modified_text = new List<string>();
         public static bool allowedtopass = true;
         public static string hell = "";
+        public static Canvas c;
 
-        [ManifestResourceStream(ResourceName = "SoundTest.Applications.Programmers_Dream.programmers_Dream.bmp")] public static byte[] Programmers_Dream;
+        public static int width = 0;
+        public static int height = 0;
+
+        [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Programmers_Dream.programmers_Dream.bmp")] public static byte[] Programmers_Dream;
         public static Bitmap programmers_dream = new Bitmap(Programmers_Dream);
         public static void Core()
         {
@@ -78,9 +84,24 @@ namespace CrystalOS.Applications.Programmers_Dream
                             get_script_and_run = true;
                             if (get_script_and_run == true)
                             {
-                                Things_to_Display.Clear();
-                                CSharp(content);
-                                get_script_and_run = false;
+                                if(content.StartsWith("/app mode = graphical".ToLower()))
+                                {
+                                        Window_Layout.text.Clear();
+                                        Window_Layout.Integers.Clear();
+                                        Window_Layout.buttons_funct.Clear();
+                                        Window_Layout.strings.Clear();
+                                        Window_Layout.buttons.Clear();
+                                        Window_Layout.instructions_list.Clear();
+                                    Graphical_Exec(content);
+                                    return;
+                                }
+                                else
+                                {
+                                    Things_to_Display.Clear();
+                                    CSharp(content);
+                                    get_script_and_run = false;
+                                }
+
                             }
                         }
                         catch (Exception e)
@@ -808,6 +829,307 @@ namespace CrystalOS.Applications.Programmers_Dream
             {
                 ImprovedVBE._DrawACSIIString(e.Message, 4, 884, 16777215);
             }
+        }
+
+        public static int lasti = 0;
+        public static bool ifstarted = false;
+        public static bool iftrue = false;
+        public static string code = "";
+        public static int window_x = 0;
+        public static int window_y = 0;
+
+        public static void Graphical_Exec(string script)
+        {
+            instruction_list = script.Split('\n');
+            for (int i = 0; i < instruction_list.Length; i++)
+            {
+                if (instruction_list[i] == "/app mode = graphical".ToLower())
+                {
+
+                }
+                else if (instruction_list[i].StartsWith("graphic_window(".ToLower()))
+                {//15
+                    string s = instruction_list[i].Remove(0, 15);
+                    s = s.Remove(s.Length - 1);
+                    string[] data = s.Split(", ");
+                    Task_Manager.data.Add(int.Parse(data[2]));
+                    Task_Manager.data.Add(int.Parse(data[3]));
+                    for (int x = 0; x < Task_Manager.Tasks.Count; x++)
+                    {
+                        if (Task_Manager.Tasks[x].Item1 == "new_app " + lasti.ToString())
+                        {
+                            Task_Manager.Tasks.RemoveAt(x);
+                        }
+                    }
+                    Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string>("new_app " + lasti.ToString(), int.Parse(data[0]), int.Parse(data[1]), false, code));
+                    lasti++;
+                    //ImprovedVBE.DrawFilledRectangle(150, int.Parse(data[0]), int.Parse(data[1]), int.Parse(data[2]), int.Parse(data[3]));
+                }
+                else if (instruction_list[i].StartsWith("draw_btn(".ToLower()))
+                {
+                    string s = instruction_list[i].Remove(0, 9);
+                    s = s.Remove(s.Length - 1);
+                    string[] data = s.Split(", ");
+                    for (int x = 0; x < Window_Layout.buttons.Count; x++)
+                    {
+                        if (Window_Layout.buttons[x].Item5 == data[4].Replace("\"", ""))
+                        {
+                            Window_Layout.buttons.RemoveAt(x);
+                        }
+                    }
+                    Window_Layout.buttons.Add(new Tuple<int, int, int, int, string, int, string>(int.Parse(data[0]), int.Parse(data[1]), int.Parse(data[2]), int.Parse(data[3]), data[4].Replace("\"", ""), lasti - 1, ""));
+                    window_x = int.Parse(data[0]);
+                    window_y = int.Parse(data[1]);
+                }
+                else if (instruction_list[i].StartsWith("if(".ToLower()))
+                {
+                    if (instruction_list[i].Contains(" = "))
+                    {
+                        string[] s = instruction_list[i].Split(" = ");
+                        if (s[0] == s[1])
+                        {
+                            iftrue = true;
+                        }
+                    }
+                }
+                else if (instruction_list[i].StartsWith("onbtnpressed("))
+                {
+                    try
+                    {
+                        int a = 0;
+                        string s = instruction_list[i].Remove(0, 13);
+                        s = s.Remove(s.Length - 1);
+                        string[] data = s.Split(" - ");
+                        string d = "";
+                        d += data[1];
+                        ImprovedVBE._DrawACSIIString(data[0] + "\n" + data[1], 500, 300, 16777215);
+                        Window_Layout.buttons_funct.Add(new Tuple<string, string>(data[0], data[1]));
+                        //test1
+                        //draw_txt(1, 1, string)
+                    }
+                    catch (Exception e)
+                    {
+                        ImprovedVBE._DrawACSIIString(e.Message, 500, 300, 16777215);
+                    }
+                }
+                else if (instruction_list[i].StartsWith("int"))
+                {
+                    if (instruction_list[i].Contains(" = "))
+                    {
+                        string s = instruction_list[i].Remove(0, 4);
+                        string[] data = s.Split(" = ");
+                        if(Window_Layout.Integers.Contains(new Tuple<string, int>(data[0], int.Parse(data[1]))))
+                        {
+
+                        }
+                        else
+                        {
+                            if (data[1].StartsWith("DateTime."))
+                            {
+                                if (data[1].EndsWith("GetHour"))
+                                {
+                                    Window_Layout.Integers.Add(new Tuple<string, int>(data[0], DateTime.UtcNow.Hour));
+                                }
+                                if (data[1].EndsWith("GetMinute"))
+                                {
+                                    Window_Layout.Integers.Add(new Tuple<string, int>(data[0], DateTime.UtcNow.Minute));
+                                }
+                                if (data[1].EndsWith("GetSecond"))
+                                {
+                                    Window_Layout.Integers.Add(new Tuple<string, int>(data[0], DateTime.UtcNow.Second));
+                                }
+                            }
+                            else
+                            {
+                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], int.Parse(data[1])));
+                            }
+                        }
+                    }
+                    else if (instruction_list[i].Contains(" -= "))
+                    {
+                        string s = instruction_list[i];
+                        string[] data = s.Split(" -= ");
+                        bool foundsg = false;
+                        int found = 0;
+                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                        {
+                            if (data[0] == tuple2.Item1)
+                            {
+                                found = tuple2.Item2;
+
+                                foundsg = true;
+                            }
+                        }
+                        bool foundsg2 = false;
+                        int found2 = 0;
+                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                        {
+                            if (data[1] == tuple2.Item1)
+                            {
+                                found2 = tuple2.Item2;
+
+                                foundsg2 = true;
+                            }
+                        }
+                        if (foundsg == true && foundsg2 == true)
+                        {
+                            Window_Layout.Integers.Add(new Tuple<string, int>(data[0], found - found2));
+                        }
+                    }
+                    else if (instruction_list[i].Contains(" += "))
+                    {
+                        Window_Layout.instructions_list.Add(new Tuple<string, int>(instruction_list[i], lasti - 1));
+                        string s = instruction_list[i];
+                        string[] data = s.Split(" += ");
+                        bool foundsg = false;
+                        int found = 0;
+                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                        {
+                            if (data[0] == tuple2.Item1)
+                            {
+                                found = tuple2.Item2;
+
+                                foundsg = true;
+                            }
+                        }
+                        bool foundsg2 = false;
+                        int found2 = 0;
+                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                        {
+                            if (data[1] == tuple2.Item1)
+                            {
+                                found2 = tuple2.Item2;
+
+                                foundsg2 = true;
+                            }
+                        }
+                        if (foundsg == true && foundsg2 == true)
+                        {
+                            Window_Layout.Integers.Add(new Tuple<string, int>(data[0], found + found2));
+                        }
+                    }
+                }
+                else if (instruction_list[i].StartsWith("string"))
+                {
+                    string s = instruction_list[i].Remove(0, 7);
+                    string[] data = s.Split(" = ");
+                    Window_Layout.strings.Add(new Tuple<string, string>(data[0], data[1]));
+                }
+                else if (instruction_list[i].StartsWith("draw_txt("))
+                {
+                    Window_Layout.text.Add(new Tuple<string, int>(instruction_list[i], lasti - 1));
+                }
+                else
+                {
+                    /*
+                    bool foundsg = false;
+                    string s = instruction_list[i].Replace(" ", "");
+                    string[] data = s.Split("=");
+                    try
+                    {
+                        Window_Layout.Integers.Add(new Tuple<string, int>(data[0], int.Parse(data[1])));
+                    }
+                    catch
+                    {
+                        foreach (Tuple<string, int> item in Window_Layout.Integers)
+                        {
+                            if (item.Item1 == data[1])
+                            {
+                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], item.Item2));
+                            }
+                        }
+                        //ImprovedVBE._DrawACSIIString("Unknown command, string or int name at line " + i.ToString(), 500, 300, 16777215);
+                    }
+                    */
+                    if (instruction_list[i].Contains(" = "))
+                    {
+                        string s = instruction_list[i].Remove(0, 4);
+                        string[] data = s.Split(" = ");
+                        if (data[1].StartsWith("DateTime."))
+                        {
+                            if (data[1].EndsWith("GetHour"))
+                            {
+                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], DateTime.UtcNow.Hour));
+                            }
+                            if (data[1].EndsWith("GetMinute"))
+                            {
+                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], DateTime.UtcNow.Minute));
+                            }
+                            if (data[1].EndsWith("GetSecond"))
+                            {
+                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], DateTime.UtcNow.Second));
+                            }
+                        }
+                        else
+                        {
+                            Window_Layout.Integers.Add(new Tuple<string, int>(data[0], int.Parse(data[1])));
+                        }
+                    }
+                    else if (instruction_list[i].Contains(" -= "))
+                    {
+                        string s = instruction_list[i];
+                        string[] data = s.Split(" -= ");
+                        bool foundsg = false;
+                        int found = 0;
+                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                        {
+                            if (data[0] == tuple2.Item1)
+                            {
+                                found = tuple2.Item2;
+
+                                foundsg = true;
+                            }
+                        }
+                        bool foundsg2 = false;
+                        int found2 = 0;
+                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                        {
+                            if (data[1] == tuple2.Item1)
+                            {
+                                found2 = tuple2.Item2;
+
+                                foundsg2 = true;
+                            }
+                        }
+                        if (foundsg == true && foundsg2 == true)
+                        {
+                            Window_Layout.Integers.Add(new Tuple<string, int>(data[0], found - found2));
+                        }
+                    }
+                    else if (instruction_list[i].Contains(" += "))
+                    {
+                        string s = instruction_list[i];
+                        string[] data = s.Split(" += ");
+                        bool foundsg = false;
+                        int found = 0;
+                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                        {
+                            if (data[0] == tuple2.Item1)
+                            {
+                                found = tuple2.Item2;
+
+                                foundsg = true;
+                            }
+                        }
+                        bool foundsg2 = false;
+                        int found2 = 0;
+                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                        {
+                            if (data[1] == tuple2.Item1)
+                            {
+                                found2 = tuple2.Item2;
+
+                                foundsg2 = true;
+                            }
+                        }
+                        if (foundsg == true && foundsg2 == true)
+                        {
+                            Window_Layout.Integers.Add(new Tuple<string, int>(data[0], found + found2));
+                        }
+                    }
+                }
+            }
+            lasti = 0;
         }
     }
 }

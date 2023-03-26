@@ -3,8 +3,8 @@ using Cosmos.System;
 using Cosmos.System.Graphics;
 using CrystalOS.Applications.Solitaire;
 using CrystalOS.SystemFiles;
+using CrystalOS2;
 using IL2CPU.API.Attribs;
-using SoundTest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +24,13 @@ namespace CrystalOS.Applications.About
         public static string username = "";
         public static bool movable = false;
 
-        [ManifestResourceStream(ResourceName = "SoundTest.Applications.About.About.bmp")] public static byte[] Solitaire;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.About.About.bmp")] public static byte[] Solitaire;
         public static Bitmap solitaire = new Bitmap(Solitaire);
         public static void About(int x, int y)
         {
-            if(Bool_Manager.About_Opened == true)
+            if (Bool_Manager.About_Opened == true)
             {
-                ImprovedVBE.DrawImage(solitaire, Int_Manager.About_X, Int_Manager.About_Y);
+                ImprovedVBE.DrawImageAlpha(solitaire, Int_Manager.About_X, Int_Manager.About_Y);
                 if (MouseManager.MouseState == MouseState.Left)
                 {
                     if (MouseManager.X > Int_Manager.About_X + 406 && MouseManager.X < Int_Manager.About_X + 448)
@@ -70,8 +70,8 @@ namespace CrystalOS.Applications.About
                             num += 1;
                         }
                     }
-                    //fs_total = (Kernel.fs.GetTotalSize("0:\\") / (1024 * 1024)).ToString();
-                    //fs_free = (Kernel.fs.GetTotalFreeSpace("0:\\") / (1024 * 1024)).ToString();
+                    fs_total = (CrystalOS2.Kernel.fs.GetTotalSize("0:\\") / (1024 * 1024)).ToString();
+                    fs_free = (CrystalOS2.Kernel.fs.GetTotalFreeSpace("0:\\") / (1024 * 1024)).ToString();
                     cpubarnd = (Cosmos.Core.CPU.GetAmountOfRAM()).ToString();
                     usedram = (CPU.GetEndOfKernel() / (1024 * 1024)).ToString();
                     request_info = false;

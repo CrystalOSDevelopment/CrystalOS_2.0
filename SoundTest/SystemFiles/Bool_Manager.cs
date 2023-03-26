@@ -29,5 +29,7 @@ namespace CrystalOS.SystemFiles
         public static bool is_locked = false;
 
         public static bool Run_Window = false;
+
+        public static bool Terminal_Opened = true;
     }
 }

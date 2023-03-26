@@ -2,13 +2,15 @@
 using Cosmos.System.Graphics;
 using CrystalOS.SystemFiles;
 using IL2CPU.API.Attribs;
-using SoundTest;
-using SoundTest.Applications.Task_Scheduler;
+using CrystalOS2;
+using CrystalOS2.Applications.File_Explorer;
+using CrystalOS2.Applications.Task_Scheduler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CrystalOS.Applications.Terminal;
 
 namespace CrystalOS.Applications.Menu
 {
@@ -18,7 +20,7 @@ namespace CrystalOS.Applications.Menu
         public static int opened_since = 90;
         public static int c = 50;
         public static int z = 50;
-        [ManifestResourceStream(ResourceName = "SoundTest.SystemFiles.Menu.bmp")] public static byte[] Menu;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.Menu.bmp")] public static byte[] Menu;
         public static Bitmap menu = new Bitmap(Menu);
         public static void MenuManager()
         {
@@ -59,14 +61,14 @@ namespace CrystalOS.Applications.Menu
                     {
                         if (MouseManager.Y > 35 + 217 && MouseManager.Y < 35 + 233)
                         {
-                            Cosmos.System.Power.Reboot();
+                            Cosmos.System.Power.Shutdown();
                         }
                     }
                     if (MouseManager.X > 775 + 96 && MouseManager.X < 775 + 142)
                     {
                         if (MouseManager.Y > 30 + 217 && MouseManager.Y < 30 + 233)
                         {
-                            Cosmos.System.Power.Shutdown();
+                            Cosmos.System.Power.Reboot();
                         }
                     }
                     if (MouseManager.X > 775 + 10 && MouseManager.X < 775 + 65)
@@ -107,6 +109,18 @@ namespace CrystalOS.Applications.Menu
                         if (MouseManager.Y > 30 + 15 && MouseManager.Y < 30 + 85)
                         {
                             Bool_Manager.File_Explorer_Opened = true;
+
+                            Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string>("explorer", z, c, false, "0:\\"));
+                            File_Explorer.hell = true;
+                            File_Explorer.readwrite = true;
+                            Task_Manager.indicator = 0;
+                            Task_Manager.counter = 0;
+                            Task_Manager.foo = 0;
+                            Task_Manager.editor_counter = 0;
+                            Task_Manager.filemgr_counter = 0;
+                            File_Explorer.container.Clear();
+                            c += 100;
+                            z += 100;
                             opened = false;
                         }
                     }
@@ -139,6 +153,11 @@ namespace CrystalOS.Applications.Menu
                         if (MouseManager.Y > 30 + 99 && MouseManager.Y < 30 + 182)
                         {
                             //Bool_Manager.Terminal_Opened = true;
+                            Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string>("terminal", z, c, false, "C:\\"));
+                            Terminal_Core.displayed.Add("C:\\");
+                            c += 100;
+                            z += 100;
+                            opened = false;
                             opened = false;
                         }
                     }

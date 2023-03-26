@@ -51,7 +51,7 @@ namespace CrystalOS.SystemFiles.Setup
         public static string selected_cursor = "default";
         public static string wallpaper = "";
 
-        public static void Installer_Run(VBECanvas c)
+        public static void Installer_Run(Canvas c)
         {
             if(Bool_Manager.Is_Setup_Running == true)
             {

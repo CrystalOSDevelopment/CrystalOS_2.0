@@ -2,8 +2,9 @@
 using Cosmos.HAL.Drivers;
 using Cosmos.System.Graphics;
 using CrystalOS.SystemFiles;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using IL2CPU.API.Attribs;
-using SoundTest.SystemFiles;
+using CrystalOS2.SystemFiles;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,17 +15,17 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using Image = Cosmos.System.Graphics.Image;
 
-namespace SoundTest
+namespace CrystalOS2
 {
     public class ImprovedVBE
     {
         //public static byte[] frame_buffer;
         //public static Bitmap frame = new Bitmap(frame_buffer);
 
-        [ManifestResourceStream(ResourceName = "SoundTest.SystemFiles.90_Style.bmp")] public static byte[] Canvas;
-        [ManifestResourceStream(ResourceName = "SoundTest.SystemFiles.autumn.bmp")] public static byte[] autumn;
-        [ManifestResourceStream(ResourceName = "SoundTest.SystemFiles.Midnight_in_NY.bmp")] public static byte[] midnight_in_NY;
-        [ManifestResourceStream(ResourceName = "SoundTest.SystemFiles.Windows_puma.bmp")] public static byte[] Windows_Puma;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.90_Style.bmp")] public static byte[] Canvas;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.autumn.bmp")] public static byte[] autumn;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.Midnight_in_NY.bmp")] public static byte[] midnight_in_NY;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.Windows_puma.bmp")] public static byte[] Windows_Puma;
         //public static int[] data;
         public static Bitmap cover = new Bitmap(Canvas);
         public static Bitmap data = new Bitmap(Canvas);
@@ -36,7 +37,7 @@ namespace SoundTest
         {
             //cover = new Bitmap(Canvas);
         }
-        public void display(VBECanvas c)
+        public void display(Canvas c)
         {
             c.DrawImage(cover, 0, 0);
             //clear(c, Color.Black);
@@ -44,7 +45,7 @@ namespace SoundTest
             clear(c, Color.Black);
         }
 
-        public static void clear(VBECanvas c, Color col)
+        public static void clear(Canvas c, Color col)
         {
             int x = 0;
             if(Bool_Manager.wallp == "autumn")
@@ -88,9 +89,9 @@ namespace SoundTest
                 }
             }
         }
-        public static void DrawPixel(VBECanvas c, int x, int y, Color col)
+        public static void DrawPixel(Canvas c, int x, int y, Color col)
         {
-            if(y * 1920 == 0)
+            if (y * 1920 == 0)
             {
                 y = 1;
                 cover.rawData[x * y] = col.ToArgb();
@@ -114,7 +115,7 @@ namespace SoundTest
             }
         }
 
-        public static void DrawFilledRectangle(VBECanvas c, int color, int X, int Y, int Width, int Height)
+        public static void DrawFilledRectangle(int color, int X, int Y, int Width, int Height)
         {
             for (int j = Y; j < Y + Height; j++)
             {
@@ -124,9 +125,225 @@ namespace SoundTest
                 }
             }
         }
-        public static void DrawLine(VBECanvas c, int color, int X, int Y, int Height)
+        /*public static void DrawLine(int color, int dx, int dy, int x1, int y1)
         {
-            DrawFilledRectangle(c, color, X, Y, 1, Height);
+            //DrawFilledRectangle(color, X, Y, 1, Height);
+
+            int i, sdx, sdy, dxabs, dyabs, x, y, px, py;
+
+            dxabs = Math.Abs(dx);
+            dyabs = Math.Abs(dy);
+            sdx = Math.Sign(dx);
+            sdy = Math.Sign(dy);
+            x = dyabs >> 1;
+            y = dxabs >> 1;
+            px = x1;
+            py = y1;
+
+            if (dxabs >= dyabs) /* the line is more horizontal than vertical /
+            {
+                for (i = 0; i < dxabs; i++)
+                {
+                    y += dyabs;
+                    if (y >= dxabs)
+                    {
+                        y -= dxabs;
+                        py += sdy;
+                    }
+                    px += sdx;
+                    DrawPixelfortext(px, py, color);
+                }
+            }
+            else /* the line is more vertical than horizontal /
+            {
+                for (i = 0; i < dyabs; i++)
+                {
+                    x += dxabs;
+                    if (x >= dyabs)
+                    {
+                        x -= dyabs;
+                        px += sdx;
+                    }
+                    py += sdy;
+                    DrawPixelfortext(px, py, color);
+                }
+            }
+        }*/
+
+        public static void DrawDiagonalLine(int color, int dx, int dy, int x1, int y1)
+        {
+            int i, sdx, sdy, dxabs, dyabs, x, y, px, py;
+
+            dxabs = Math.Abs(dx);
+            dyabs = Math.Abs(dy);
+            sdx = Math.Sign(dx);
+            sdy = Math.Sign(dy);
+            x = dyabs >> 1;
+            y = dxabs >> 1;
+            px = x1;
+            py = y1;
+
+            if (dxabs >= dyabs) /* the line is more horizontal than vertical */
+            {
+                for (i = 0; i < dxabs; i++)
+                {
+                    y += dyabs;
+                    if (y >= dxabs)
+                    {
+                        y -= dxabs;
+                        py += sdy;
+                    }
+                    px += sdx;
+                    DrawPixelfortext(px, py, color);
+                }
+            }
+            else /* the line is more vertical than horizontal */
+            {
+                for (i = 0; i < dyabs; i++)
+                {
+                    x += dxabs;
+                    if (x >= dyabs)
+                    {
+                        x -= dyabs;
+                        px += sdx;
+                    }
+                    py += sdy;
+                    DrawPixelfortext(px, py, color);
+                }
+            }
+        }
+
+        public static void TrimLine(ref int x1, ref int y1, ref int x2, ref int y2)
+        {
+            // in case of vertical lines, no need to perform complex operations
+            if (x1 == x2)
+            {
+                x1 = (int)Math.Min(1920 - 1, Math.Max(0, x1));
+                x2 = x1;
+                y1 = (int)Math.Min(1080 - 1, Math.Max(0, y1));
+                y2 = (int)Math.Min(1080 - 1, Math.Max(0, y2));
+
+                return;
+            }
+
+            // never attempt to remove this part,
+            // if we didn't calculate our new values as floats, we would end up with inaccurate output
+            float x1_out = x1, y1_out = y1;
+            float x2_out = x2, y2_out = y2;
+
+            // calculate the line slope, and the entercepted part of the y axis
+            float m = (y2_out - y1_out) / (x2_out - x1_out);
+            float c = y1_out - m * x1_out;
+
+            // handle x1
+            if (x1_out < 0)
+            {
+                x1_out = 0;
+                y1_out = c;
+            }
+            else if (x1_out >= 1920)
+            {
+                x1_out = 1920 - 1;
+                y1_out = (1920 - 1) * m + c;
+            }
+
+            // handle x2
+            if (x2_out < 0)
+            {
+                x2_out = 0;
+                y2_out = c;
+            }
+            else if (x2_out >= 1920)
+            {
+                x2_out = 1920 - 1;
+                y2_out = (1920 - 1) * m + c;
+            }
+
+            // handle y1
+            if (y1_out < 0)
+            {
+                x1_out = -c / m;
+                y1_out = 0;
+            }
+            else if (y1_out >= 1080)
+            {
+                x1_out = (1080 - 1 - c) / m;
+                y1_out = 1080 - 1;
+            }
+
+            // handle y2
+            if (y2_out < 0)
+            {
+                x2_out = -c / m;
+                y2_out = 0;
+            }
+            else if (y2_out >= 1080)
+            {
+                x2_out = (1080 - 1 - c) / m;
+                y2_out = 1080 - 1;
+            }
+
+            // final check, to avoid lines that are totally outside bounds
+            if (x1_out < 0 || x1_out >= 1920 || y1_out < 0 || y1_out >= 1080)
+            {
+                x1_out = 0; x2_out = 0;
+                y1_out = 0; y2_out = 0;
+            }
+
+            if (x2_out < 0 || x2_out >= 1920 || y2_out < 0 || y2_out >= 1080)
+            {
+                x1_out = 0; x2_out = 0;
+                y1_out = 0; y2_out = 0;
+            }
+
+            // replace inputs with new values
+            x1 = (int)x1_out; y1 = (int)y1_out;
+            x2 = (int)x2_out; y2 = (int)y2_out;
+        }
+
+        public static void DrawHorizontalLine(int color, int dx, int x1, int y1)
+        {
+            uint i;
+
+            for (i = 0; i < dx; i++)
+            {
+                DrawPixelfortext((int)(x1 + i), y1, color);
+            }
+        }
+        public static void DrawVerticalLine(int color, int dy, int x1, int y1)
+        {
+            int i;
+
+            for (i = 0; i < dy; i++)
+            {
+                DrawPixelfortext((int)x1, (int)(y1 + i), color);
+            }
+        }
+
+        public static void DrawLine(int color, int x1, int y1, int x2, int y2)
+        {
+            // trim the given line to fit inside the canvas boundries
+            TrimLine(ref x1, ref y1, ref x2, ref y2);
+
+            int dx, dy;
+
+            dx = x2 - x1;      /* the horizontal distance of the line */
+            dy = y2 - y1;      /* the vertical distance of the line */
+
+            if (dy == 0) /* The line is horizontal */
+            {
+                DrawHorizontalLine(color, dx, x1, y1);
+                return;
+            }
+
+            if (dx == 0) /* the line is vertical */
+            {
+                DrawVerticalLine(color, dy, x1, y1);
+                return;
+            }
+
+            /* the line is neither horizontal neither vertical, is diagonal then! */
+            DrawDiagonalLine(color, dx, dy, x1, y1);
         }
 
         public static void DrawImage(Image image, int x, int y)
@@ -180,7 +397,7 @@ namespace SoundTest
             }
         }
 
-        public static void DrawImageAlpha(Image image, int x, int y)
+        public static void DrawImageAlpha2(Image image, int x, int y)
         {
             int counter = 0;
             for (int _y = y; _y < y + image.Height; _y++)
@@ -198,6 +415,40 @@ namespace SoundTest
                             cover.rawData[((_y * 1920) - (1920 - _x))] = image.rawData[counter];
                             counter++;
                         }
+                    }
+                }
+            }
+        }
+
+        public static void DrawImageAlpha(Image image, int x, int y)
+        {
+            int counter = 0;
+            for (int _y = y; _y < y + image.Height; _y++)
+            {
+                for (int _x = x; _x < x + image.Width; _x++)
+                {
+                    if (_y <= 1079)
+                    {
+                        if (_x <= 1920)
+                        {
+                            if (image.rawData[counter] == 0)
+                            {
+                                counter++;
+                            }
+                            else
+                            {
+                                cover.rawData[((_y * 1920) - (1920 - _x))] = image.rawData[counter];
+                                counter++;
+                            }
+                        }
+                        else
+                        {
+                            counter++;
+                        }
+                    }
+                    else
+                    {
+                        counter += (int)image.Width;
                     }
                 }
             }

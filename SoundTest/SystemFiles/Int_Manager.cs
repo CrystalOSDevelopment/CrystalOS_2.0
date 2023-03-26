@@ -23,10 +23,13 @@ namespace CrystalOS.SystemFiles
         public static int Text_Editor_X = 500;
         public static int Text_Editor_Y = 700;
 
-        public static int About_X = 1500;
-        public static int About_Y = 550;
+        public static int About_X = 100;
+        public static int About_Y = 50;
 
         public static int Create_App_X = 0;
         public static int Create_App_Y = 30;
+
+        public static int Terminal_X = 50;
+        public static int Terminal_Y = 30;
     }
 }

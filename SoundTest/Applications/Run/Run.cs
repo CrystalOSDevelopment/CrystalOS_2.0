@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SoundTest.Applications.Run
+namespace CrystalOS2.Applications.Run
 {
     public static class Run
     {
-        [ManifestResourceStream(ResourceName = "SoundTest.Applications.Run.Run.bmp")] public static byte[] Window;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Run.Run.bmp")] public static byte[] Window;
         public static Bitmap base_Window = new Bitmap(Window);
         public static void Run_Window()
         {

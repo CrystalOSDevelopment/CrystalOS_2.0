@@ -1,6 +1,6 @@
 ﻿using Cosmos.System.Graphics;
 using IL2CPU.API.Attribs;
-using SoundTest;
+using CrystalOS2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +14,9 @@ namespace CrystalOS.Applications.Solitaire
         public static List<int> rnd = new List<int>();
         public static Random random = new Random();
 
-        [ManifestResourceStream(ResourceName = "SoundTest.Applications.Solitaire.A_Red_Heart.bmp")] public static byte[] redheart0;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Solitaire.A_Red_Heart.bmp")] public static byte[] redheart0;
         public static Bitmap Redheart0 = new Bitmap(redheart0);
-        [ManifestResourceStream(ResourceName = "SoundTest.Applications.Solitaire.Solitaire.bmp")] public static byte[] background0;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Solitaire.Solitaire.bmp")] public static byte[] background0;
         public static Bitmap Background = new Bitmap(background0);
 
         public static void Solitaire_core()

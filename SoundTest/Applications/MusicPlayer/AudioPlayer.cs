@@ -2,19 +2,19 @@
 using Cosmos.System.Graphics;
 using CrystalOS.SystemFiles;
 using IL2CPU.API.Attribs;
-using SoundTest;
+using CrystalOS2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kernel = SoundTest.Kernel;
+using Kernel = CrystalOS2.Kernel;
 
 namespace CrystalOS.Applications.MusicPlayer
 {
     internal class AudioPlayer
     {
-        [ManifestResourceStream(ResourceName = "SoundTest.Applications.MusicPlayer.AudioPlayer.bmp")] public static byte[] AudioPlayer_base;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.MusicPlayer.AudioPlayer.bmp")] public static byte[] AudioPlayer_base;
         public static Bitmap audioplayer_base = new Bitmap(AudioPlayer_base);
         public static bool movable = false;
         public static void Music_Player()

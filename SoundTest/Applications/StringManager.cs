@@ -177,7 +177,7 @@ namespace CrystalOS.Applications
         [ManifestResourceStream(ResourceName = "CrystalOS.SystemFiles.Font_16.quote.bmp")] public static byte[] quote;
         public static Bitmap Quote = new Bitmap(quote);
         #endregion numbers
-        public static void StringWriter(VBECanvas c, string str, int x, int y)
+        public static void StringWriter(Canvas c, string str, int x, int y)
         {
             int startindex = x;
             foreach(char character in str)

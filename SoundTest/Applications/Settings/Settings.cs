@@ -2,21 +2,21 @@
 using Cosmos.System.Graphics;
 using CrystalOS.SystemFiles;
 using IL2CPU.API.Attribs;
-using SoundTest;
-using SoundTest.Applications.Task_Scheduler;
+using CrystalOS2;
+using CrystalOS2.Applications.Task_Scheduler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kernel = SoundTest.Kernel;
+using Kernel = CrystalOS2.Kernel;
 
 namespace CrystalOS.NewFolder.NewFolder
 {
     public static class Settings
     {
         public static bool movable = false;
-        [ManifestResourceStream(ResourceName = "SoundTest.Applications.Settings.Settings.bmp")] public static byte[] settings_base;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Settings.Settings.bmp")] public static byte[] settings_base;
         public static Bitmap Settings_base = new Bitmap(settings_base);
         public static void settings(int x, int y)
         {

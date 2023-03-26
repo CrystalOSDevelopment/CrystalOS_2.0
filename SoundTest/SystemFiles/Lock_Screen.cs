@@ -10,11 +10,11 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace SoundTest.SystemFiles
+namespace CrystalOS2.SystemFiles
 {
     public class Lock_Screen
     {
-        [ManifestResourceStream(ResourceName = "SoundTest.SystemFiles.Lock_Screen.bmp")] public static byte[] Menu;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.Lock_Screen.bmp")] public static byte[] Menu;
         public static Bitmap screen = new Bitmap(Menu);
         public static string username = "";
         public static string password = "";

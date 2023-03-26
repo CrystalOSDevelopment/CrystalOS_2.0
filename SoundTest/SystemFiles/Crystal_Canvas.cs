@@ -12,7 +12,7 @@ namespace CrystalOS.SystemFiles
         private static string data;
         private static Bitmap pixels = new Bitmap(data);
 
-        private static void drawpixel(VBECanvas c)
+        private static void drawpixel(Canvas c)
         {
 
         }

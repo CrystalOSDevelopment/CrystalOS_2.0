@@ -2,8 +2,8 @@
 using Cosmos.System.Graphics;
 using CrystalOS.SystemFiles;
 using IL2CPU.API.Attribs;
-using SoundTest;
-using SoundTest.Applications.Task_Scheduler;
+using CrystalOS2;
+using CrystalOS2.Applications.Task_Scheduler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,7 @@ namespace CrystalOS.Applications.Text_Editor
         public static bool get_last_length = true;
         public static int i = 0;
 
-        [ManifestResourceStream(ResourceName = "SoundTest.Applications.Text_Editor.Text_Editor.bmp")] public static byte[] text_editor_base;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Text_Editor.Text_Editor.bmp")] public static byte[] text_editor_base;
         public static Bitmap Text_Editor_base = new Bitmap(text_editor_base);
 
         public static void text_editor(int x, int y)
@@ -60,7 +60,7 @@ namespace CrystalOS.Applications.Text_Editor
                         }
                     }
                 }
-                if(Task_Manager.Tasks[0].Item1 == "text_editor" && Task_Manager.indicator == 0)
+                if (Task_Manager.Tasks[0].Item1 == "text_editor" && Task_Manager.indicator == 0)
                 {
                     KeyEvent key;
                     if (KeyboardManager.TryReadKey(out key))

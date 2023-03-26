@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SoundTest.Applications.Calendar
+namespace CrystalOS2.Applications.Calendar
 {
     public static class Calendar
     {
-        public static VBECanvas c;
+        public static Canvas c;
         public static int day = DateTime.Today.Day;
         public static int month = DateTime.UtcNow.Month;
-        [ManifestResourceStream(ResourceName = "SoundTest.Applications.Calendar.Calendar.bmp")] public static byte[] calendar_base;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Calendar.Calendar.bmp")] public static byte[] calendar_base;
         public static Bitmap Calendar_base = new Bitmap(calendar_base);
 
         public static void calendar()
@@ -29,7 +29,7 @@ namespace SoundTest.Applications.Calendar
             {
                 if (day == i)
                 {
-                    ImprovedVBE.DrawFilledRectangle(c, 4808134, basex - 1, basey - 1, 104, 65);
+                    ImprovedVBE.DrawFilledRectangle(4808134, basex - 1, basey - 1, 104, 65);
                 }
                 ImprovedVBE._DrawACSIIString(i.ToString(), basex, basey, 16777215);
                 basex += 107;
