@@ -1,0 +1,971 @@
+{
+  "version": 3,
+  "targets": {
+    "net6.0": {
+      "Cosmos.Build/0.1.0-localbuild20220820080404": {
+        "type": "package",
+        "build": {
+          "build/Cosmos.Build.props": {},
+          "build/Cosmos.Build.targets": {}
+        }
+      },
+      "Cosmos.Common/0.1.0-localbuild20220820080413": {
+        "type": "package",
+        "dependencies": {
+          "Cosmos.Debug.Kernel": "0.1.0-localbuild20220820080413"
+        },
+        "compile": {
+          "lib/net6.0/Cosmos.Common.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Cosmos.Common.dll": {}
+        }
+      },
+      "Cosmos.Core/0.1.0-localbuild20220820080413": {
+        "type": "package",
+        "dependencies": {
+          "Cosmos.Debug.Kernel": "0.1.0-localbuild20220820080413",
+          "IL2CPU.API": "0.1.0-localbuild20220820080413"
+        },
+        "compile": {
+          "lib/net6.0/Cosmos.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Cosmos.Core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Cosmos.Debug.Kernel/0.1.0-localbuild20220820080413": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Cosmos.Debug.Kernel.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Cosmos.Debug.Kernel.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Cosmos.HAL2/0.1.0-localbuild20220820080413": {
+        "type": "package",
+        "dependencies": {
+          "Cosmos.Common": "0.1.0-localbuild20220820080413",
+          "Cosmos.Core": "0.1.0-localbuild20220820080413",
+          "Cosmos.Debug.Kernel": "0.1.0-localbuild20220820080413",
+          "IL2CPU.API": "0.1.0-localbuild20220820080413"
+        },
+        "compile": {
+          "lib/net6.0/Cosmos.HAL2.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Cosmos.HAL2.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Cosmos.System2/0.1.0-localbuild20220820080413": {
+        "type": "package",
+        "dependencies": {
+          "Cosmos.Common": "0.1.0-localbuild20220820080413",
+          "Cosmos.Debug.Kernel": "0.1.0-localbuild20220820080413",
+          "Cosmos.HAL2": "0.1.0-localbuild20220820080413",
+          "IL2CPU.API": "0.1.0-localbuild20220820080413"
+        },
+        "compile": {
+          "lib/net6.0/Cosmos.System2.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Cosmos.System2.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "DocumentFormat.OpenXml/2.19.0": {
+        "type": "package",
+        "dependencies": {
+          "System.IO.Packaging": "4.7.0"
+        },
+        "compile": {
+          "lib/net6.0/DocumentFormat.OpenXml.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/DocumentFormat.OpenXml.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Elasticsearch.Net/7.17.5": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CSharp": "4.6.0",
+          "System.Buffers": "4.5.1",
+          "System.Diagnostics.DiagnosticSource": "5.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.1/Elasticsearch.Net.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/Elasticsearch.Net.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "IL2CPU.API/0.1.0-localbuild20220820080413": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/IL2CPU.API.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/IL2CPU.API.dll": {}
+        }
+      },
+      "Microsoft.Azure.Amqp/2.5.12": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Microsoft.Azure.Amqp.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Azure.Amqp.dll": {}
+        }
+      },
+      "Microsoft.CSharp/4.6.0": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.0/_._": {}
+        }
+      },
+      "NEST/7.17.5": {
+        "type": "package",
+        "dependencies": {
+          "Elasticsearch.Net": "7.17.5"
+        },
+        "compile": {
+          "lib/netstandard2.0/Nest.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Nest.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "System.Buffers/4.5.1": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.0/_._": {}
+        }
+      },
+      "System.Diagnostics.DiagnosticSource/5.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/System.Diagnostics.DiagnosticSource.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0/System.Diagnostics.DiagnosticSource.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.IO.Packaging/4.7.0": {
+        "type": "package",
+        "compile": {
+          "ref/netstandard2.0/System.IO.Packaging.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.IO.Packaging.dll": {
+            "related": ".xml"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Cosmos.Build/0.1.0-localbuild20220820080404": {
+      "sha512": "ceOzp7+nChmAgJYmlefCCYED9FMi25NV3U48Uccvfvaxq1Gynv5jiTIzfLmHuNi8ZThmo0YUliDMCyIlPh4Ong==",
+      "type": "package",
+      "path": "cosmos.build/0.1.0-localbuild20220820080404",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        "LICENSE.txt",
+        "build/Cosmos.Build.props",
+        "build/Cosmos.Build.targets",
+        "cosmos.build.0.1.0-localbuild20220820080404.nupkg.sha512",
+        "cosmos.build.nuspec",
+        "runtime.json",
+        "tools/cygwin/win/GPL Readme.txt",
+        "tools/cygwin/win/cygiconv-2.dll",
+        "tools/cygwin/win/cygintl-3.dll",
+        "tools/cygwin/win/cygwin1.dll",
+        "tools/cygwin/win/ld.exe",
+        "tools/cygwin/win/objdump.bat",
+        "tools/cygwin/win/objdump.exe",
+        "tools/grub2/boot/grub/i386-pc/915resolution.mod",
+        "tools/grub2/boot/grub/i386-pc/acpi.mod",
+        "tools/grub2/boot/grub/i386-pc/adler32.mod",
+        "tools/grub2/boot/grub/i386-pc/affs.mod",
+        "tools/grub2/boot/grub/i386-pc/afs.mod",
+        "tools/grub2/boot/grub/i386-pc/ahci.mod",
+        "tools/grub2/boot/grub/i386-pc/all_video.mod",
+        "tools/grub2/boot/grub/i386-pc/aout.mod",
+        "tools/grub2/boot/grub/i386-pc/archelp.mod",
+        "tools/grub2/boot/grub/i386-pc/at_keyboard.mod",
+        "tools/grub2/boot/grub/i386-pc/ata.mod",
+        "tools/grub2/boot/grub/i386-pc/backtrace.mod",
+        "tools/grub2/boot/grub/i386-pc/bfs.mod",
+        "tools/grub2/boot/grub/i386-pc/biosdisk.mod",
+        "tools/grub2/boot/grub/i386-pc/bitmap.mod",
+        "tools/grub2/boot/grub/i386-pc/bitmap_scale.mod",
+        "tools/grub2/boot/grub/i386-pc/blocklist.mod",
+        "tools/grub2/boot/grub/i386-pc/boot.mod",
+        "tools/grub2/boot/grub/i386-pc/bsd.mod",
+        "tools/grub2/boot/grub/i386-pc/btrfs.mod",
+        "tools/grub2/boot/grub/i386-pc/bufio.mod",
+        "tools/grub2/boot/grub/i386-pc/cat.mod",
+        "tools/grub2/boot/grub/i386-pc/cbfs.mod",
+        "tools/grub2/boot/grub/i386-pc/cbls.mod",
+        "tools/grub2/boot/grub/i386-pc/cbmemc.mod",
+        "tools/grub2/boot/grub/i386-pc/cbtable.mod",
+        "tools/grub2/boot/grub/i386-pc/cbtime.mod",
+        "tools/grub2/boot/grub/i386-pc/chain.mod",
+        "tools/grub2/boot/grub/i386-pc/cmdline_cat_test.mod",
+        "tools/grub2/boot/grub/i386-pc/cmosdump.mod",
+        "tools/grub2/boot/grub/i386-pc/cmostest.mod",
+        "tools/grub2/boot/grub/i386-pc/cmp.mod",
+        "tools/grub2/boot/grub/i386-pc/command.lst",
+        "tools/grub2/boot/grub/i386-pc/configfile.mod",
+        "tools/grub2/boot/grub/i386-pc/cpio.mod",
+        "tools/grub2/boot/grub/i386-pc/cpio_be.mod",
+        "tools/grub2/boot/grub/i386-pc/cpuid.mod",
+        "tools/grub2/boot/grub/i386-pc/crc64.mod",
+        "tools/grub2/boot/grub/i386-pc/crypto.lst",
+        "tools/grub2/boot/grub/i386-pc/crypto.mod",
+        "tools/grub2/boot/grub/i386-pc/cryptodisk.mod",
+        "tools/grub2/boot/grub/i386-pc/cs5536.mod",
+        "tools/grub2/boot/grub/i386-pc/date.mod",
+        "tools/grub2/boot/grub/i386-pc/datehook.mod",
+        "tools/grub2/boot/grub/i386-pc/datetime.mod",
+        "tools/grub2/boot/grub/i386-pc/disk.mod",
+        "tools/grub2/boot/grub/i386-pc/diskfilter.mod",
+        "tools/grub2/boot/grub/i386-pc/div_test.mod",
+        "tools/grub2/boot/grub/i386-pc/dm_nv.mod",
+        "tools/grub2/boot/grub/i386-pc/drivemap.mod",
+        "tools/grub2/boot/grub/i386-pc/echo.mod",
+        "tools/grub2/boot/grub/i386-pc/efiemu.mod",
+        "tools/grub2/boot/grub/i386-pc/efiemu32.o",
+        "tools/grub2/boot/grub/i386-pc/efiemu64.o",
+        "tools/grub2/boot/grub/i386-pc/ehci.mod",
+        "tools/grub2/boot/grub/i386-pc/elf.mod",
+        "tools/grub2/boot/grub/i386-pc/eltorito.img",
+        "tools/grub2/boot/grub/i386-pc/eval.mod",
+        "tools/grub2/boot/grub/i386-pc/exfat.mod",
+        "tools/grub2/boot/grub/i386-pc/exfctest.mod",
+        "tools/grub2/boot/grub/i386-pc/ext2.mod",
+        "tools/grub2/boot/grub/i386-pc/extcmd.mod",
+        "tools/grub2/boot/grub/i386-pc/fat.mod",
+        "tools/grub2/boot/grub/i386-pc/file.mod",
+        "tools/grub2/boot/grub/i386-pc/font.mod",
+        "tools/grub2/boot/grub/i386-pc/freedos.mod",
+        "tools/grub2/boot/grub/i386-pc/fs.lst",
+        "tools/grub2/boot/grub/i386-pc/fshelp.mod",
+        "tools/grub2/boot/grub/i386-pc/functional_test.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_arcfour.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_blowfish.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_camellia.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_cast5.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_crc.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_des.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_dsa.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_idea.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_md4.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_md5.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_rfc2268.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_rijndael.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_rmd160.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_rsa.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_seed.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_serpent.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_sha1.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_sha256.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_sha512.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_tiger.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_twofish.mod",
+        "tools/grub2/boot/grub/i386-pc/gcry_whirlpool.mod",
+        "tools/grub2/boot/grub/i386-pc/gdb.mod",
+        "tools/grub2/boot/grub/i386-pc/geli.mod",
+        "tools/grub2/boot/grub/i386-pc/gettext.mod",
+        "tools/grub2/boot/grub/i386-pc/gfxmenu.mod",
+        "tools/grub2/boot/grub/i386-pc/gfxterm.mod",
+        "tools/grub2/boot/grub/i386-pc/gfxterm_background.mod",
+        "tools/grub2/boot/grub/i386-pc/gfxterm_menu.mod",
+        "tools/grub2/boot/grub/i386-pc/gptsync.mod",
+        "tools/grub2/boot/grub/i386-pc/gzio.mod",
+        "tools/grub2/boot/grub/i386-pc/halt.mod",
+        "tools/grub2/boot/grub/i386-pc/hashsum.mod",
+        "tools/grub2/boot/grub/i386-pc/hdparm.mod",
+        "tools/grub2/boot/grub/i386-pc/hello.mod",
+        "tools/grub2/boot/grub/i386-pc/help.mod",
+        "tools/grub2/boot/grub/i386-pc/hexdump.mod",
+        "tools/grub2/boot/grub/i386-pc/hfs.mod",
+        "tools/grub2/boot/grub/i386-pc/hfsplus.mod",
+        "tools/grub2/boot/grub/i386-pc/hfspluscomp.mod",
+        "tools/grub2/boot/grub/i386-pc/http.mod",
+        "tools/grub2/boot/grub/i386-pc/hwmatch.mod",
+        "tools/grub2/boot/grub/i386-pc/iorw.mod",
+        "tools/grub2/boot/grub/i386-pc/iso9660.mod",
+        "tools/grub2/boot/grub/i386-pc/jfs.mod",
+        "tools/grub2/boot/grub/i386-pc/jpeg.mod",
+        "tools/grub2/boot/grub/i386-pc/keylayouts.mod",
+        "tools/grub2/boot/grub/i386-pc/keystatus.mod",
+        "tools/grub2/boot/grub/i386-pc/ldm.mod",
+        "tools/grub2/boot/grub/i386-pc/legacy_password_test.mod",
+        "tools/grub2/boot/grub/i386-pc/legacycfg.mod",
+        "tools/grub2/boot/grub/i386-pc/linux.mod",
+        "tools/grub2/boot/grub/i386-pc/linux16.mod",
+        "tools/grub2/boot/grub/i386-pc/loadenv.mod",
+        "tools/grub2/boot/grub/i386-pc/loopback.mod",
+        "tools/grub2/boot/grub/i386-pc/ls.mod",
+        "tools/grub2/boot/grub/i386-pc/lsacpi.mod",
+        "tools/grub2/boot/grub/i386-pc/lsapm.mod",
+        "tools/grub2/boot/grub/i386-pc/lsmmap.mod",
+        "tools/grub2/boot/grub/i386-pc/lspci.mod",
+        "tools/grub2/boot/grub/i386-pc/luks.mod",
+        "tools/grub2/boot/grub/i386-pc/lvm.mod",
+        "tools/grub2/boot/grub/i386-pc/lzopio.mod",
+        "tools/grub2/boot/grub/i386-pc/macbless.mod",
+        "tools/grub2/boot/grub/i386-pc/macho.mod",
+        "tools/grub2/boot/grub/i386-pc/mda_text.mod",
+        "tools/grub2/boot/grub/i386-pc/mdraid09.mod",
+        "tools/grub2/boot/grub/i386-pc/mdraid09_be.mod",
+        "tools/grub2/boot/grub/i386-pc/mdraid1x.mod",
+        "tools/grub2/boot/grub/i386-pc/memdisk.mod",
+        "tools/grub2/boot/grub/i386-pc/memrw.mod",
+        "tools/grub2/boot/grub/i386-pc/minicmd.mod",
+        "tools/grub2/boot/grub/i386-pc/minix.mod",
+        "tools/grub2/boot/grub/i386-pc/minix2.mod",
+        "tools/grub2/boot/grub/i386-pc/minix2_be.mod",
+        "tools/grub2/boot/grub/i386-pc/minix3.mod",
+        "tools/grub2/boot/grub/i386-pc/minix3_be.mod",
+        "tools/grub2/boot/grub/i386-pc/minix_be.mod",
+        "tools/grub2/boot/grub/i386-pc/mmap.mod",
+        "tools/grub2/boot/grub/i386-pc/moddep.lst",
+        "tools/grub2/boot/grub/i386-pc/modinfo.sh",
+        "tools/grub2/boot/grub/i386-pc/morse.mod",
+        "tools/grub2/boot/grub/i386-pc/mpi.mod",
+        "tools/grub2/boot/grub/i386-pc/msdospart.mod",
+        "tools/grub2/boot/grub/i386-pc/multiboot.mod",
+        "tools/grub2/boot/grub/i386-pc/multiboot2.mod",
+        "tools/grub2/boot/grub/i386-pc/nativedisk.mod",
+        "tools/grub2/boot/grub/i386-pc/net.mod",
+        "tools/grub2/boot/grub/i386-pc/newc.mod",
+        "tools/grub2/boot/grub/i386-pc/nilfs2.mod",
+        "tools/grub2/boot/grub/i386-pc/normal.mod",
+        "tools/grub2/boot/grub/i386-pc/ntfs.mod",
+        "tools/grub2/boot/grub/i386-pc/ntfscomp.mod",
+        "tools/grub2/boot/grub/i386-pc/ntldr.mod",
+        "tools/grub2/boot/grub/i386-pc/odc.mod",
+        "tools/grub2/boot/grub/i386-pc/offsetio.mod",
+        "tools/grub2/boot/grub/i386-pc/ohci.mod",
+        "tools/grub2/boot/grub/i386-pc/part_acorn.mod",
+        "tools/grub2/boot/grub/i386-pc/part_amiga.mod",
+        "tools/grub2/boot/grub/i386-pc/part_apple.mod",
+        "tools/grub2/boot/grub/i386-pc/part_bsd.mod",
+        "tools/grub2/boot/grub/i386-pc/part_dfly.mod",
+        "tools/grub2/boot/grub/i386-pc/part_dvh.mod",
+        "tools/grub2/boot/grub/i386-pc/part_gpt.mod",
+        "tools/grub2/boot/grub/i386-pc/part_msdos.mod",
+        "tools/grub2/boot/grub/i386-pc/part_plan.mod",
+        "tools/grub2/boot/grub/i386-pc/part_sun.mod",
+        "tools/grub2/boot/grub/i386-pc/part_sunpc.mod",
+        "tools/grub2/boot/grub/i386-pc/partmap.lst",
+        "tools/grub2/boot/grub/i386-pc/parttool.lst",
+        "tools/grub2/boot/grub/i386-pc/parttool.mod",
+        "tools/grub2/boot/grub/i386-pc/password.mod",
+        "tools/grub2/boot/grub/i386-pc/password_pbkdf2.mod",
+        "tools/grub2/boot/grub/i386-pc/pata.mod",
+        "tools/grub2/boot/grub/i386-pc/pbkdf2.mod",
+        "tools/grub2/boot/grub/i386-pc/pbkdf2_test.mod",
+        "tools/grub2/boot/grub/i386-pc/pci.mod",
+        "tools/grub2/boot/grub/i386-pc/pcidump.mod",
+        "tools/grub2/boot/grub/i386-pc/plan9.mod",
+        "tools/grub2/boot/grub/i386-pc/play.mod",
+        "tools/grub2/boot/grub/i386-pc/png.mod",
+        "tools/grub2/boot/grub/i386-pc/priority_queue.mod",
+        "tools/grub2/boot/grub/i386-pc/probe.mod",
+        "tools/grub2/boot/grub/i386-pc/procfs.mod",
+        "tools/grub2/boot/grub/i386-pc/progress.mod",
+        "tools/grub2/boot/grub/i386-pc/pxe.mod",
+        "tools/grub2/boot/grub/i386-pc/pxechain.mod",
+        "tools/grub2/boot/grub/i386-pc/raid5rec.mod",
+        "tools/grub2/boot/grub/i386-pc/raid6rec.mod",
+        "tools/grub2/boot/grub/i386-pc/read.mod",
+        "tools/grub2/boot/grub/i386-pc/reboot.mod",
+        "tools/grub2/boot/grub/i386-pc/regexp.mod",
+        "tools/grub2/boot/grub/i386-pc/reiserfs.mod",
+        "tools/grub2/boot/grub/i386-pc/relocator.mod",
+        "tools/grub2/boot/grub/i386-pc/romfs.mod",
+        "tools/grub2/boot/grub/i386-pc/scsi.mod",
+        "tools/grub2/boot/grub/i386-pc/search.mod",
+        "tools/grub2/boot/grub/i386-pc/search_fs_file.mod",
+        "tools/grub2/boot/grub/i386-pc/search_fs_uuid.mod",
+        "tools/grub2/boot/grub/i386-pc/search_label.mod",
+        "tools/grub2/boot/grub/i386-pc/sendkey.mod",
+        "tools/grub2/boot/grub/i386-pc/serial.mod",
+        "tools/grub2/boot/grub/i386-pc/setjmp.mod",
+        "tools/grub2/boot/grub/i386-pc/setjmp_test.mod",
+        "tools/grub2/boot/grub/i386-pc/setpci.mod",
+        "tools/grub2/boot/grub/i386-pc/sfs.mod",
+        "tools/grub2/boot/grub/i386-pc/signature_test.mod",
+        "tools/grub2/boot/grub/i386-pc/sleep.mod",
+        "tools/grub2/boot/grub/i386-pc/sleep_test.mod",
+        "tools/grub2/boot/grub/i386-pc/spkmodem.mod",
+        "tools/grub2/boot/grub/i386-pc/squash4.mod",
+        "tools/grub2/boot/grub/i386-pc/syslinuxcfg.mod",
+        "tools/grub2/boot/grub/i386-pc/tar.mod",
+        "tools/grub2/boot/grub/i386-pc/terminal.lst",
+        "tools/grub2/boot/grub/i386-pc/terminal.mod",
+        "tools/grub2/boot/grub/i386-pc/terminfo.mod",
+        "tools/grub2/boot/grub/i386-pc/test.mod",
+        "tools/grub2/boot/grub/i386-pc/test_blockarg.mod",
+        "tools/grub2/boot/grub/i386-pc/testload.mod",
+        "tools/grub2/boot/grub/i386-pc/testspeed.mod",
+        "tools/grub2/boot/grub/i386-pc/tftp.mod",
+        "tools/grub2/boot/grub/i386-pc/tga.mod",
+        "tools/grub2/boot/grub/i386-pc/time.mod",
+        "tools/grub2/boot/grub/i386-pc/tr.mod",
+        "tools/grub2/boot/grub/i386-pc/trig.mod",
+        "tools/grub2/boot/grub/i386-pc/true.mod",
+        "tools/grub2/boot/grub/i386-pc/truecrypt.mod",
+        "tools/grub2/boot/grub/i386-pc/udf.mod",
+        "tools/grub2/boot/grub/i386-pc/ufs1.mod",
+        "tools/grub2/boot/grub/i386-pc/ufs1_be.mod",
+        "tools/grub2/boot/grub/i386-pc/ufs2.mod",
+        "tools/grub2/boot/grub/i386-pc/uhci.mod",
+        "tools/grub2/boot/grub/i386-pc/usb.mod",
+        "tools/grub2/boot/grub/i386-pc/usb_keyboard.mod",
+        "tools/grub2/boot/grub/i386-pc/usbms.mod",
+        "tools/grub2/boot/grub/i386-pc/usbserial_common.mod",
+        "tools/grub2/boot/grub/i386-pc/usbserial_ftdi.mod",
+        "tools/grub2/boot/grub/i386-pc/usbserial_pl2303.mod",
+        "tools/grub2/boot/grub/i386-pc/usbserial_usbdebug.mod",
+        "tools/grub2/boot/grub/i386-pc/usbtest.mod",
+        "tools/grub2/boot/grub/i386-pc/vbe.mod",
+        "tools/grub2/boot/grub/i386-pc/verify.mod",
+        "tools/grub2/boot/grub/i386-pc/vga.mod",
+        "tools/grub2/boot/grub/i386-pc/vga_text.mod",
+        "tools/grub2/boot/grub/i386-pc/video.lst",
+        "tools/grub2/boot/grub/i386-pc/video.mod",
+        "tools/grub2/boot/grub/i386-pc/video_bochs.mod",
+        "tools/grub2/boot/grub/i386-pc/video_cirrus.mod",
+        "tools/grub2/boot/grub/i386-pc/video_colors.mod",
+        "tools/grub2/boot/grub/i386-pc/video_fb.mod",
+        "tools/grub2/boot/grub/i386-pc/videoinfo.mod",
+        "tools/grub2/boot/grub/i386-pc/videotest.mod",
+        "tools/grub2/boot/grub/i386-pc/videotest_checksum.mod",
+        "tools/grub2/boot/grub/i386-pc/xfs.mod",
+        "tools/grub2/boot/grub/i386-pc/xnu.mod",
+        "tools/grub2/boot/grub/i386-pc/xnu_uuid.mod",
+        "tools/grub2/boot/grub/i386-pc/xnu_uuid_test.mod",
+        "tools/grub2/boot/grub/i386-pc/xzio.mod",
+        "tools/grub2/boot/grub/i386-pc/zfs.mod",
+        "tools/grub2/boot/grub/i386-pc/zfscrypt.mod",
+        "tools/grub2/boot/grub/i386-pc/zfsinfo.mod",
+        "tools/mkisofs/win/mkisofs.exe",
+        "tools/net48/Cosmos.Build.Common.dll",
+        "tools/net48/Cosmos.Build.Common.pdb",
+        "tools/net48/Cosmos.Build.Tasks.dll",
+        "tools/net48/Cosmos.Build.Tasks.pdb",
+        "tools/net48/Cosmos.Debug.Common.dll",
+        "tools/net48/Cosmos.Debug.Common.pdb",
+        "tools/net48/Cosmos.Debug.Hosts.dll",
+        "tools/net48/Cosmos.Debug.Hosts.pdb",
+        "tools/net48/Dapper.StrongName.dll",
+        "tools/net48/DapperExtensions.StrongName.dll",
+        "tools/net48/DapperExtensions.StrongName.pdb",
+        "tools/net48/HyperVServer/Cosmos.Debug.HyperVServer.exe",
+        "tools/net48/HyperVServer/Cosmos.Debug.HyperVServer.exe.config",
+        "tools/net48/HyperVServer/Cosmos.Debug.HyperVServer.pdb",
+        "tools/net48/HyperVServer/System.Management.Automation.dll",
+        "tools/net48/HyperVServer/scripts/CreateVm.ps1",
+        "tools/net48/HyperVServer/scripts/RemoveVM.ps1",
+        "tools/net48/HyperVServer/scripts/StartVm.ps1",
+        "tools/net48/HyperVServer/scripts/StopVm.ps1",
+        "tools/net48/IL2CPU.Debug.Symbols.Net48.dll",
+        "tools/net48/IL2CPU.Debug.Symbols.Net48.pdb",
+        "tools/net48/Microsoft.Data.Sqlite.dll",
+        "tools/net48/Microsoft.DiaSymReader.dll",
+        "tools/net48/Microsoft.Win32.Registry.dll",
+        "tools/net48/SQLitePCLRaw.batteries_v2.dll",
+        "tools/net48/SQLitePCLRaw.core.dll",
+        "tools/net48/SQLitePCLRaw.provider.e_sqlite3.dll",
+        "tools/net48/System.Buffers.dll",
+        "tools/net48/System.Collections.Immutable.dll",
+        "tools/net48/System.ComponentModel.Annotations.dll",
+        "tools/net48/System.Data.SqlClient.dll",
+        "tools/net48/System.IO.Ports.dll",
+        "tools/net48/System.Memory.dll",
+        "tools/net48/System.Numerics.Vectors.dll",
+        "tools/net48/System.Reflection.Metadata.dll",
+        "tools/net48/System.Runtime.CompilerServices.Unsafe.dll",
+        "tools/net48/System.Security.AccessControl.dll",
+        "tools/net48/System.Security.Principal.Windows.dll",
+        "tools/net48/e_sqlite3.dll",
+        "tools/net48/runtimes/win-arm/native/e_sqlite3.dll",
+        "tools/net48/runtimes/win-x64/native/e_sqlite3.dll",
+        "tools/net48/runtimes/win-x86/native/e_sqlite3.dll",
+        "tools/syslinux/bios/com32/elflink/ldlinux/ldlinux.c32",
+        "tools/syslinux/bios/com32/lib/libcom32.c32",
+        "tools/syslinux/bios/com32/mboot/mboot.c32",
+        "tools/syslinux/bios/core/isolinux.bin",
+        "tools/syslinux/bios/core/pxelinux.0",
+        "tools/syslinux/bios/core/pxelinux.bin",
+        "tools/syslinux/win/syslinux.exe",
+        "tools/unix/objdump.sh",
+        "tools/yasm/win/LICENSE.txt",
+        "tools/yasm/win/yasm.exe"
+      ]
+    },
+    "Cosmos.Common/0.1.0-localbuild20220820080413": {
+      "sha512": "e7t827putkR7k6lFeaJzBZLwJhs3Is1M+mzFk2P+P1U8FCbWUFZwz1ty1ov8g+04Wb3Kpfc0RgFScjDOt+82QA==",
+      "type": "package",
+      "path": "cosmos.common/0.1.0-localbuild20220820080413",
+      "files": [
+        ".nupkg.metadata",
+        "LICENSE.txt",
+        "cosmos.common.0.1.0-localbuild20220820080413.nupkg.sha512",
+        "cosmos.common.nuspec",
+        "lib/net6.0/Cosmos.Common.dll"
+      ]
+    },
+    "Cosmos.Core/0.1.0-localbuild20220820080413": {
+      "sha512": "DQyk/TYBzULoff/lz8/i5fU6LUIU+4ZU0yMaH47gTvIUjDIh9TjRSXKeUHvY+MSMUnSpb6RVHt+bc99b+biEnQ==",
+      "type": "package",
+      "path": "cosmos.core/0.1.0-localbuild20220820080413",
+      "files": [
+        ".nupkg.metadata",
+        "LICENSE.txt",
+        "cosmos.core.0.1.0-localbuild20220820080413.nupkg.sha512",
+        "cosmos.core.nuspec",
+        "lib/net6.0/Cosmos.Core.dll",
+        "lib/net6.0/Cosmos.Core.xml"
+      ]
+    },
+    "Cosmos.Debug.Kernel/0.1.0-localbuild20220820080413": {
+      "sha512": "uJgLCfRNOpAv9saYVXm+6GEoXg0x8Y99LKRc6LCiGjtfeY0NbDoY84PCCD+g9He5wfvN4K/op0Uql8suIBxlOw==",
+      "type": "package",
+      "path": "cosmos.debug.kernel/0.1.0-localbuild20220820080413",
+      "files": [
+        ".nupkg.metadata",
+        "LICENSE.txt",
+        "cosmos.debug.kernel.0.1.0-localbuild20220820080413.nupkg.sha512",
+        "cosmos.debug.kernel.nuspec",
+        "lib/netstandard2.0/Cosmos.Debug.Kernel.dll",
+        "lib/netstandard2.0/Cosmos.Debug.Kernel.xml"
+      ]
+    },
+    "Cosmos.HAL2/0.1.0-localbuild20220820080413": {
+      "sha512": "9QGbmMs5cKIyf1EkC8agO73qiUjkq05QFXrUiBf5eZQuhLYPxeja1PX7dPm4FobbbM4Az5yXyBHRw41VhsQpxQ==",
+      "type": "package",
+      "path": "cosmos.hal2/0.1.0-localbuild20220820080413",
+      "files": [
+        ".nupkg.metadata",
+        "LICENSE.txt",
+        "cosmos.hal2.0.1.0-localbuild20220820080413.nupkg.sha512",
+        "cosmos.hal2.nuspec",
+        "lib/net6.0/Cosmos.HAL2.dll",
+        "lib/net6.0/Cosmos.HAL2.xml"
+      ]
+    },
+    "Cosmos.System2/0.1.0-localbuild20220820080413": {
+      "sha512": "QcqMv5Sggk40OnyI1pdi1lq7SG1NSsoRJ4XYF9U5cNyEktH6D84v2WM1prQV8KEPe5RlHx1b1U+O7//TwB1Maw==",
+      "type": "package",
+      "path": "cosmos.system2/0.1.0-localbuild20220820080413",
+      "files": [
+        ".nupkg.metadata",
+        "LICENSE.txt",
+        "cosmos.system2.0.1.0-localbuild20220820080413.nupkg.sha512",
+        "cosmos.system2.nuspec",
+        "lib/net6.0/Cosmos.System2.dll",
+        "lib/net6.0/Cosmos.System2.xml"
+      ]
+    },
+    "DocumentFormat.OpenXml/2.19.0": {
+      "sha512": "BLFqodowHZHR/A/sKU/6e+63J5ONWDdv8hEuSZOUiBfGFuVmsG9P3o+LMSq+dajNWE1q+lqVSa1H5FuhLX8/fA==",
+      "type": "package",
+      "path": "documentformat.openxml/2.19.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "documentformat.openxml.2.19.0.nupkg.sha512",
+        "documentformat.openxml.nuspec",
+        "icon.png",
+        "lib/net35/DocumentFormat.OpenXml.dll",
+        "lib/net35/DocumentFormat.OpenXml.xml",
+        "lib/net40/DocumentFormat.OpenXml.dll",
+        "lib/net40/DocumentFormat.OpenXml.xml",
+        "lib/net46/DocumentFormat.OpenXml.dll",
+        "lib/net46/DocumentFormat.OpenXml.xml",
+        "lib/net6.0/DocumentFormat.OpenXml.dll",
+        "lib/net6.0/DocumentFormat.OpenXml.xml",
+        "lib/netstandard1.3/DocumentFormat.OpenXml.dll",
+        "lib/netstandard1.3/DocumentFormat.OpenXml.xml",
+        "lib/netstandard2.0/DocumentFormat.OpenXml.dll",
+        "lib/netstandard2.0/DocumentFormat.OpenXml.xml"
+      ]
+    },
+    "Elasticsearch.Net/7.17.5": {
+      "sha512": "orChsQi1Ceho/NyIylNOn6y4vuGcsbCfMZnCueNN0fzqYEGQmQdPfcVmsR5+3fwpXTgxCdjTUVmqOwvHpCSB+Q==",
+      "type": "package",
+      "path": "elasticsearch.net/7.17.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "elasticsearch.net.7.17.5.nupkg.sha512",
+        "elasticsearch.net.nuspec",
+        "lib/net461/Elasticsearch.Net.dll",
+        "lib/net461/Elasticsearch.Net.pdb",
+        "lib/net461/Elasticsearch.Net.xml",
+        "lib/netstandard2.0/Elasticsearch.Net.dll",
+        "lib/netstandard2.0/Elasticsearch.Net.pdb",
+        "lib/netstandard2.0/Elasticsearch.Net.xml",
+        "lib/netstandard2.1/Elasticsearch.Net.dll",
+        "lib/netstandard2.1/Elasticsearch.Net.pdb",
+        "lib/netstandard2.1/Elasticsearch.Net.xml",
+        "license.txt",
+        "nuget-icon.png"
+      ]
+    },
+    "IL2CPU.API/0.1.0-localbuild20220820080413": {
+      "sha512": "pX4QpRywwGP3yWpxyqGZA5LKcfuRFWDH//PSPHjm5Tl8j7hfpSH6VR6QUG+xG+PLBBPUqF+rvZMEN5gy9zDKdg==",
+      "type": "package",
+      "path": "il2cpu.api/0.1.0-localbuild20220820080413",
+      "files": [
+        ".nupkg.metadata",
+        "il2cpu.api.0.1.0-localbuild20220820080413.nupkg.sha512",
+        "il2cpu.api.nuspec",
+        "lib/netstandard2.0/IL2CPU.API.dll"
+      ]
+    },
+    "Microsoft.Azure.Amqp/2.5.12": {
+      "sha512": "0SlEl+TSQdpjXWf9/37dXWAa0zk6R1EJKmGtGZeKUAH7WEQpJOWMxJ9I43igcBCnTkFwa28CdPnpSCjFZVQlkw==",
+      "type": "package",
+      "path": "microsoft.azure.amqp/2.5.12",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "images/icon.png",
+        "lib/monoandroid/Microsoft.Azure.Amqp.dll",
+        "lib/net45/Microsoft.Azure.Amqp.dll",
+        "lib/netstandard1.3/Microsoft.Azure.Amqp.dll",
+        "lib/netstandard2.0/Microsoft.Azure.Amqp.dll",
+        "lib/portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10/Microsoft.Azure.Amqp.dll",
+        "lib/uap10.0/Microsoft.Azure.Amqp.dll",
+        "lib/uap10.0/Microsoft.Azure.Amqp.pri",
+        "microsoft.azure.amqp.2.5.12.nupkg.sha512",
+        "microsoft.azure.amqp.nuspec"
+      ]
+    },
+    "Microsoft.CSharp/4.6.0": {
+      "sha512": "kxn3M2rnAGy5N5DgcIwcE8QTePWU/XiYcQVzn9HqTls2NKluVzVSmVWRjK7OUPWbljCXuZxHyhEz9kPRIQeXow==",
+      "type": "package",
+      "path": "microsoft.csharp/4.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net45/_._",
+        "lib/netcore50/Microsoft.CSharp.dll",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.3/Microsoft.CSharp.dll",
+        "lib/netstandard2.0/Microsoft.CSharp.dll",
+        "lib/netstandard2.0/Microsoft.CSharp.xml",
+        "lib/portable-net45+win8+wp8+wpa81/_._",
+        "lib/uap10.0.16299/_._",
+        "lib/win8/_._",
+        "lib/wp80/_._",
+        "lib/wpa81/_._",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "microsoft.csharp.4.6.0.nupkg.sha512",
+        "microsoft.csharp.nuspec",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net45/_._",
+        "ref/netcore50/Microsoft.CSharp.dll",
+        "ref/netcore50/Microsoft.CSharp.xml",
+        "ref/netcore50/de/Microsoft.CSharp.xml",
+        "ref/netcore50/es/Microsoft.CSharp.xml",
+        "ref/netcore50/fr/Microsoft.CSharp.xml",
+        "ref/netcore50/it/Microsoft.CSharp.xml",
+        "ref/netcore50/ja/Microsoft.CSharp.xml",
+        "ref/netcore50/ko/Microsoft.CSharp.xml",
+        "ref/netcore50/ru/Microsoft.CSharp.xml",
+        "ref/netcore50/zh-hans/Microsoft.CSharp.xml",
+        "ref/netcore50/zh-hant/Microsoft.CSharp.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard1.0/Microsoft.CSharp.dll",
+        "ref/netstandard1.0/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/de/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/es/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/fr/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/it/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/ja/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/ko/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/ru/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/zh-hans/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/zh-hant/Microsoft.CSharp.xml",
+        "ref/netstandard2.0/Microsoft.CSharp.dll",
+        "ref/netstandard2.0/Microsoft.CSharp.xml",
+        "ref/portable-net45+win8+wp8+wpa81/_._",
+        "ref/uap10.0.16299/_._",
+        "ref/win8/_._",
+        "ref/wp80/_._",
+        "ref/wpa81/_._",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "NEST/7.17.5": {
+      "sha512": "bo9UyuIoVRx4IUQiuC8ZrlZuvAXKIccernC7UUKukQCEmRq2eVIk+gubHlnMQljrP51q0mN4cjgy9vv5uZPkoA==",
+      "type": "package",
+      "path": "nest/7.17.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/Nest.dll",
+        "lib/net461/Nest.pdb",
+        "lib/net461/Nest.xml",
+        "lib/netstandard2.0/Nest.dll",
+        "lib/netstandard2.0/Nest.pdb",
+        "lib/netstandard2.0/Nest.xml",
+        "license.txt",
+        "nest.7.17.5.nupkg.sha512",
+        "nest.nuspec",
+        "nuget-icon.png"
+      ]
+    },
+    "System.Buffers/4.5.1": {
+      "sha512": "Rw7ijyl1qqRS0YQD/WycNst8hUUMgrMH4FCn1nNm27M4VxchZ1js3fVjQaANHO5f3sN4isvP4a+Met9Y4YomAg==",
+      "type": "package",
+      "path": "system.buffers/4.5.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/System.Buffers.dll",
+        "lib/net461/System.Buffers.xml",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.1/System.Buffers.dll",
+        "lib/netstandard1.1/System.Buffers.xml",
+        "lib/netstandard2.0/System.Buffers.dll",
+        "lib/netstandard2.0/System.Buffers.xml",
+        "lib/uap10.0.16299/_._",
+        "ref/net45/System.Buffers.dll",
+        "ref/net45/System.Buffers.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard1.1/System.Buffers.dll",
+        "ref/netstandard1.1/System.Buffers.xml",
+        "ref/netstandard2.0/System.Buffers.dll",
+        "ref/netstandard2.0/System.Buffers.xml",
+        "ref/uap10.0.16299/_._",
+        "system.buffers.4.5.1.nupkg.sha512",
+        "system.buffers.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Diagnostics.DiagnosticSource/5.0.0": {
+      "sha512": "tCQTzPsGZh/A9LhhA6zrqCRV4hOHsK90/G7q3Khxmn6tnB1PuNU0cRaKANP2AWcF9bn0zsuOoZOSrHuJk6oNBA==",
+      "type": "package",
+      "path": "system.diagnostics.diagnosticsource/5.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net45/System.Diagnostics.DiagnosticSource.dll",
+        "lib/net45/System.Diagnostics.DiagnosticSource.xml",
+        "lib/net46/System.Diagnostics.DiagnosticSource.dll",
+        "lib/net46/System.Diagnostics.DiagnosticSource.xml",
+        "lib/net5.0/System.Diagnostics.DiagnosticSource.dll",
+        "lib/net5.0/System.Diagnostics.DiagnosticSource.xml",
+        "lib/netstandard1.1/System.Diagnostics.DiagnosticSource.dll",
+        "lib/netstandard1.1/System.Diagnostics.DiagnosticSource.xml",
+        "lib/netstandard1.3/System.Diagnostics.DiagnosticSource.dll",
+        "lib/netstandard1.3/System.Diagnostics.DiagnosticSource.xml",
+        "lib/portable-net45+win8+wpa81/System.Diagnostics.DiagnosticSource.dll",
+        "lib/portable-net45+win8+wpa81/System.Diagnostics.DiagnosticSource.xml",
+        "system.diagnostics.diagnosticsource.5.0.0.nupkg.sha512",
+        "system.diagnostics.diagnosticsource.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.IO.Packaging/4.7.0": {
+      "sha512": "9VV4KAbgRQZ79iEoG40KIeZy38O30oWwewScAST879+oki8g/Wa2HXZQgrhDDxQM4GkP1PnRJll05NMiVPbYAw==",
+      "type": "package",
+      "path": "system.io.packaging/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net46/System.IO.Packaging.dll",
+        "lib/net46/System.IO.Packaging.xml",
+        "lib/netstandard1.3/System.IO.Packaging.dll",
+        "lib/netstandard1.3/System.IO.Packaging.xml",
+        "lib/netstandard2.0/System.IO.Packaging.dll",
+        "lib/netstandard2.0/System.IO.Packaging.xml",
+        "ref/net46/System.IO.Packaging.dll",
+        "ref/net46/System.IO.Packaging.xml",
+        "ref/netstandard1.3/System.IO.Packaging.dll",
+        "ref/netstandard1.3/System.IO.Packaging.xml",
+        "ref/netstandard2.0/System.IO.Packaging.dll",
+        "ref/netstandard2.0/System.IO.Packaging.xml",
+        "system.io.packaging.4.7.0.nupkg.sha512",
+        "system.io.packaging.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net6.0": [
+      "Cosmos.Build >= 0.0.0-*",
+      "Cosmos.Debug.Kernel >= 0.0.0-*",
+      "Cosmos.System2 >= 0.0.0-*",
+      "DocumentFormat.OpenXml >= 2.19.0",
+      "Microsoft.Azure.Amqp >= 2.5.12",
+      "NEST >= 7.17.5"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\vokan\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\vokan\\source\\repos\\SoundTest\\SoundTest\\CrystalOS2.csproj",
+      "projectName": "CrystalOS2",
+      "projectPath": "C:\\Users\\vokan\\source\\repos\\SoundTest\\SoundTest\\CrystalOS2.csproj",
+      "packagesPath": "C:\\Users\\vokan\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\vokan\\source\\repos\\SoundTest\\SoundTest\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\vokan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net6.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Users\\vokan\\AppData\\Roaming\\Cosmos User Kit\\packages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net6.0": {
+        "targetAlias": "net6.0",
+        "dependencies": {
+          "Cosmos.Build": {
+            "target": "Package",
+            "version": "[0.0.0-*, )",
+            "noWarn": [
+              "NU1604"
+            ]
+          },
+          "Cosmos.Debug.Kernel": {
+            "target": "Package",
+            "version": "[0.0.0-*, )",
+            "noWarn": [
+              "NU1604"
+            ]
+          },
+          "Cosmos.System2": {
+            "target": "Package",
+            "version": "[0.0.0-*, )",
+            "noWarn": [
+              "NU1604"
+            ]
+          },
+          "DocumentFormat.OpenXml": {
+            "target": "Package",
+            "version": "[2.19.0, )"
+          },
+          "Microsoft.Azure.Amqp": {
+            "target": "Package",
+            "version": "[2.5.12, )"
+          },
+          "NEST": {
+            "target": "Package",
+            "version": "[7.17.5, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

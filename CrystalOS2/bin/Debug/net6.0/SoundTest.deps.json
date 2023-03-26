@@ -1,0 +1,258 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "SoundTest/1.0.0": {
+        "dependencies": {
+          "Cosmos.Build": "0.1.0-localbuild20220820080404",
+          "Cosmos.Debug.Kernel": "0.1.0-localbuild20220820080413",
+          "Cosmos.System2": "0.1.0-localbuild20220820080413",
+          "DocumentFormat.OpenXml": "2.19.0",
+          "Microsoft.Azure.Amqp": "2.5.12",
+          "NEST": "7.17.5"
+        },
+        "runtime": {
+          "SoundTest.dll": {}
+        }
+      },
+      "Cosmos.Build/0.1.0-localbuild20220820080404": {},
+      "Cosmos.Common/0.1.0-localbuild20220820080413": {
+        "dependencies": {
+          "Cosmos.Debug.Kernel": "0.1.0-localbuild20220820080413"
+        },
+        "runtime": {
+          "lib/net6.0/Cosmos.Common.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.0.0"
+          }
+        }
+      },
+      "Cosmos.Core/0.1.0-localbuild20220820080413": {
+        "dependencies": {
+          "Cosmos.Debug.Kernel": "0.1.0-localbuild20220820080413",
+          "IL2CPU.API": "0.1.0-localbuild20220820080413"
+        },
+        "runtime": {
+          "lib/net6.0/Cosmos.Core.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.0.0"
+          }
+        }
+      },
+      "Cosmos.Debug.Kernel/0.1.0-localbuild20220820080413": {
+        "runtime": {
+          "lib/netstandard2.0/Cosmos.Debug.Kernel.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.0.0"
+          }
+        }
+      },
+      "Cosmos.HAL2/0.1.0-localbuild20220820080413": {
+        "dependencies": {
+          "Cosmos.Common": "0.1.0-localbuild20220820080413",
+          "Cosmos.Core": "0.1.0-localbuild20220820080413",
+          "Cosmos.Debug.Kernel": "0.1.0-localbuild20220820080413",
+          "IL2CPU.API": "0.1.0-localbuild20220820080413"
+        },
+        "runtime": {
+          "lib/net6.0/Cosmos.HAL2.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.0.0"
+          }
+        }
+      },
+      "Cosmos.System2/0.1.0-localbuild20220820080413": {
+        "dependencies": {
+          "Cosmos.Common": "0.1.0-localbuild20220820080413",
+          "Cosmos.Debug.Kernel": "0.1.0-localbuild20220820080413",
+          "Cosmos.HAL2": "0.1.0-localbuild20220820080413",
+          "IL2CPU.API": "0.1.0-localbuild20220820080413"
+        },
+        "runtime": {
+          "lib/net6.0/Cosmos.System2.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.0.0"
+          }
+        }
+      },
+      "DocumentFormat.OpenXml/2.19.0": {
+        "dependencies": {
+          "System.IO.Packaging": "4.7.0"
+        },
+        "runtime": {
+          "lib/net6.0/DocumentFormat.OpenXml.dll": {
+            "assemblyVersion": "2.19.0.0",
+            "fileVersion": "2.19.0.0"
+          }
+        }
+      },
+      "Elasticsearch.Net/7.17.5": {
+        "dependencies": {
+          "Microsoft.CSharp": "4.6.0",
+          "System.Buffers": "4.5.1",
+          "System.Diagnostics.DiagnosticSource": "5.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.1/Elasticsearch.Net.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.17.5.0"
+          }
+        }
+      },
+      "IL2CPU.API/0.1.0-localbuild20220820080413": {
+        "runtime": {
+          "lib/netstandard2.0/IL2CPU.API.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.0.0"
+          }
+        }
+      },
+      "Microsoft.Azure.Amqp/2.5.12": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Azure.Amqp.dll": {
+            "assemblyVersion": "2.4.0.0",
+            "fileVersion": "2.2.0.0"
+          }
+        }
+      },
+      "Microsoft.CSharp/4.6.0": {},
+      "NEST/7.17.5": {
+        "dependencies": {
+          "Elasticsearch.Net": "7.17.5"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Nest.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.17.5.0"
+          }
+        }
+      },
+      "System.Buffers/4.5.1": {},
+      "System.Diagnostics.DiagnosticSource/5.0.0": {},
+      "System.IO.Packaging/4.7.0": {
+        "runtime": {
+          "lib/netstandard2.0/System.IO.Packaging.dll": {
+            "assemblyVersion": "4.0.5.0",
+            "fileVersion": "4.700.19.56404"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "SoundTest/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Cosmos.Build/0.1.0-localbuild20220820080404": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ceOzp7+nChmAgJYmlefCCYED9FMi25NV3U48Uccvfvaxq1Gynv5jiTIzfLmHuNi8ZThmo0YUliDMCyIlPh4Ong==",
+      "path": "cosmos.build/0.1.0-localbuild20220820080404",
+      "hashPath": "cosmos.build.0.1.0-localbuild20220820080404.nupkg.sha512"
+    },
+    "Cosmos.Common/0.1.0-localbuild20220820080413": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-e7t827putkR7k6lFeaJzBZLwJhs3Is1M+mzFk2P+P1U8FCbWUFZwz1ty1ov8g+04Wb3Kpfc0RgFScjDOt+82QA==",
+      "path": "cosmos.common/0.1.0-localbuild20220820080413",
+      "hashPath": "cosmos.common.0.1.0-localbuild20220820080413.nupkg.sha512"
+    },
+    "Cosmos.Core/0.1.0-localbuild20220820080413": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DQyk/TYBzULoff/lz8/i5fU6LUIU+4ZU0yMaH47gTvIUjDIh9TjRSXKeUHvY+MSMUnSpb6RVHt+bc99b+biEnQ==",
+      "path": "cosmos.core/0.1.0-localbuild20220820080413",
+      "hashPath": "cosmos.core.0.1.0-localbuild20220820080413.nupkg.sha512"
+    },
+    "Cosmos.Debug.Kernel/0.1.0-localbuild20220820080413": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uJgLCfRNOpAv9saYVXm+6GEoXg0x8Y99LKRc6LCiGjtfeY0NbDoY84PCCD+g9He5wfvN4K/op0Uql8suIBxlOw==",
+      "path": "cosmos.debug.kernel/0.1.0-localbuild20220820080413",
+      "hashPath": "cosmos.debug.kernel.0.1.0-localbuild20220820080413.nupkg.sha512"
+    },
+    "Cosmos.HAL2/0.1.0-localbuild20220820080413": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9QGbmMs5cKIyf1EkC8agO73qiUjkq05QFXrUiBf5eZQuhLYPxeja1PX7dPm4FobbbM4Az5yXyBHRw41VhsQpxQ==",
+      "path": "cosmos.hal2/0.1.0-localbuild20220820080413",
+      "hashPath": "cosmos.hal2.0.1.0-localbuild20220820080413.nupkg.sha512"
+    },
+    "Cosmos.System2/0.1.0-localbuild20220820080413": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QcqMv5Sggk40OnyI1pdi1lq7SG1NSsoRJ4XYF9U5cNyEktH6D84v2WM1prQV8KEPe5RlHx1b1U+O7//TwB1Maw==",
+      "path": "cosmos.system2/0.1.0-localbuild20220820080413",
+      "hashPath": "cosmos.system2.0.1.0-localbuild20220820080413.nupkg.sha512"
+    },
+    "DocumentFormat.OpenXml/2.19.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-BLFqodowHZHR/A/sKU/6e+63J5ONWDdv8hEuSZOUiBfGFuVmsG9P3o+LMSq+dajNWE1q+lqVSa1H5FuhLX8/fA==",
+      "path": "documentformat.openxml/2.19.0",
+      "hashPath": "documentformat.openxml.2.19.0.nupkg.sha512"
+    },
+    "Elasticsearch.Net/7.17.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-orChsQi1Ceho/NyIylNOn6y4vuGcsbCfMZnCueNN0fzqYEGQmQdPfcVmsR5+3fwpXTgxCdjTUVmqOwvHpCSB+Q==",
+      "path": "elasticsearch.net/7.17.5",
+      "hashPath": "elasticsearch.net.7.17.5.nupkg.sha512"
+    },
+    "IL2CPU.API/0.1.0-localbuild20220820080413": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pX4QpRywwGP3yWpxyqGZA5LKcfuRFWDH//PSPHjm5Tl8j7hfpSH6VR6QUG+xG+PLBBPUqF+rvZMEN5gy9zDKdg==",
+      "path": "il2cpu.api/0.1.0-localbuild20220820080413",
+      "hashPath": "il2cpu.api.0.1.0-localbuild20220820080413.nupkg.sha512"
+    },
+    "Microsoft.Azure.Amqp/2.5.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0SlEl+TSQdpjXWf9/37dXWAa0zk6R1EJKmGtGZeKUAH7WEQpJOWMxJ9I43igcBCnTkFwa28CdPnpSCjFZVQlkw==",
+      "path": "microsoft.azure.amqp/2.5.12",
+      "hashPath": "microsoft.azure.amqp.2.5.12.nupkg.sha512"
+    },
+    "Microsoft.CSharp/4.6.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kxn3M2rnAGy5N5DgcIwcE8QTePWU/XiYcQVzn9HqTls2NKluVzVSmVWRjK7OUPWbljCXuZxHyhEz9kPRIQeXow==",
+      "path": "microsoft.csharp/4.6.0",
+      "hashPath": "microsoft.csharp.4.6.0.nupkg.sha512"
+    },
+    "NEST/7.17.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bo9UyuIoVRx4IUQiuC8ZrlZuvAXKIccernC7UUKukQCEmRq2eVIk+gubHlnMQljrP51q0mN4cjgy9vv5uZPkoA==",
+      "path": "nest/7.17.5",
+      "hashPath": "nest.7.17.5.nupkg.sha512"
+    },
+    "System.Buffers/4.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Rw7ijyl1qqRS0YQD/WycNst8hUUMgrMH4FCn1nNm27M4VxchZ1js3fVjQaANHO5f3sN4isvP4a+Met9Y4YomAg==",
+      "path": "system.buffers/4.5.1",
+      "hashPath": "system.buffers.4.5.1.nupkg.sha512"
+    },
+    "System.Diagnostics.DiagnosticSource/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tCQTzPsGZh/A9LhhA6zrqCRV4hOHsK90/G7q3Khxmn6tnB1PuNU0cRaKANP2AWcF9bn0zsuOoZOSrHuJk6oNBA==",
+      "path": "system.diagnostics.diagnosticsource/5.0.0",
+      "hashPath": "system.diagnostics.diagnosticsource.5.0.0.nupkg.sha512"
+    },
+    "System.IO.Packaging/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9VV4KAbgRQZ79iEoG40KIeZy38O30oWwewScAST879+oki8g/Wa2HXZQgrhDDxQM4GkP1PnRJll05NMiVPbYAw==",
+      "path": "system.io.packaging/4.7.0",
+      "hashPath": "system.io.packaging.4.7.0.nupkg.sha512"
+    }
+  }
+}
