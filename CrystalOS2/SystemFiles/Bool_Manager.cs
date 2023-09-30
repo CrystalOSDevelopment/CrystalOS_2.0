@@ -31,5 +31,11 @@ namespace CrystalOS.SystemFiles
         public static bool Run_Window = false;
 
         public static bool Terminal_Opened = true;
+
+        public static bool Clock = false;
+        public static bool Taskman = false;
+
+        public static bool Calendar = false;
+        public static bool Paint = false;
     }
 }

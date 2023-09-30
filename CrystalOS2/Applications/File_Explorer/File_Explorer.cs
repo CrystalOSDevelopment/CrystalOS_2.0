@@ -1,7 +1,6 @@
 ﻿using Cosmos.HAL.BlockDevice.Registers;
 using Cosmos.System;
 using Cosmos.System.Audio.IO;
-using Cosmos.System.FileSystem.Listing;
 using Cosmos.System.Graphics;
 using CrystalOS.Applications;
 using CrystalOS.Applications.Programmers_Dream;
@@ -14,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cosmos.System.FileSystem.Listing;
 
 namespace CrystalOS2.Applications.File_Explorer
 {
@@ -26,6 +26,7 @@ namespace CrystalOS2.Applications.File_Explorer
         public static List<DirectoryEntry> getDirFiles(string path)
         {
             List<DirectoryEntry> l = new List<DirectoryEntry>();
+            /*
             foreach (DirectoryEntry d in Kernel.fs.GetDirectoryListing(path.ToUpper()))
             {
                 if (d.mEntryType == DirectoryEntryTypeEnum.File)
@@ -33,11 +34,13 @@ namespace CrystalOS2.Applications.File_Explorer
                     l.Add(d);
                 }
             }
+            */
             return l;
         }
         public static List<DirectoryEntry> getDirFolders(string path)
         {
             List<DirectoryEntry> l = new List<DirectoryEntry>();
+            /*
             foreach (DirectoryEntry d in Kernel.fs.GetDirectoryListing(path.ToUpper()))
             {
                 if (d.mEntryType == DirectoryEntryTypeEnum.Directory)
@@ -45,6 +48,7 @@ namespace CrystalOS2.Applications.File_Explorer
                     l.Add(d);
                 }
             }
+            */
             return l;
         }
         public static List<Tuple<int, int, string, string>> fandf_locations = new List<Tuple<int, int, string, string>>();
@@ -72,14 +76,14 @@ namespace CrystalOS2.Applications.File_Explorer
             source = Task_Manager.Tasks[Task_Manager.indicator].Item5;
             if (Bool_Manager.File_Explorer_Opened == true)
             {
-                ImprovedVBE.DrawImageAlpha2(file_explorer_base, x, y);
+                ImprovedVBE.DrawImageAlpha(file_explorer_base, x, y);
                 ImprovedVBE._DrawACSIIString(source, x + 278, y + 37, 0);
 
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (MouseManager.X > x + 842 && MouseManager.X < x + 885)
+                    if (Kernel.X > x + 842 && Kernel.X < x + 885)
                     {
-                        if (MouseManager.Y > y + 10 && MouseManager.Y < y + 46)
+                        if (Kernel.Y > y + 10 && Kernel.Y < y + 46)
                         {
                             //Bool_Manager.File_Explorer_Opened = false;
                             Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
@@ -88,15 +92,15 @@ namespace CrystalOS2.Applications.File_Explorer
                     }
                     if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == false)
                     {
-                        if (MouseManager.X > x && MouseManager.X < x + 742)
+                        if (Kernel.X > x && Kernel.X < x + 742)
                         {
-                            if (MouseManager.Y > y && MouseManager.Y < y + 55)
+                            if (Kernel.Y > y && Kernel.Y < y + 55)
                             {
-                                int f = (int)MouseManager.X;
-                                int g = (int)MouseManager.Y;
+                                int f = (int)Kernel.X;
+                                int g = (int)Kernel.Y;
                                 //string saves = Task_Manager.Tasks[Task_Manager.indicator].Item5;
                                 Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
-                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("explorer", f, g, true, source));
+                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("explorer", f, g, true, source, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
                                 string[] q = container[Task_Manager.filemgr_counter].Item1;
                                 string[] w = container[Task_Manager.filemgr_counter].Item2;
                                 string[] r = container[Task_Manager.filemgr_counter].Item3;
@@ -158,7 +162,7 @@ namespace CrystalOS2.Applications.File_Explorer
                             {
                                 if (str != "")
                                 {
-                                    ImprovedVBE.DrawImageAlpha2(unknown, x1 + 20 + x, y1 + y);
+                                    ImprovedVBE.DrawImageAlpha(unknown, x1 + 20 + x, y1 + y);
                                     ImprovedVBE._DrawACSIIString(str, x1 + x, y1 + 30 + y, 16777215);
                                     if (hell == true)
                                     {
@@ -173,7 +177,7 @@ namespace CrystalOS2.Applications.File_Explorer
                             {
                                 x1 += 60;
                                 y1 = /*y + */64;
-                                ImprovedVBE.DrawImageAlpha2(unknown, x1 + 20 + x, y1 + y);
+                                ImprovedVBE.DrawImageAlpha(unknown, x1 + 20 + x, y1 + y);
                                 ImprovedVBE._DrawACSIIString(str, x1 + x, y1 + 30 + y, 16777215);
                                 if (hell == true)
                                 {
@@ -197,7 +201,7 @@ namespace CrystalOS2.Applications.File_Explorer
                             {
                                 if (str != "")
                                 {
-                                    ImprovedVBE.DrawImageAlpha2(folder_ico, x1 + 20 + x, y1 + y);
+                                    ImprovedVBE.DrawImageAlpha(folder_ico, x1 + 20 + x, y1 + y);
                                     ImprovedVBE._DrawACSIIString(str, x1 + x, y1 + 30 + y, 16777215);
                                     if (hell == true)
                                     {
@@ -211,7 +215,7 @@ namespace CrystalOS2.Applications.File_Explorer
                             {
                                 x1 += 90;
                                 y1 = /*y + */64;
-                                ImprovedVBE.DrawImageAlpha2(folder_ico, x1 + 20 + x, y1 + y);
+                                ImprovedVBE.DrawImageAlpha(folder_ico, x1 + 20 + x, y1 + y);
                                 ImprovedVBE._DrawACSIIString(str, x1  + x, y1 + 30 + y, 16777215);
                                 if (hell == true)
                                 {
@@ -227,10 +231,10 @@ namespace CrystalOS2.Applications.File_Explorer
 
                 if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == true)
                 {
-                    int f = (int)MouseManager.X;
-                    int g = (int)MouseManager.Y;
+                    int f = (int)Kernel.X;
+                    int g = (int)Kernel.Y;
                     Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
-                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("explorer", f, g, true, source));
+                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("explorer", f, g, true, source, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
                     string[] q = container[Task_Manager.filemgr_counter].Item1;
                     string[] w = container[Task_Manager.filemgr_counter].Item2;
                     string[] r = container[Task_Manager.filemgr_counter].Item3;
@@ -240,7 +244,7 @@ namespace CrystalOS2.Applications.File_Explorer
                     if (MouseManager.MouseState == MouseState.Right)
                     {
                         Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("explorer", f, g, false, source));
+                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("explorer", f, g, false, source, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
                         string[] q2 = container[Task_Manager.filemgr_counter].Item1;
                         string[] w2 = container[Task_Manager.filemgr_counter].Item2;
                         string[] r2 = container[Task_Manager.filemgr_counter].Item3;
@@ -266,9 +270,9 @@ namespace CrystalOS2.Applications.File_Explorer
                 {
                     foreach (Tuple<int, int, string, string> f in fandf_locations)
                     {
-                        if (MouseManager.X > f.Item1 + x && MouseManager.X < f.Item1 + f.Item4.Length * 12 + x)
+                        if (Kernel.X > f.Item1 + x && Kernel.X < f.Item1 + f.Item4.Length * 12 + x)
                         {
-                            if (MouseManager.Y > f.Item2 + y && MouseManager.Y < f.Item2 + 67 + y)
+                            if (Kernel.Y > f.Item2 + y && Kernel.Y < f.Item2 + 67 + y)
                             {
                                 try
                                 {
@@ -286,7 +290,7 @@ namespace CrystalOS2.Applications.File_Explorer
                                         {
                                             Bool_Manager.Text_Editor_Opened = true;
                                             string shit = File.ReadAllText(f.Item3);
-                                            Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string>("text_editor", 100, 100, false, shit));
+                                            Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string, bool, int>("text_editor", 100, 100, false, shit, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
                                         }
                                         else if (f.Item3.ToLower().EndsWith(".bmp"))
                                         {
@@ -327,7 +331,7 @@ namespace CrystalOS2.Applications.File_Explorer
                                         string[] g = folders.Split('\n');
 
                                         Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
-                                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("explorer", x, y, false, f.Item3));
+                                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("explorer", x, y, false, f.Item3, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
                                         string[] q = s;
                                         string[] w = s_full;
                                         string[] r = g;
@@ -348,9 +352,9 @@ namespace CrystalOS2.Applications.File_Explorer
                             }
                         }
                     }
-                    if (MouseManager.X > x + 422 && MouseManager.X < x + 443)
+                    if (Kernel.X > x + 422 && Kernel.X < x + 443)
                     {
-                        if (MouseManager.Y > y + 22 && MouseManager.Y < y + 36)
+                        if (Kernel.Y > y + 22 && Kernel.Y < y + 36)
                         {
                             source = source.Substring(0, source.LastIndexOf('\\'));
                             if (source == "0:")
@@ -367,24 +371,24 @@ namespace CrystalOS2.Applications.File_Explorer
 
                         }
                     }
-                    if (MouseManager.X > x + 104 && MouseManager.X < x + 159)
+                    if (Kernel.X > x + 104 && Kernel.X < x + 159)
                     {
-                        if (MouseManager.Y > y + 20 && MouseManager.Y < y + 38)
+                        if (Kernel.Y > y + 20 && Kernel.Y < y + 38)
                         {
                             Bool_Manager.Create_App = true;
                         }
                     }
-                    if (MouseManager.X > x + 160 && MouseManager.X < x + 231)
+                    if (Kernel.X > x + 160 && Kernel.X < x + 231)
                     {
-                        if (MouseManager.Y > y + 20 && MouseManager.Y < y + 38)
+                        if (Kernel.Y > y + 20 && Kernel.Y < y + 38)
                         {
                             Bool_Manager.Create_App = true;
                         }
                     }
                     /*
-                    if (MouseManager.X > x + 105 && MouseManager.X < x + 205)
+                    if (Kernel.X > x + 105 && Kernel.X < x + 205)
                     {
-                        if (MouseManager.Y > y + 40 && MouseManager.Y < y + 75)
+                        if (Kernel.Y > y + 40 && Kernel.Y < y + 75)
                         {
                             Text_Editor.Text_Editor.content = File.ReadAllText("0:\\Root.txt");
                         }
@@ -393,7 +397,23 @@ namespace CrystalOS2.Applications.File_Explorer
 
                 }
             }
-            //StringManager.StringWriter(c, files, 300, 10);
+            if (Task_Manager.indicator == Task_Manager.calculators.Count - 1)
+            {
+
+            }
+            else
+            {
+                if (MouseManager.MouseState == MouseState.Left)
+                {
+                    if (Kernel.X > x && Kernel.X < x + file_explorer_base.Width)
+                    {
+                        if (Kernel.Y > y && Kernel.Y < y + file_explorer_base.Height)
+                        {
+                            //z = 999;
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -403,11 +423,11 @@ namespace CrystalOS2.Applications.File_Explorer
             if (y * 1920 == 0)
             {
                 y = 1;
-                file_explorer_base.rawData[x * y] = color;
+                file_explorer_base.RawData[x * y] = color;
             }
             else
             {
-                file_explorer_base.rawData[(y * 1920) - (1920 - x)] = color;
+                file_explorer_base.RawData[(y * 1920) - (1920 - x)] = color;
             }
         }
 

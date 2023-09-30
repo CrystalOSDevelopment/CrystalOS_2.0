@@ -9,33 +9,51 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kernel = CrystalOS2.Kernel;
 
 namespace Youtube_tut.Applications.Calculator
 {
-    public static class Calculator
+    public interface App
     {
-        public static string equasion = "";
-        public static string[] numbers;
-        public static int pressedsince;
-        public static bool movable = false;
-        public static bool isclicked = false;
+        void App();
+        int desk_ID { get; }
+        string name { get; }
+
+        bool minimised { get; set; }
+
+        int z { get; set; }
+    }
+    public class Calculator : App
+    {
+        public int a = 0;
+        public string equasion = "";
+        public string[] numbers;
+        public int pressedsince;
+        public bool movable = false;
+        public bool isclicked = false;
+        public string name
+        {
+            get { return "Calc..."; }
+        }
+
+        public bool minimised { get; set; }
+
+        public int desk_ID { get; set; }
+
+        public int x = 0;
+        public int y = 0;
+        public int z { get; set; }
 
         [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Calculator.Calculator.bmp")] public static byte[] calculator_base;
         public static Bitmap Calculator_base = new Bitmap(calculator_base);
 
-        //Basically I copied the code from CrystaOS 2.0
-        //The code is very easy to understand
-        public static void calculator(int x, int y)
+        public void App()
         {
-            equasion = Task_Manager.Tasks[Task_Manager.indicator].Item5;//In the tasks list the 5th element was a string which contains the equasion
-            ImprovedVBE.DrawImageAlpha(Calculator_base, x, y);//Then it renders the base of the calculator
+            ImprovedVBE.DrawImageAlpha(Calculator_base, x, y);
 
-            ImprovedVBE._DrawACSIIString(Task_Manager.Tasks[Task_Manager.indicator].Item5, x + 6, y + 27, 16777215);//After that, it dispays the equasion
-            if (Task_Manager.Tasks[0].Item1 == "calculator" && Task_Manager.indicator == 0)
+            ImprovedVBE._DrawACSIIString(equasion, x + 6, y + 27, 16777215);
+            if (Task_Manager.indicator == Task_Manager.calculators.Count - 1)
             {
-                //In here, it's a bit complicated
-                //First, it checks if the current app its's executing is the first in the tasks list
-                //if so, it reads a keyboard input
                 KeyEvent key;
                 if (KeyboardManager.TryReadKey(out key))
                 {
@@ -45,91 +63,64 @@ namespace Youtube_tut.Applications.Calculator
                     if (key.KeyChar == '1')
                     {
                         equasion += "1";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
+                        //Task_Manager.Tasks.RemoveAt(0);
+                        //Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("calculator", x, y, false, equasion, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
                     }
                     if (key.KeyChar == '2')
                     {
                         equasion += "2";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
                     if (key.KeyChar == '3')
                     {
                         equasion += "3";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
                     if (key.KeyChar == '4')
                     {
                         equasion += "4";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
                     if (key.KeyChar == '5')
                     {
                         equasion += "5";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
                     if (key.KeyChar == '6')
                     {
                         equasion += "6";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
                     if (key.KeyChar == '7')
                     {
                         equasion += "7";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
                     if (key.KeyChar == '8')
                     {
                         equasion += "8";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
                     if (key.KeyChar == '9')
                     {
                         equasion += "9";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
                     if (key.KeyChar == '0')
                     {
                         equasion += "0";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
                     if (key.Key == ConsoleKeyEx.NumDivide)
                     {
                         equasion += "/";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
                     if (key.Key == ConsoleKeyEx.NumMultiply)
                     {
                         equasion += "*";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
                     if (key.Key == ConsoleKeyEx.NumMinus)
                     {
                         equasion += "-";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
                     if (key.Key == ConsoleKeyEx.NumPlus)
                     {
                         equasion += "+";
-                        Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                     }
-                    //Same in case Enter was pressed
+
                     if (key.Key == ConsoleKeyEx.Enter)
                     {
-                        //Split the equasion by +; doing the math; displaying the new result
                         if (equasion.Contains("+"))
                         {
                             equasion = equasion.Replace('+', ' ');
@@ -141,8 +132,6 @@ namespace Youtube_tut.Applications.Calculator
                             int result = num1 + num2;
 
                             equasion = result.ToString();
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                         if (equasion.Contains("-"))
                         {
@@ -154,8 +143,6 @@ namespace Youtube_tut.Applications.Calculator
                             int result = num1 - num2;
 
                             equasion = result.ToString();
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                         if (equasion.Contains("*"))
                         {
@@ -167,8 +154,6 @@ namespace Youtube_tut.Applications.Calculator
                             int result = num1 * num2;
 
                             equasion = result.ToString();
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                         if (equasion.Contains("/"))
                         {
@@ -180,14 +165,9 @@ namespace Youtube_tut.Applications.Calculator
                             int result = num1 / num2;
 
                             equasion = result.ToString();
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
                 }
-
-                //In case no button was pressed, we can also take button inputs.
-                //The concept is identical to what we saw in the menu part.
 
                 if (MouseManager.MouseState == MouseState.Left)
                 {
@@ -198,161 +178,129 @@ namespace Youtube_tut.Applications.Calculator
                 {
                     //Identifies which part of the screen was pressed, recognises, whether it fits into the given x, y range
                     //If so: doing similar like in the keyboard part
-                    if (MouseManager.X > x + 5 && MouseManager.X < x + 29)
+                    if (Kernel.X > x + 5 && Kernel.X < x + 29)
                     {
-                        if (MouseManager.Y > y + 69 && MouseManager.Y < y + 103)
+                        if (Kernel.Y > y + 69 && Kernel.Y < y + 103)
                         {
                             equasion = "";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
-                    if (MouseManager.X > x + 34 && MouseManager.X < x + 58)
+                    if (Kernel.X > x + 34 && Kernel.X < x + 58)
                     {
-                        if (MouseManager.Y > y + 69 && MouseManager.Y < y + 103)
+                        if (Kernel.Y > y + 69 && Kernel.Y < y + 103)
                         {
                             if (equasion.Length != 0)
                             {
                                 equasion = equasion.Remove(equasion.Length - 1);
-                                Task_Manager.Tasks.RemoveAt(0);
-                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                             }
                         }
                     }
-                    if (MouseManager.X > x + 63 && MouseManager.X < x + 87)
+                    if (Kernel.X > x + 63 && Kernel.X < x + 87)
                     {
-                        if (MouseManager.Y > y + 69 && MouseManager.Y < y + 103)
+                        if (Kernel.Y > y + 69 && Kernel.Y < y + 103)
                         {
                             equasion += "+";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
-                    if (MouseManager.X > x + 92 && MouseManager.X < x + 116)
+                    if (Kernel.X > x + 92 && Kernel.X < x + 116)
                     {
-                        if (MouseManager.Y > y + 69 && MouseManager.Y < y + 103)
+                        if (Kernel.Y > y + 69 && Kernel.Y < y + 103)
                         {
                             equasion += "-";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
-                    if (MouseManager.X > x + 121 && MouseManager.X < x + 145)
+                    if (Kernel.X > x + 121 && Kernel.X < x + 145)
                     {
-                        if (MouseManager.Y > y + 69 && MouseManager.Y < y + 103)
+                        if (Kernel.Y > y + 69 && Kernel.Y < y + 103)
                         {
                             equasion += "*";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
 
-                    if (MouseManager.X > x + 5 && MouseManager.X < x + 29)
+                    if (Kernel.X > x + 5 && Kernel.X < x + 29)
                     {
-                        if (MouseManager.Y > y + 114 && MouseManager.Y < y + 148)
+                        if (Kernel.Y > y + 114 && Kernel.Y < y + 148)
                         {
                             equasion += "7";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
-                    if (MouseManager.X > x + 34 && MouseManager.X < x + 58)
+                    if (Kernel.X > x + 34 && Kernel.X < x + 58)
                     {
-                        if (MouseManager.Y > y + 114 && MouseManager.Y < y + 148)
+                        if (Kernel.Y > y + 114 && Kernel.Y < y + 148)
                         {
                             equasion += "8";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
-                    if (MouseManager.X > x + 63 && MouseManager.X < x + 87)
+                    if (Kernel.X > x + 63 && Kernel.X < x + 87)
                     {
-                        if (MouseManager.Y > y + 114 && MouseManager.Y < y + 148)
+                        if (Kernel.Y > y + 114 && Kernel.Y < y + 148)
                         {
                             equasion += "9";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
-                    if (MouseManager.X > x + 92 && MouseManager.X < x + 116)
+                    if (Kernel.X > x + 92 && Kernel.X < x + 116)
                     {
-                        if (MouseManager.Y > y + 114 && MouseManager.Y < y + 148)
+                        if (Kernel.Y > y + 114 && Kernel.Y < y + 148)
                         {
                             equasion += "/";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
 
-                    if (MouseManager.X > x + 5 && MouseManager.X < x + 29)
+                    if (Kernel.X > x + 5 && Kernel.X < x + 29)
                     {
-                        if (MouseManager.Y > y + 153 && MouseManager.Y < y + 187)
+                        if (Kernel.Y > y + 153 && Kernel.Y < y + 187)
                         {
                             equasion += "4";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
-                    if (MouseManager.X > x + 34 && MouseManager.X < x + 58)
+                    if (Kernel.X > x + 34 && Kernel.X < x + 58)
                     {
-                        if (MouseManager.Y > y + 153 && MouseManager.Y < y + 187)
+                        if (Kernel.Y > y + 153 && Kernel.Y < y + 187)
                         {
                             equasion += "5";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
-                    if (MouseManager.X > x + 63 && MouseManager.X < x + 87)
+                    if (Kernel.X > x + 63 && Kernel.X < x + 87)
                     {
-                        if (MouseManager.Y > y + 153 && MouseManager.Y < y + 187)
+                        if (Kernel.Y > y + 153 && Kernel.Y < y + 187)
                         {
                             equasion += "6";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
 
-                    if (MouseManager.X > x + 5 && MouseManager.X < x + 29)
+                    if (Kernel.X > x + 5 && Kernel.X < x + 29)
                     {
-                        if (MouseManager.Y > y + 192 && MouseManager.Y < y + 226)
+                        if (Kernel.Y > y + 192 && Kernel.Y < y + 226)
                         {
                             equasion += "1";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
-                    if (MouseManager.X > x + 34 && MouseManager.X < x + 58)
+                    if (Kernel.X > x + 34 && Kernel.X < x + 58)
                     {
-                        if (MouseManager.Y > y + 192 && MouseManager.Y < y + 226)
+                        if (Kernel.Y > y + 192 && Kernel.Y < y + 226)
                         {
                             equasion += "2";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
-                    if (MouseManager.X > x + 63 && MouseManager.X < x + 87)
+                    if (Kernel.X > x + 63 && Kernel.X < x + 87)
                     {
-                        if (MouseManager.Y > y + 192 && MouseManager.Y < y + 226)
+                        if (Kernel.Y > y + 192 && Kernel.Y < y + 226)
                         {
                             equasion += "3";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
 
-                    if (MouseManager.X > x + 34 && MouseManager.X < x + 58)
+                    if (Kernel.X > x + 34 && Kernel.X < x + 58)
                     {
-                        if (MouseManager.Y > y + 231 && MouseManager.Y < y + 265)
+                        if (Kernel.Y > y + 231 && Kernel.Y < y + 265)
                         {
                             equasion += "0";
-                            Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                         }
                     }
 
-                    if (MouseManager.X > x + 121 && MouseManager.X < x + 145 || MouseManager.X > x + 93 && MouseManager.X < x + 121)
+                    if (Kernel.X > x + 121 && Kernel.X < x + 145 || Kernel.X > x + 93 && Kernel.X < x + 121)
                     {
-                        if (MouseManager.Y > y + 114 && MouseManager.Y < y + 187 || MouseManager.Y > y + 153 && MouseManager.Y < y + 187)
+                        if (Kernel.Y > y + 114 && Kernel.Y < y + 187 || Kernel.Y > y + 153 && Kernel.Y < y + 187)
                         {
                             if (equasion.Contains("+"))
                             {
@@ -365,8 +313,6 @@ namespace Youtube_tut.Applications.Calculator
                                 int result = num1 + num2;
 
                                 equasion = result.ToString();
-                                Task_Manager.Tasks.RemoveAt(0);
-                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                             }
                             if (equasion.Contains("-"))
                             {
@@ -378,8 +324,6 @@ namespace Youtube_tut.Applications.Calculator
                                 int result = num1 - num2;
 
                                 equasion = result.ToString();
-                                Task_Manager.Tasks.RemoveAt(0);
-                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                             }
                             if (equasion.Contains("*"))
                             {
@@ -391,8 +335,6 @@ namespace Youtube_tut.Applications.Calculator
                                 int result = num1 * num2;
 
                                 equasion = result.ToString();
-                                Task_Manager.Tasks.RemoveAt(0);
-                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                             }
                             if (equasion.Contains("/"))
                             {
@@ -404,65 +346,57 @@ namespace Youtube_tut.Applications.Calculator
                                 int result = num1 / num2;
 
                                 equasion = result.ToString();
-                                Task_Manager.Tasks.RemoveAt(0);
-                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", x, y, false, equasion));
                             }
                         }
                     }
                     isclicked = false;
                 }
-
             }
-
-            //This part does the movable/close button action
-            if (MouseManager.MouseState == MouseState.Left)
+            else
             {
-                if (MouseManager.X > x + 106 && MouseManager.X < x + 148)
+                if(MouseManager.MouseState == MouseState.Left)
                 {
-                    if (MouseManager.Y > y && MouseManager.Y < y + 17)
+                    if(Kernel.X > x && Kernel.X < x + Calculator_base.Width)
                     {
-                        //Bool_Manager.Calculator_Opened = false;
-                        Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);//Whith this, you remove the given app from the task manager tasks list
-                    }
-                }
-                if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == false)
-                {
-                    if (MouseManager.X > x && MouseManager.X < x + 40)
-                    {
-                        if (MouseManager.Y > y && MouseManager.Y < y + 18)
+                        if (Kernel.Y > y && Kernel.Y < y + Calculator_base.Height)
                         {
-                            int f = (int)MouseManager.X;
-                            int g = (int)MouseManager.Y;
-                            Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);//Here, it removes it from the list and inserts back a new one with the bool now showing true
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", f, g, true, equasion));
+                            z = 999;
                         }
                     }
                 }
             }
 
-            if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == true)//In this part, since the 4th item is true, movability is enabled until you press the right button
+            if (MouseManager.MouseState == MouseState.Left)
             {
-                int f = (int)MouseManager.X;
-                int g = (int)MouseManager.Y;
-                Task_Manager.Tasks.RemoveAt(0);
-                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", f, g, true, equasion));
-                if (MouseManager.MouseState == MouseState.Right)
+                if (Kernel.X > x + 106 && Kernel.X < x + 148)
                 {
-                    Task_Manager.Tasks.RemoveAt(0);
-                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string>("calculator", f, g, false, equasion));
-                    //Task_Manager.Tasks.Reverse();
-                    //movable = false;
-                }
-                //Also, it is constantly placed on the top(0) of the tasks list
-                /*
-                if (MouseManager.X > Int_Manager.Settings_X && MouseManager.X < Int_Manager.Settings_X + 352)
-                {
-                    if (MouseManager.Y > Int_Manager.Settings_Y && MouseManager.Y < Int_Manager.Settings_Y + 18)
+                    if (Kernel.Y > y && Kernel.Y < y + 17)
                     {
-                        movable = false;
+                        Task_Manager.calculators.RemoveAt(Task_Manager.indicator);
                     }
                 }
-                */
+                if (movable == false)
+                {
+                    if (Kernel.X > x && Kernel.X < x + 50)
+                    {
+                        if (Kernel.Y > y && Kernel.Y < y + 18)
+                        {
+                            x = (int)Kernel.X;
+                            y = (int)Kernel.Y;
+                            movable = true;
+                        }
+                    }
+                }
+            }
+
+            if (movable == true)
+            {
+                x = (int)Kernel.X;
+                y = (int)Kernel.Y;
+                if (MouseManager.MouseState == MouseState.Right)
+                {
+                    movable = false;
+                }
             }
 
         }

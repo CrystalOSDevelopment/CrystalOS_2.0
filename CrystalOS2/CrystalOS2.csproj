@@ -17,93 +17,205 @@
         <Profile>VMware</Profile>
         <Description>Use VMware Player or Workstation to deploy and debug.</Description>
         <PxeInterface>192.168.0.8</PxeInterface>
-        <DebugEnabled>False</DebugEnabled>
-        <CompileVBEMultiboot>False</CompileVBEMultiboot>
-        <VBEResolution>1920x1080x32</VBEResolution>
+        <OptimizationLevel>3</OptimizationLevel>
         <CompressionType>Gzip</CompressionType>
+        <DebugEnabled>False</DebugEnabled>
+        <CompileVBEMultiboot>True</CompileVBEMultiboot>
+        <VBEResolution>1280x800x32</VBEResolution>
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="a.wav" />
+      <None Remove="90_Style.bmp" />
       <None Remove="Applications\About\About.bmp" />
+      <None Remove="Applications\Browser\Browser.bmp" />
+      <None Remove="Applications\Browser\index.html" />
       <None Remove="Applications\Calculator\Calculator.bmp" />
       <None Remove="Applications\Calendar\Calendar.bmp" />
+      <None Remove="Applications\Clock\Clock.bmp" />
+      <None Remove="Applications\Clock\numbers\0.bmp" />
+      <None Remove="Applications\Clock\numbers\1.bmp" />
+      <None Remove="Applications\Clock\numbers\2.bmp" />
+      <None Remove="Applications\Clock\numbers\3.bmp" />
+      <None Remove="Applications\Clock\numbers\4.bmp" />
+      <None Remove="Applications\Clock\numbers\5.bmp" />
+      <None Remove="Applications\Clock\numbers\6.bmp" />
+      <None Remove="Applications\Clock\numbers\7.bmp" />
+      <None Remove="Applications\Clock\numbers\8.bmp" />
+      <None Remove="Applications\Clock\numbers\9.bmp" />
+      <None Remove="Applications\Clock\numbers\two_dot.bmp" />
+      <None Remove="Applications\file.ttf" />
       <None Remove="Applications\File_Explorer\Explorer.bmp" />
       <None Remove="Applications\File_Explorer\Folder.bmp" />
+      <None Remove="Applications\File_Explorer\Folder2.bmp" />
       <None Remove="Applications\File_Explorer\Unknown.bmp" />
+      <None Remove="Applications\File_Explorer\Unknown2.bmp" />
+      <None Remove="Applications\MultiDesk\DesktopWizard.bmp" />
       <None Remove="Applications\MusicPlayer\AudioPlayer.bmp" />
+      <None Remove="Applications\Paint\Paint.bmp" />
       <None Remove="Applications\Programmers_Dream\programmers_Dream.bmp" />
       <None Remove="Applications\Run\Run.bmp" />
       <None Remove="Applications\Settings\Settings.bmp" />
+      <None Remove="Applications\Settings\Settings_Cursors.bmp" />
+      <None Remove="Applications\Settings\User.bmp" />
       <None Remove="Applications\Solitaire\A_Red_Heart.bmp" />
+      <None Remove="Applications\Solitaire\Cards.bmp" />
       <None Remove="Applications\Solitaire\Solitaire.bmp" />
       <None Remove="Applications\Terminal\Terminal.bmp" />
+      <None Remove="Applications\Terminal\Terminal2.bmp" />
       <None Remove="Applications\Text_Editor\Text_Editor.bmp" />
-      <None Remove="b.wav" />
-      <None Remove="bad_apple.wav" />
+      <None Remove="Applications\Video_Player\Player_Base.bmp" />
+      <None Remove="Applications\Video_Player\Shrek.wav" />
+      <None Remove="Applications\Video_Player\Shrek2.wav" />
+      <None Remove="Applications\Video_Player\spongebob.wav" />
+      <None Remove="Applications\Video_Player\video0.bvf" />
+      <None Remove="Applications\Video_Player\video1.bvf" />
+      <None Remove="Applications\Video_Player\video2.bvf" />
+      <None Remove="Applications\Word_Processor\app.bmp" />
+      <None Remove="Applications\Word_Processor\file.ttf" />
+      <None Remove="Applications\Word_Processor\font.eff" />
+      <None Remove="Applications\Word_Processor\Font_rendering\ballerosfont.gff" />
+      <None Remove="Arial_16.btf" />
+      <None Remove="autumn.bmp" />
       <None Remove="canvas.bmp" />
+      <None Remove="Gameboy\4_in_1.gb" />
+      <None Remove="Gameboy\Caesars_Palace.gb" />
+      <None Remove="Gameboy\Collection.bmp" />
+      <None Remove="Gameboy\Smurfs_Nightmare.gb" />
+      <None Remove="Gameboy\Super_Mario_Land.gb" />
+      <None Remove="Gameboy\Tetris.gb" />
+      <None Remove="Gameboy\Zelda.gb" />
       <None Remove="Icons\Cursor.bmp" />
       <None Remove="Icons\Cursor2.bmp" />
       <None Remove="Icons\Cursor3.bmp" />
       <None Remove="Icons\Cursor4.bmp" />
-      <None Remove="Sounds\Startup.wav" />
-      <None Remove="Startup.wav" />
-      <None Remove="SystemFiles\90_Style.bmp" />
-      <None Remove="SystemFiles\autumn.bmp" />
+      <None Remove="Icons\Folder.bmp" />
+      <None Remove="Icons\my_pc.bmp" />
+      <None Remove="Icons\notes.bmp" />
+      <None Remove="Icons\trash_can.bmp" />
+      <None Remove="Midnight_in_NY.bmp" />
+      <None Remove="SystemFiles\Boot\boot.bmp" />
+      <None Remove="SystemFiles\Boot\corner.bmp" />
+      <None Remove="SystemFiles\button.bmp" />
       <None Remove="SystemFiles\Lock_Screen.bmp" />
       <None Remove="SystemFiles\Menu.bmp" />
-      <None Remove="SystemFiles\Midnight_in_NY.bmp" />
+      <None Remove="SystemFiles\Menu2.bmp" />
+      <None Remove="SystemFiles\Search.bmp" />
+      <None Remove="SystemFiles\Setup\Setup_Base.bmp" />
+      <None Remove="SystemFiles\Setup\Setup_Base_Collecting.bmp" />
+      <None Remove="SystemFiles\Setup\Setup_Collecting_1.bmp" />
+      <None Remove="SystemFiles\Setup\Setup_finished.bmp" />
+      <None Remove="SystemFiles\Setup\Setup_Finished_Window.bmp" />
+      <None Remove="SystemFiles\Setup\Setup_Visual1.bmp" />
+      <None Remove="SystemFiles\Setup\Visual_pref2.bmp" />
+      <None Remove="SystemFiles\Setup\Welcome_Window.bmp" />
       <None Remove="SystemFiles\Task_manager.bmp" />
-      <None Remove="SystemFiles\Windows_puma.bmp" />
-      <None Remove="test.wav" />
+      <None Remove="SystemFiles\UI_Elements\knob.bmp" />
+      <None Remove="SystemFiles\UI_Elements\Radio.bmp" />
+      <None Remove="SystemFiles\UI_Elements\Radio_Selected.bmp" />
+      <None Remove="SystemFiles\UI_Elements\Selected_Check.bmp" />
+      <None Remove="SystemFiles\UI_Elements\Unsel_Check.bmp" />
+      <None Remove="Windows_puma.bmp" />
     </ItemGroup>
 
     <ItemGroup>
-      <ApplicationDefinition Include="test.wav" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Include="a.wav" />
+      <EmbeddedResource Include="90_Style.bmp" />
       <EmbeddedResource Include="Applications\About\About.bmp" />
+      <EmbeddedResource Include="Applications\Browser\Browser.bmp" />
+      <EmbeddedResource Include="Applications\Browser\index.html" />
       <EmbeddedResource Include="Applications\Calculator\Calculator.bmp" />
       <EmbeddedResource Include="Applications\Calendar\Calendar.bmp" />
+      <EmbeddedResource Include="Applications\Clock\Clock.bmp" />
+      <EmbeddedResource Include="Applications\Clock\numbers\0.bmp" />
+      <EmbeddedResource Include="Applications\Clock\numbers\1.bmp" />
+      <EmbeddedResource Include="Applications\Clock\numbers\2.bmp" />
+      <EmbeddedResource Include="Applications\Clock\numbers\3.bmp" />
+      <EmbeddedResource Include="Applications\Clock\numbers\4.bmp" />
+      <EmbeddedResource Include="Applications\Clock\numbers\5.bmp" />
+      <EmbeddedResource Include="Applications\Clock\numbers\6.bmp" />
+      <EmbeddedResource Include="Applications\Clock\numbers\7.bmp" />
+      <EmbeddedResource Include="Applications\Clock\numbers\8.bmp" />
+      <EmbeddedResource Include="Applications\Clock\numbers\9.bmp" />
+      <EmbeddedResource Include="Applications\Clock\numbers\two_dot.bmp" />
+      <EmbeddedResource Include="Applications\file.ttf" />
       <EmbeddedResource Include="Applications\File_Explorer\Explorer.bmp" />
       <EmbeddedResource Include="Applications\File_Explorer\Folder.bmp" />
+      <EmbeddedResource Include="Applications\File_Explorer\Folder2.bmp" />
       <EmbeddedResource Include="Applications\File_Explorer\Unknown.bmp" />
+      <EmbeddedResource Include="Applications\File_Explorer\Unknown2.bmp" />
+      <EmbeddedResource Include="Applications\MultiDesk\DesktopWizard.bmp" />
       <EmbeddedResource Include="Applications\MusicPlayer\AudioPlayer.bmp" />
+      <EmbeddedResource Include="Applications\Paint\Paint.bmp" />
       <EmbeddedResource Include="Applications\Programmers_Dream\programmers_Dream.bmp" />
       <EmbeddedResource Include="Applications\Run\Run.bmp" />
       <EmbeddedResource Include="Applications\Settings\Settings.bmp" />
+      <EmbeddedResource Include="Applications\Settings\Settings_Cursors.bmp" />
+      <EmbeddedResource Include="Applications\Settings\User.bmp" />
       <EmbeddedResource Include="Applications\Solitaire\A_Red_Heart.bmp" />
+      <EmbeddedResource Include="Applications\Solitaire\Cards.bmp" />
       <EmbeddedResource Include="Applications\Solitaire\Solitaire.bmp" />
       <EmbeddedResource Include="Applications\Terminal\Terminal.bmp" />
+      <EmbeddedResource Include="Applications\Terminal\Terminal2.bmp" />
       <EmbeddedResource Include="Applications\Text_Editor\Text_Editor.bmp" />
-      <EmbeddedResource Include="b.wav" />
-      <EmbeddedResource Include="bad_apple.wav" />
+      <EmbeddedResource Include="Applications\Video_Player\Player_Base.bmp" />
+      <EmbeddedResource Include="Applications\Video_Player\Shrek.wav" />
+      <EmbeddedResource Include="Applications\Video_Player\Shrek2.wav" />
+      <EmbeddedResource Include="Applications\Video_Player\spongebob.wav" />
+      <EmbeddedResource Include="Applications\Video_Player\video0.bvf" />
+      <EmbeddedResource Include="Applications\Video_Player\video1.bvf" />
+      <EmbeddedResource Include="Applications\Video_Player\video2.bvf" />
+      <EmbeddedResource Include="Applications\Word_Processor\app.bmp" />
+      <EmbeddedResource Include="Applications\Word_Processor\file.ttf" />
+      <EmbeddedResource Include="Applications\Word_Processor\font.eff" />
+      <EmbeddedResource Include="Applications\Word_Processor\Font_rendering\ballerosfont.gff" />
+      <EmbeddedResource Include="Arial_16.btf" />
+      <EmbeddedResource Include="autumn.bmp" />
       <EmbeddedResource Include="canvas.bmp" />
+      <EmbeddedResource Include="Gameboy\4_in_1.gb" />
+      <EmbeddedResource Include="Gameboy\Caesars_Palace.gb" />
+      <EmbeddedResource Include="Gameboy\Collection.bmp" />
+      <EmbeddedResource Include="Gameboy\Smurfs_Nightmare.gb" />
+      <EmbeddedResource Include="Gameboy\Super_Mario_Land.gb" />
+      <EmbeddedResource Include="Gameboy\Tetris.gb" />
+      <EmbeddedResource Include="Gameboy\Zelda.gb" />
       <EmbeddedResource Include="Icons\Cursor.bmp" />
       <EmbeddedResource Include="Icons\Cursor2.bmp" />
       <EmbeddedResource Include="Icons\Cursor3.bmp" />
       <EmbeddedResource Include="Icons\Cursor4.bmp" />
-      <EmbeddedResource Include="Sounds\Startup.wav" />
-      <EmbeddedResource Include="Startup.wav" />
-      <EmbeddedResource Include="SystemFiles\90_Style.bmp" />
-      <EmbeddedResource Include="SystemFiles\autumn.bmp" />
+      <EmbeddedResource Include="Icons\Folder.bmp" />
+      <EmbeddedResource Include="Icons\my_pc.bmp" />
+      <EmbeddedResource Include="Icons\notes.bmp" />
+      <EmbeddedResource Include="Icons\trash_can.bmp" />
+      <EmbeddedResource Include="Midnight_in_NY.bmp" />
+      <EmbeddedResource Include="SystemFiles\Boot\boot.bmp" />
+      <EmbeddedResource Include="SystemFiles\Boot\corner.bmp" />
+      <EmbeddedResource Include="SystemFiles\button.bmp" />
       <EmbeddedResource Include="SystemFiles\Lock_Screen.bmp" />
       <EmbeddedResource Include="SystemFiles\Menu.bmp" />
-      <EmbeddedResource Include="SystemFiles\Midnight_in_NY.bmp" />
+      <EmbeddedResource Include="SystemFiles\Menu2.bmp" />
+      <EmbeddedResource Include="SystemFiles\Search.bmp" />
+      <EmbeddedResource Include="SystemFiles\Setup\Setup_Base.bmp" />
+      <EmbeddedResource Include="SystemFiles\Setup\Setup_Base_Collecting.bmp" />
+      <EmbeddedResource Include="SystemFiles\Setup\Setup_Collecting_1.bmp" />
+      <EmbeddedResource Include="SystemFiles\Setup\Setup_finished.bmp" />
+      <EmbeddedResource Include="SystemFiles\Setup\Setup_Finished_Window.bmp" />
+      <EmbeddedResource Include="SystemFiles\Setup\Setup_Visual1.bmp" />
+      <EmbeddedResource Include="SystemFiles\Setup\Visual_pref2.bmp" />
+      <EmbeddedResource Include="SystemFiles\Setup\Welcome_Window.bmp" />
       <EmbeddedResource Include="SystemFiles\Task_manager.bmp" />
-      <EmbeddedResource Include="SystemFiles\Windows_puma.bmp" />
-      <EmbeddedResource Include="test.wav" />
+      <EmbeddedResource Include="SystemFiles\UI_Elements\knob.bmp" />
+      <EmbeddedResource Include="SystemFiles\UI_Elements\Radio.bmp" />
+      <EmbeddedResource Include="SystemFiles\UI_Elements\Radio_Selected.bmp" />
+      <EmbeddedResource Include="SystemFiles\UI_Elements\Selected_Check.bmp" />
+      <EmbeddedResource Include="SystemFiles\UI_Elements\Unsel_Check.bmp" />
+      <EmbeddedResource Include="Windows_puma.bmp" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Cosmos.Build" Version="0-*" NoWarn="NU1604" />
+        <PackageReference Include="Cosmos.Coroutines" Version="1.0.0" />
         <PackageReference Include="Cosmos.Debug.Kernel" Version="0-*" NoWarn="NU1604" />
+        <PackageReference Include="Cosmos.Plugs" Version="0.1.0-localbuild20230921044249" />
         <PackageReference Include="Cosmos.System2" Version="0-*" NoWarn="NU1604" />
-        <PackageReference Include="DocumentFormat.OpenXml" Version="2.19.0" />
-        <PackageReference Include="Microsoft.Azure.Amqp" Version="2.5.12" />
-        <PackageReference Include="NEST" Version="7.17.5" />
     </ItemGroup>
 
 </Project>

@@ -15,6 +15,10 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using Console = System.Console;
+using CrystalOS2.Applications.Programmers_Dream;
+using Kernel = CrystalOS2.Kernel;
+using Microsoft.VisualBasic;
+using CrystalOS2.Applications.Word_Processor;
 
 namespace CrystalOS.Applications.Programmers_Dream
 {
@@ -44,366 +48,382 @@ namespace CrystalOS.Applications.Programmers_Dream
         public static int width = 0;
         public static int height = 0;
 
+        public static int cursor = 0;
+
+        public static List<string> fs_list = new List<string>();
+
+        public static int line_count, char_count = 0;
+
         [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Programmers_Dream.programmers_Dream.bmp")] public static byte[] Programmers_Dream;
         public static Bitmap programmers_dream = new Bitmap(Programmers_Dream);
+
+        public static int[] buffer = new int[1024 * 749];
+
+        public static int[] dropdown = new int[71 * 22];
+        public static string sample = "";
+        public static bool update = true;
+        public static bool first = true;
+        public static int help = 0;
+        public static int last_x = 0;
+        public static int last_y = 0;
         public static void Core()
         {
+            Graphics_programing1 v = new Graphics_programing1();
             if (Bool_Manager.Programmers_choice == true)
             {
-                ImprovedVBE.DrawImageAlpha(programmers_dream, 0, 30);
+                //ImprovedVBE.DrawImageAlpha(programmers_dream, 0, 30);
+
+                programmers_dream.RawData.CopyTo(ImprovedVBE.cover.RawData, 20 * ImprovedVBE.width);
+
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (MouseManager.X > 1875 && MouseManager.X < 1919)
+                    if (Kernel.X > 1875 && Kernel.X < 1919)
                     {
-                        if (MouseManager.Y > 30 && MouseManager.Y < 47)
+                        if (Kernel.Y > 30 && Kernel.Y < 47)
                         {
                             Bool_Manager.Programmers_choice = false;
                         }
                     }
-                    /*
-                    if (movable == false)
+                }
+
+                if(MouseManager.MouseState == MouseState.Left)
+                {
+                    if(Kernel.X > 297 && Kernel.X < 384)//184, 248
                     {
-                        if (MouseManager.X > Int_Manager.Text_Editor_X && MouseManager.X < Int_Manager.Text_Editor_X + 352)
+                        if(Kernel.Y > 30 + 42 && Kernel.Y < 30 + 61)
                         {
-                            if (MouseManager.Y > Int_Manager.Text_Editor_Y && MouseManager.Y < Int_Manager.Text_Editor_Y + 18)
+                            try
                             {
-                                movable = true;
+                                get_script_and_run = true;
+                                if (get_script_and_run == true)
+                                {
+                                    if(content.StartsWith("/app mode = graphical".ToLower()))
+                                    {
+                                            Window_Layout.text.Clear();
+                                            Window_Layout.Integers.Clear();
+                                            Window_Layout.buttons_funct.Clear();
+                                            Window_Layout.strings.Clear();
+                                            Window_Layout.buttons.Clear();
+                                            Window_Layout.instructions_list.Clear();
+                                        Graphical_Exec(content);
+                                        get_script_and_run = false;
+                                    }
+                                    else if(content.StartsWith("/app mode = console".ToLower()))
+                                    {
+                                        Things_to_Display.Clear();
+                                        CSharp(content);
+                                        get_script_and_run = false;
+                                    }
+                                    /*
+                                    else if (content.Contains("namespace"))
+                                    {
+                                        v.bools.Clear();
+                                        v.strings.Clear();
+                                        v.ints.Clear();
+                                        v.classes.Clear();
+                                        Task_Manager.Tasks.RemoveAll(d => d.Item1 == "task");
+                                        Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string>("task", 0, 0, false, content));
+                                        v.graphic_window_exec(content);
+                                    }
+                                    */
+                                    else
+                                    {
+                                        /*
+                                        Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string>("0:\\demo.run", 50, 50, false, content));
+                                        if (File.Exists("0:\\demo.run"))
+                                        {
+                                            File.Delete("0:\\demo.run");
+                                        }
+                                        File.Create("0:\\demo.run");
+                                        File.WriteAllText("0:\\demo.run", content);
+                                        */
+                                        //Task_Manager.Tasks.RemoveAll(d => d.Item1 == "task");
+                                        Graphics_programing1.Windows.Clear();
+                                        //Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string, bool>("task", 0, 0, false, content, true));
+                                        Graphics_programing1.graphic_window_exec(content);
+                                        Graphics_programing1.is_stopped = false;
+                                        Graphics_programing1.get_ints = true;
+                                        get_script_and_run = false;
+                                    }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                ImprovedVBE._DrawACSIIString(e.Message, 4, 884, 16777215);
+                            }
+                        }
+                    }
+                    if(Kernel.X > 10 && Kernel.X < 115)
+                    {
+                        if(Kernel.Y > 52 && Kernel.Y < 78)
+                        {
+                            //Add & remove method
+                        }
+                    }
+                    if(Kernel.X > 126 && Kernel.X < 166)
+                    {
+                        if(Kernel.Y > 52 && Kernel.Y < 78)
+                        {
+                            if (File.Exists("0:\\demo.run"))
+                            {
+                                File.Delete("0:\\demo.run");
+                            }
+                            File.Create("0:\\demo.run");
+                            File.WriteAllText("0:\\demo.run", content);
+                        }
+                    }
+                }
+                if (allowedtopass == true)
+                {
+                    ImprovedVBE.DrawFilledRectangle(16777215, 4 + char_count * 8, 115 + line_count * 16, 1, 16);
+                    /*
+                    KeyEvent key;
+                    if (KeyboardManager.TryReadKey(out key))
+                    {
+                        if (key.Key == ConsoleKeyEx.Backspace)
+                        {
+                            if (content.Length != 0)
+                            {
+                                content = content.Remove(cursor - 1, 1);
+                                cursor--;
+                                char_count--;
+                            }
+                        }
+                        else if (key.Key == ConsoleKeyEx.Tab)
+                        {
+                            content = content.Insert(cursor, "    ");
+                            char_count += 4;
+                            cursor+=4;
+                        }
+                        else if (key.Key == ConsoleKeyEx.Enter)
+                        {
+                            content = content.Insert(cursor, "\n");
+                            line_count++;
+                            char_count = 0;
+                            cursor++;
+                        }
+                        else if(key.Key == ConsoleKeyEx.UpArrow)
+                        {
+                            
+                            string[] apple = content.Split("\n");
+                            int hmm = cursor;
+                            int inline = 0;
+                            int line = 0;
+                            for(int a = 0; a < apple.Length; a++)
+                            {
+                                if(hmm < apple[a].Length)
+                                {
+                                    inline = hmm;
+                                    line = a - 1;
+                                    break;
+                                }
+                                else
+                                {
+                                    hmm -= apple[a].Length;
+                                }
+                            }
+                            if (apple[line].Length < inline)
+                            {
+                                cursor -= inline;
+                            }
+                            else
+                            {
+                                int temp = apple[line].Length - inline;
+                                cursor -= inline + temp + 1;
+                            }
+                            char_count = inline;
+                            line_count--;
+                        }
+                        else if(key.Key == ConsoleKeyEx.DownArrow)
+                        {
+                            string[] apple = content.Split("\n");
+                            int hmm = cursor;
+                            int inline = 0;
+                            int line = 0;
+                            for (int a = 0; a < apple.Length; a++)
+                            {
+                                if (hmm < apple[a].Length)
+                                {
+                                    inline = hmm;
+                                    line = a + 1;
+                                    break;
+                                }
+                                else
+                                {
+                                    hmm -= apple[a].Length;
+                                }
+                            }
+                            if (apple[line].Length < inline)
+                            {
+                                cursor += apple[line - 1].Length - inline;
+                                cursor += apple[line].Length;
+                            }
+                            else
+                            {
+                                int temp = apple[line - 1].Length - inline;
+                                cursor += inline + temp;
+                            }
+                            char_count = inline;
+                            line_count++;
+                        }
+                        else if(key.Key == ConsoleKeyEx.LeftArrow)
+                        {
+                            if(cursor >= 0)
+                            {
+                                char_count--;
+                                cursor--;
+                            }
+                        }
+                        else if (key.Key == ConsoleKeyEx.RightArrow)
+                        {
+                            if (cursor <= content.Length)
+                            {
+                                char_count++;
+                                cursor++;
+                            }
+                        }
+                        else
+                        {
+                            try
+                            {
+                                if (content.Length < 2)
+                                {
+                                    content += key.KeyChar;
+                                    cursor++;
+                                }
+                                else
+                                {
+                                    content = content.Insert(cursor, key.KeyChar.ToString());
+                                    cursor++;
+                                }
+                                char_count++;
+                            }
+                            catch (Exception e)
+                            {
+                                ImprovedVBE._DrawACSIIString(e.Message, 4, 884, 16777215);
+                                ImprovedVBE._DrawACSIIString(cursor.ToString(), 4, 900, 16777215);
+                                ImprovedVBE._DrawACSIIString(content.Length.ToString(), 4, 920, 16777215);
                             }
                         }
                     }
                     */
-                }
-            if(MouseManager.MouseState == MouseState.Left)
-            {
-                if(MouseManager.X > 297 && MouseManager.X < 384)//184, 248
-                {
-                    if(MouseManager.Y > 30 + 42 && MouseManager.Y < 30 + 61)
+
+                    int x = 8;
+                    int y = 140;
+                    if (first == true)
                     {
-                        try
+                        Array.Copy(programmers_dream.RawData, 1024 * 116, buffer, 0, 1024 * 652);
+
+                        first = false;
+                    }
+                    if (update == true)
+                    {
+                        buffer = Word_processor.draw_text(sample, x, y, ImprovedVBE.colourToNumber(0, 0, 0), buffer, 1024, help);
+                        update = false;
+                    }
+
+                    if (Kernel.Keyboard_cur == false)
+                    {
+                        KeyEvent key;
+                        if (KeyboardManager.TryReadKey(out key))
                         {
-                            get_script_and_run = true;
-                            if (get_script_and_run == true)
+                            if (key.Key == ConsoleKeyEx.Backspace)
                             {
-                                if(content.StartsWith("/app mode = graphical".ToLower()))
+                                if (sample.Length != 0)
                                 {
-                                        Window_Layout.text.Clear();
-                                        Window_Layout.Integers.Clear();
-                                        Window_Layout.buttons_funct.Clear();
-                                        Window_Layout.strings.Clear();
-                                        Window_Layout.buttons.Clear();
-                                        Window_Layout.instructions_list.Clear();
-                                    Graphical_Exec(content);
-                                    return;
+                                    sample = sample.Remove(sample.Length - 1);
+
+                                    for (int j = 0; j < 17; j++)
+                                    {
+                                        Array.Copy(programmers_dream.RawData, (1024 * 125) + (last_y + j) * 1024 + last_x, buffer, (last_y + j) * 1024 + last_x, 10);
+                                    }
+                                }
+                                if (sample.Length >= 10)
+                                {
+                                    help = sample.Length - 10;
                                 }
                                 else
                                 {
-                                    Things_to_Display.Clear();
-                                    CSharp(content);
-                                    get_script_and_run = false;
+                                    help = 0;
                                 }
-
+                                update = true;
+                            }
+                            else if (key.Key == ConsoleKeyEx.Enter || key.Key == ConsoleKeyEx.NumEnter)
+                            {
+                                sample += "\n";
+                                help = sample.Length - 10;
+                                update = true;
+                            }
+                            else
+                            {
+                                sample += key.KeyChar;
+                                help = sample.Length - 10;
+                                update = true;
                             }
                         }
-                        catch (Exception e)
-                        {
-                            ImprovedVBE._DrawACSIIString(e.Message, 4, 884, 16777215);
-                        }
                     }
+                    ImprovedVBE.DrawImageArray(71, 22, dropdown, 42, 53 + 20);
+                    buffer.CopyTo(ImprovedVBE.cover.RawData, 1024 * 135);
                 }
-                if(MouseManager.X > 10 && MouseManager.X < 115)
+                if (movable == true)
                 {
-                    if(MouseManager.Y > 52 && MouseManager.Y < 78)
+                    Int_Manager.Text_Editor_X = (int)Kernel.X;
+                    Int_Manager.Text_Editor_Y = (int)Kernel.Y;
+                    if (MouseManager.MouseState == MouseState.Right)
                     {
-                        //Add & remove method
+                        movable = false;
                     }
                 }
-                if(MouseManager.X > 126 && MouseManager.X < 166)
-                {
-                    if(MouseManager.Y > 52 && MouseManager.Y < 78)
-                    {
-                        if (File.Exists("0:\\CoolProgram.txt"))
-                        {
-                            File.Delete("0:\\CoolProgram.txt");
-                        }
-                        File.Create("0:\\CoolProgram.txt");
-                        File.WriteAllText("0:\\CoolProgram.txt", content);
-                    }
-                }
-            }
-            if (allowedtopass == true)
-            {
 
-                KeyEvent key;
-                if (KeyboardManager.TryReadKey(out key))
+                int i = 0;
+                if (content2 == content)
                 {
-                    if (key.Key == ConsoleKeyEx.Backspace)
-                    {
-                        if (content.Length != 0)
-                        {
-                            content = content.Remove(content.Length - 1);
-                            return;
-                        }
-                    }
-                    if (key.Key == ConsoleKeyEx.Enter)
-                    {
-                        content += "\n";
-                        return;
-                    }
-                    else
-                    {
-                        content += key.KeyChar;
-                        return;
-                    }
-                }
-                if (KeyboardManager.TryReadKey(out key))
-                {
-                    if (key.Key == ConsoleKeyEx.Backspace)
-                    {
-                        if (content.Length != 0)
-                        {
-                            content = content.Remove(content.Length - 1);
-                            return;
-                        }
-                    }
-                    if (key.Key == ConsoleKeyEx.Enter)
-                    {
-                        content += "\n";
-                        return;
-                    }
-                    else
-                    {
-                        content += key.KeyChar;
-                        return;
-                    }
-                }
-                if (KeyboardManager.TryReadKey(out key))
-                {
-                    if (key.Key == ConsoleKeyEx.Backspace)
-                    {
-                        if (content.Length != 0)
-                        {
-                            content = content.Remove(content.Length - 1);
-                            return;
-                        }
-                    }
-                    if (key.Key == ConsoleKeyEx.Enter)
-                    {
-                        content += "\n";
-                        return;
-                    }
-                    else
-                    {
-                        content += key.KeyChar;
-                        return;
-                    }
-                }
-                if (KeyboardManager.TryReadKey(out key))
-                {
-                    if (key.Key == ConsoleKeyEx.Backspace)
-                    {
-                        if (content.Length != 0)
-                        {
-                            content = content.Remove(content.Length - 1);
-                            return;
-                        }
-                    }
-                    if (key.Key == ConsoleKeyEx.Enter)
-                    {
-                        content += "\n";
-                        return;
-                    }
-                    else
-                    {
-                        content += key.KeyChar;
-                        return;
-                    }
-                }
-                if (KeyboardManager.TryReadKey(out key))
-                {
-                    if (key.Key == ConsoleKeyEx.Backspace)
-                    {
-                        if (content.Length != 0)
-                        {
-                            content = content.Remove(content.Length - 1);
-                            return;
-                        }
-                    }
-                    if (key.Key == ConsoleKeyEx.Enter)
-                    {
-                        content += "\n";
-                        return;
-                    }
-                    else
-                    {
-                        content += key.KeyChar;
-                        return;
-                    }
-                }
-                if (KeyboardManager.TryReadKey(out key))
-                {
-                    if (key.Key == ConsoleKeyEx.Backspace)
-                    {
-                        if (content.Length != 0)
-                        {
-                            content = content.Remove(content.Length - 1);
-                            return;
-                        }
-                    }
-                    if (key.Key == ConsoleKeyEx.Enter)
-                    {
-                        content += "\n";
-                        return;
-                    }
-                    else
-                    {
-                        content += key.KeyChar;
-                        return;
-                    }
-                }
-                if (KeyboardManager.TryReadKey(out key))
-                {
-                    if (key.Key == ConsoleKeyEx.Backspace)
-                    {
-                        if (content.Length != 0)
-                        {
-                            content = content.Remove(content.Length - 1);
-                            return;
-                        }
-                    }
-                    if (key.Key == ConsoleKeyEx.Enter)
-                    {
-                        content += "\n";
-                        return;
-                    }
-                    else
-                    {
-                        content += key.KeyChar;
-                        return;
-                    }
-                }
-                if (KeyboardManager.TryReadKey(out key))
-                {
-                    if (key.Key == ConsoleKeyEx.Backspace)
-                    {
-                        if (content.Length != 0)
-                        {
-                            content = content.Remove(content.Length - 1);
-                            return;
-                        }
-                    }
-                    if (key.Key == ConsoleKeyEx.Enter)
-                    {
-                        content += "\n";
-                        return;
-                    }
-                    else
-                    {
-                        content += key.KeyChar;
-                        return;
-                    }
-                }
-                if (KeyboardManager.TryReadKey(out key))
-                {
-                    if (key.Key == ConsoleKeyEx.Backspace)
-                    {
-                        if (content.Length != 0)
-                        {
-                            content = content.Remove(content.Length - 1);
-                            return;
-                        }
-                    }
-                    if (key.Key == ConsoleKeyEx.Enter)
-                    {
-                        content += "\n";
-                        return;
-                    }
-                    else
-                    {
-                        content += key.KeyChar;
-                        return;
-                    }
-                }
-                if (KeyboardManager.TryReadKey(out key))
-                {
-                    if (key.Key == ConsoleKeyEx.Backspace)
-                    {
-                        if (content.Length != 0)
-                        {
-                            content = content.Remove(content.Length - 1);
-                            return;
-                        }
-                    }
-                    if (key.Key == ConsoleKeyEx.Enter)
-                    {
-                        content += "\n";
-                        return;
-                    }
-                    else
-                    {
-                        content += key.KeyChar;
-                        return;
-                    }
-                }
-            }
-            if (movable == true)
-            {
-                Int_Manager.Text_Editor_X = (int)MouseManager.X;
-                Int_Manager.Text_Editor_Y = (int)MouseManager.Y;
-                if (MouseManager.MouseState == MouseState.Right)
-                {
-                    movable = false;
-                }
-            }
 
-            int i = 0;
-            if (content2 == content)
-            {
-
-            }
-            else
-            {
-                modified_content = "";
-                foreach (char character in content)
+                }
+                else
                 {
-                    if (i == 115)
+                    modified_content = "";
+                    foreach (char character in content)
                     {
-                        modified_content += "\n" + character;
-                        i = 0;
+                        if (i == 115)
+                        {
+                            modified_content += "\n" + character;
+                            i = 0;
+                        }
+                        if (character == '\n')
+                        {
+                            modified_content += character;
+                            i = 0;
+                        }
+                        else
+                        {
+                            modified_content += character;
+                            i++;
+                        }
                     }
-                    if (character == '\n')
+                    content2 = content;
+                }
+                //Text displayer 4, 102
+                ImprovedVBE._DrawACSIIString(modified_content, 4, 115, 16777215);
+                try
+                {
+                    int x = 4;
+                    int y = 836;//884
+
+                    foreach (string s in Things_to_Display)
                     {
-                        modified_content += character;
-                        i = 0;
-                    }
-                    else
-                    {
-                        modified_content += character;
-                        i++;
+                        ImprovedVBE._DrawACSIIString(s, x, y, 16777215);
+                        y += 12;
                     }
                 }
-                content2 = content;
-            }
-            //Text displayer 4, 102
-            ImprovedVBE._DrawACSIIString(modified_content, 4, 115, 16777215);
-            try
-            {
-                int x = 4;
-                int y = 836;//884
-
-                foreach (string s in Things_to_Display)
+                catch (Exception e)
                 {
-                    ImprovedVBE._DrawACSIIString(s, x, y, 16777215);
-                    y += 12;
+                     ImprovedVBE._DrawACSIIString(e.Message, 4, 884, 16777215);
                 }
-            }
-            catch (Exception e)
-            {
-                 ImprovedVBE._DrawACSIIString(e.Message, 4, 884, 16777215);
-            }
-            var_value_string.Clear();
-            var_value_int.Clear();
-            modified_text.Clear();
-            ImprovedVBE._DrawACSIIString(hell, 500, 884, 16777215);
+                var_value_string.Clear();
+                var_value_int.Clear();
+                modified_text.Clear();
+                ImprovedVBE._DrawACSIIString(hell, 500, 884, 16777215);
             }
         }
 
@@ -680,7 +700,7 @@ namespace CrystalOS.Applications.Programmers_Dream
                         Things_to_Display.Add(cont);
                         cont = "";
                     }
-                    if ((instruction_list[i].StartsWith("FileSystem.CreateFile(\"") || instruction_list[i].StartsWith("filesystem.createfile(\"")) && instruction_list[i].EndsWith("\")"))
+                    if ((instruction_list[i].StartsWith("CrystalOS2.CreateFile(\"") || instruction_list[i].StartsWith("filesystem.createfile(\"")) && instruction_list[i].EndsWith("\")"))
                     {
                         string s = instruction_list[i].Remove(0, 23);
                         s = s.Remove(s.Length - 2);
@@ -711,7 +731,7 @@ namespace CrystalOS.Applications.Programmers_Dream
                             }
                         }
                     }
-                    if ((instruction_list[i].StartsWith("FileSystem.RemoveFile(\"") || instruction_list[i].StartsWith("filesystem.removefile(\"")) && instruction_list[i].EndsWith("\")"))
+                    if ((instruction_list[i].StartsWith("CrystalOS2.RemoveFile(\"") || instruction_list[i].StartsWith("filesystem.removefile(\"")) && instruction_list[i].EndsWith("\")"))
                     {
                         string s = instruction_list[i].Remove(0, 23);
                         s = s.Remove(s.Length - 2);
@@ -742,7 +762,7 @@ namespace CrystalOS.Applications.Programmers_Dream
                             }
                         }
                     }
-                    if ((instruction_list[i].StartsWith("FileSystem.CreateFolder(\"") || instruction_list[i].StartsWith("filesystem.createfolder(\"")) && instruction_list[i].EndsWith("\")"))
+                    if ((instruction_list[i].StartsWith("CrystalOS2.CreateFolder(\"") || instruction_list[i].StartsWith("filesystem.createfolder(\"")) && instruction_list[i].EndsWith("\")"))
                     {
                         string s = instruction_list[i].Remove(0, 25);
                         s = s.Remove(s.Length - 2);
@@ -773,7 +793,7 @@ namespace CrystalOS.Applications.Programmers_Dream
                             }
                         }
                     }
-                    if ((instruction_list[i].StartsWith("FileSystem.RemoveFolder(\"") || instruction_list[i].StartsWith("filesystem.removefolder(\"")) && instruction_list[i].EndsWith("\")"))
+                    if ((instruction_list[i].StartsWith("CrystalOS2.RemoveFolder(\"") || instruction_list[i].StartsWith("filesystem.removefolder(\"")) && instruction_list[i].EndsWith("\")"))
                     {
                         string s = instruction_list[i].Remove(0, 25);
                         s = s.Remove(s.Length - 2);
@@ -804,7 +824,7 @@ namespace CrystalOS.Applications.Programmers_Dream
                             }
                         }
                     }
-                    if ((instruction_list[i].StartsWith("FileSystem.ReadFromFile(\"") || instruction_list[i].StartsWith("filesystem.readfromfile(\"")) && instruction_list[i].EndsWith("\")"))
+                    if ((instruction_list[i].StartsWith("CrystalOS2.ReadFromFile(\"") || instruction_list[i].StartsWith("filesystem.readfromfile(\"")) && instruction_list[i].EndsWith("\")"))
                     {
                         //25
                         string cleaned = instruction_list[i].Remove(0, 25);
@@ -838,92 +858,271 @@ namespace CrystalOS.Applications.Programmers_Dream
         public static int window_x = 0;
         public static int window_y = 0;
 
+        public static bool is_statement_true = true;
+
+        public static List<bool> ifs = new List<bool>();
+        public static string scripts = "";
+
         public static void Graphical_Exec(string script)
         {
             instruction_list = script.Split('\n');
             for (int i = 0; i < instruction_list.Length; i++)
             {
-                if (instruction_list[i] == "/app mode = graphical".ToLower())
+                if(ifs.Last() == true)
                 {
+                    if (instruction_list[i].StartsWith("if("))
+                    {
+                        //Starts if structure start
+                        ifs.Add(true);
+                        if (instruction_list[i].EndsWith("}"))
+                        {
+                            ifs.RemoveAt(ifs.Count - 1);
+                            if (ifs.Count() == 0)
+                            {
+                                ifs.Add(false);
+                            }
+                        }
+                        /*
+                         if (instruction_list[i].Contains(" = "))
+                        {
+                            string[] s = instruction_list[i].Split(" = ");
+                            if (s[0] == s[1])
+                            {
+                                iftrue = true;
+                            }
+                        }
+                         */
+                    }
+                    else if (instruction_list[i].EndsWith("}"))
+                    {
+                        ifs.RemoveAt(ifs.Count - 1);
+                        if (ifs.Count() == 0)
+                        {
+                            ifs.Add(false);
+                        }
+                        Window_Layout.ifs.Add(new Tuple<string, int>(scripts, 0));
+                    }
+                    else
+                    {
+                        scripts += instruction_list[i] + "\n";
+                    }
+                }
+                else
+                {
+                    if (instruction_list[i] == "/app mode = graphical".ToLower())
+                    {
 
-                }
-                else if (instruction_list[i].StartsWith("graphic_window(".ToLower()))
-                {//15
-                    string s = instruction_list[i].Remove(0, 15);
-                    s = s.Remove(s.Length - 1);
-                    string[] data = s.Split(", ");
-                    Task_Manager.data.Add(int.Parse(data[2]));
-                    Task_Manager.data.Add(int.Parse(data[3]));
-                    for (int x = 0; x < Task_Manager.Tasks.Count; x++)
-                    {
-                        if (Task_Manager.Tasks[x].Item1 == "new_app " + lasti.ToString())
-                        {
-                            Task_Manager.Tasks.RemoveAt(x);
-                        }
                     }
-                    Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string>("new_app " + lasti.ToString(), int.Parse(data[0]), int.Parse(data[1]), false, code));
-                    lasti++;
-                    //ImprovedVBE.DrawFilledRectangle(150, int.Parse(data[0]), int.Parse(data[1]), int.Parse(data[2]), int.Parse(data[3]));
-                }
-                else if (instruction_list[i].StartsWith("draw_btn(".ToLower()))
-                {
-                    string s = instruction_list[i].Remove(0, 9);
-                    s = s.Remove(s.Length - 1);
-                    string[] data = s.Split(", ");
-                    for (int x = 0; x < Window_Layout.buttons.Count; x++)
-                    {
-                        if (Window_Layout.buttons[x].Item5 == data[4].Replace("\"", ""))
-                        {
-                            Window_Layout.buttons.RemoveAt(x);
-                        }
-                    }
-                    Window_Layout.buttons.Add(new Tuple<int, int, int, int, string, int, string>(int.Parse(data[0]), int.Parse(data[1]), int.Parse(data[2]), int.Parse(data[3]), data[4].Replace("\"", ""), lasti - 1, ""));
-                    window_x = int.Parse(data[0]);
-                    window_y = int.Parse(data[1]);
-                }
-                else if (instruction_list[i].StartsWith("if(".ToLower()))
-                {
-                    if (instruction_list[i].Contains(" = "))
-                    {
-                        string[] s = instruction_list[i].Split(" = ");
-                        if (s[0] == s[1])
-                        {
-                            iftrue = true;
-                        }
-                    }
-                }
-                else if (instruction_list[i].StartsWith("onbtnpressed("))
-                {
-                    try
-                    {
-                        int a = 0;
-                        string s = instruction_list[i].Remove(0, 13);
+                    else if (instruction_list[i].StartsWith("graphic_window(".ToLower()))
+                    {//15
+                        string s = instruction_list[i].Remove(0, 15);
                         s = s.Remove(s.Length - 1);
-                        string[] data = s.Split(" - ");
-                        string d = "";
-                        d += data[1];
-                        ImprovedVBE._DrawACSIIString(data[0] + "\n" + data[1], 500, 300, 16777215);
-                        Window_Layout.buttons_funct.Add(new Tuple<string, string>(data[0], data[1]));
-                        //test1
-                        //draw_txt(1, 1, string)
-                    }
-                    catch (Exception e)
-                    {
-                        ImprovedVBE._DrawACSIIString(e.Message, 500, 300, 16777215);
-                    }
-                }
-                else if (instruction_list[i].StartsWith("int"))
-                {
-                    if (instruction_list[i].Contains(" = "))
-                    {
-                        string s = instruction_list[i].Remove(0, 4);
-                        string[] data = s.Split(" = ");
-                        if(Window_Layout.Integers.Contains(new Tuple<string, int>(data[0], int.Parse(data[1]))))
+                        string[] data = s.Split(", ");
+                        Task_Manager.data.Add(int.Parse(data[2]));
+                        Task_Manager.data.Add(int.Parse(data[3]));
+                        for (int x = 0; x < Task_Manager.Tasks.Count; x++)
                         {
-
+                            if (Task_Manager.Tasks[x].Item1 == "new_app " + lasti.ToString())
+                            {
+                                Task_Manager.Tasks.RemoveAt(x);
+                            }
                         }
-                        else
+                        Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string, bool, int>("new_app " + lasti.ToString(), int.Parse(data[0]), int.Parse(data[1]), false, code, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                        lasti++;
+                        //ImprovedVBE.DrawFilledRectangle(150, int.Parse(data[0]), int.Parse(data[1]), int.Parse(data[2]), int.Parse(data[3]));
+                    }
+                    else if (instruction_list[i].StartsWith("draw_btn(".ToLower()))
+                    {
+                        string s = instruction_list[i].Remove(0, 9);
+                        s = s.Remove(s.Length - 1);
+                        string[] data = s.Split(", ");
+                        for (int x = 0; x < Window_Layout.buttons.Count; x++)
                         {
+                            if (Window_Layout.buttons[x].Item5 == data[4].Replace("\"", ""))
+                            {
+                                Window_Layout.buttons.RemoveAt(x);
+                            }
+                        }
+                        Window_Layout.buttons.Add(new Tuple<int, int, int, int, string, int, string>(int.Parse(data[0]), int.Parse(data[1]), int.Parse(data[2]), int.Parse(data[3]), data[4].Replace("\"", ""), lasti - 1, ""));
+                        window_x = int.Parse(data[0]);
+                        window_y = int.Parse(data[1]);
+                    }
+                    else if (instruction_list[i].StartsWith("onbtnpressed("))
+                    {
+                        try
+                        {
+                            int a = 0;
+                            string s = instruction_list[i].Remove(0, 13);
+                            s = s.Remove(s.Length - 1);
+                            string[] data = s.Split(" - ");
+                            string d = "";
+                            d += data[1];
+                            ImprovedVBE._DrawACSIIString(data[0] + "\n" + data[1], 500, 300, 16777215);
+                            Window_Layout.buttons_funct.Add(new Tuple<string, string>(data[0], data[1]));
+                            //test1
+                            //draw_txt(1, 1, string)
+                        }
+                        catch (Exception e)
+                        {
+                            ImprovedVBE._DrawACSIIString(e.Message, 500, 300, 16777215);
+                        }
+                    }
+                    else if (instruction_list[i].StartsWith("int"))
+                    {
+                        if (instruction_list[i].Contains(" = "))
+                        {
+                            string s = instruction_list[i].Remove(0, 4);
+                            string[] data = s.Split(" = ");
+                            if (Window_Layout.Integers.Contains(new Tuple<string, int>(data[0], int.Parse(data[1]))))
+                            {
+
+                            }
+                            else
+                            {
+                                if (data[1].StartsWith("DateTime."))
+                                {
+                                    if (data[1].EndsWith("GetHour"))
+                                    {
+                                        Window_Layout.Integers.Add(new Tuple<string, int>(data[0], DateTime.UtcNow.Hour));
+                                    }
+                                    if (data[1].EndsWith("GetMinute"))
+                                    {
+                                        Window_Layout.Integers.Add(new Tuple<string, int>(data[0], DateTime.UtcNow.Minute));
+                                    }
+                                    if (data[1].EndsWith("GetSecond"))
+                                    {
+                                        Window_Layout.Integers.Add(new Tuple<string, int>(data[0], DateTime.UtcNow.Second));
+                                    }
+                                }
+                                else
+                                {
+                                    Window_Layout.Integers.Add(new Tuple<string, int>(data[0], int.Parse(data[1])));
+                                }
+                            }
+                        }
+                        else if (instruction_list[i].Contains(" -= "))
+                        {
+                            string s = instruction_list[i];
+                            string[] data = s.Split(" -= ");
+                            bool foundsg = false;
+                            int found = 0;
+                            foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                            {
+                                if (data[0] == tuple2.Item1)
+                                {
+                                    found = tuple2.Item2;
+
+                                    foundsg = true;
+                                }
+                            }
+                            bool foundsg2 = false;
+                            int found2 = 0;
+                            foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                            {
+                                if (data[1] == tuple2.Item1)
+                                {
+                                    found2 = tuple2.Item2;
+
+                                    foundsg2 = true;
+                                }
+                            }
+                            if (foundsg == true && foundsg2 == true)
+                            {
+                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], found - found2));
+                            }
+                        }
+                        else if (instruction_list[i].Contains(" += "))
+                        {
+                            Window_Layout.instructions_list.Add(new Tuple<string, int>(instruction_list[i], lasti - 1));
+                            string s = instruction_list[i];
+                            string[] data = s.Split(" += ");
+                            bool foundsg = false;
+                            int found = 0;
+                            foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                            {
+                                if (data[0] == tuple2.Item1)
+                                {
+                                    found = tuple2.Item2;
+
+                                    foundsg = true;
+                                }
+                            }
+                            bool foundsg2 = false;
+                            int found2 = 0;
+                            foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                            {
+                                if (data[1] == tuple2.Item1)
+                                {
+                                    found2 = tuple2.Item2;
+
+                                    foundsg2 = true;
+                                }
+                            }
+                            if (foundsg == true && foundsg2 == true)
+                            {
+                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], found + found2));
+                            }
+                        }
+                    }
+                    else if (instruction_list[i].StartsWith("string"))
+                    {
+                        string s = instruction_list[i].Remove(0, 7);
+                        string[] data = s.Split(" = ");
+                        Window_Layout.strings.Add(new Tuple<string, string>(data[0], data[1]));
+                    }
+                    else if (instruction_list[i].StartsWith("draw_txt("))
+                    {
+                        Window_Layout.text.Add(new Tuple<string, int>(instruction_list[i], lasti - 1));
+                    }
+                    else if (instruction_list[i].StartsWith("if("))
+                    {
+                        //Starts if structure start
+                        ifs.Add(true);
+                        if (instruction_list[i].EndsWith("}"))
+                        {
+                            ifs.RemoveAt(ifs.Count - 1);
+                            if(ifs.Count() == 0)
+                            {
+                                ifs.Add(false);
+                            }
+                        }
+                        /*
+                         if (instruction_list[i].Contains(" = "))
+                        {
+                            string[] s = instruction_list[i].Split(" = ");
+                            if (s[0] == s[1])
+                            {
+                                iftrue = true;
+                            }
+                        }
+                         */
+                    }
+                    else
+                    {
+                        /*
+                        bool foundsg = false;
+                        string s = instruction_list[i].Replace(" ", "");
+                        string[] data = s.Split("=");
+                        try
+                        {
+                            Window_Layout.Integers.Add(new Tuple<string, int>(data[0], int.Parse(data[1])));
+                        }
+                        catch
+                        {
+                            foreach (Tuple<string, int> item in Window_Layout.Integers)
+                            {
+                                if (item.Item1 == data[1])
+                                {
+                                    Window_Layout.Integers.Add(new Tuple<string, int>(data[0], item.Item2));
+                                }
+                            }
+                            //ImprovedVBE._DrawACSIIString("Unknown command, string or int name at line " + i.ToString(), 500, 300, 16777215);
+                        }
+                        */
+                        if (instruction_list[i].Contains(" = "))
+                        {
+                            string s = instruction_list[i].Remove(0, 4);
+                            string[] data = s.Split(" = ");
                             if (data[1].StartsWith("DateTime."))
                             {
                                 if (data[1].EndsWith("GetHour"))
@@ -944,190 +1143,71 @@ namespace CrystalOS.Applications.Programmers_Dream
                                 Window_Layout.Integers.Add(new Tuple<string, int>(data[0], int.Parse(data[1])));
                             }
                         }
-                    }
-                    else if (instruction_list[i].Contains(" -= "))
-                    {
-                        string s = instruction_list[i];
-                        string[] data = s.Split(" -= ");
-                        bool foundsg = false;
-                        int found = 0;
-                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
+                        else if (instruction_list[i].Contains(" -= "))
                         {
-                            if (data[0] == tuple2.Item1)
+                            string s = instruction_list[i];
+                            string[] data = s.Split(" -= ");
+                            bool foundsg = false;
+                            int found = 0;
+                            foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
                             {
-                                found = tuple2.Item2;
+                                if (data[0] == tuple2.Item1)
+                                {
+                                    found = tuple2.Item2;
 
-                                foundsg = true;
+                                    foundsg = true;
+                                }
                             }
-                        }
-                        bool foundsg2 = false;
-                        int found2 = 0;
-                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
-                        {
-                            if (data[1] == tuple2.Item1)
+                            bool foundsg2 = false;
+                            int found2 = 0;
+                            foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
                             {
-                                found2 = tuple2.Item2;
+                                if (data[1] == tuple2.Item1)
+                                {
+                                    found2 = tuple2.Item2;
 
-                                foundsg2 = true;
+                                    foundsg2 = true;
+                                }
+                            }
+                            if (foundsg == true && foundsg2 == true)
+                            {
+                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], found - found2));
                             }
                         }
-                        if (foundsg == true && foundsg2 == true)
+                        else if (instruction_list[i].Contains(" += "))
                         {
-                            Window_Layout.Integers.Add(new Tuple<string, int>(data[0], found - found2));
-                        }
-                    }
-                    else if (instruction_list[i].Contains(" += "))
-                    {
-                        Window_Layout.instructions_list.Add(new Tuple<string, int>(instruction_list[i], lasti - 1));
-                        string s = instruction_list[i];
-                        string[] data = s.Split(" += ");
-                        bool foundsg = false;
-                        int found = 0;
-                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
-                        {
-                            if (data[0] == tuple2.Item1)
+                            string s = instruction_list[i];
+                            string[] data = s.Split(" += ");
+                            bool foundsg = false;
+                            int found = 0;
+                            foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
                             {
-                                found = tuple2.Item2;
+                                if (data[0] == tuple2.Item1)
+                                {
+                                    found = tuple2.Item2;
 
-                                foundsg = true;
+                                    foundsg = true;
+                                }
                             }
-                        }
-                        bool foundsg2 = false;
-                        int found2 = 0;
-                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
-                        {
-                            if (data[1] == tuple2.Item1)
+                            bool foundsg2 = false;
+                            int found2 = 0;
+                            foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
                             {
-                                found2 = tuple2.Item2;
+                                if (data[1] == tuple2.Item1)
+                                {
+                                    found2 = tuple2.Item2;
 
-                                foundsg2 = true;
+                                    foundsg2 = true;
+                                }
                             }
-                        }
-                        if (foundsg == true && foundsg2 == true)
-                        {
-                            Window_Layout.Integers.Add(new Tuple<string, int>(data[0], found + found2));
-                        }
-                    }
-                }
-                else if (instruction_list[i].StartsWith("string"))
-                {
-                    string s = instruction_list[i].Remove(0, 7);
-                    string[] data = s.Split(" = ");
-                    Window_Layout.strings.Add(new Tuple<string, string>(data[0], data[1]));
-                }
-                else if (instruction_list[i].StartsWith("draw_txt("))
-                {
-                    Window_Layout.text.Add(new Tuple<string, int>(instruction_list[i], lasti - 1));
-                }
-                else
-                {
-                    /*
-                    bool foundsg = false;
-                    string s = instruction_list[i].Replace(" ", "");
-                    string[] data = s.Split("=");
-                    try
-                    {
-                        Window_Layout.Integers.Add(new Tuple<string, int>(data[0], int.Parse(data[1])));
-                    }
-                    catch
-                    {
-                        foreach (Tuple<string, int> item in Window_Layout.Integers)
-                        {
-                            if (item.Item1 == data[1])
+                            if (foundsg == true && foundsg2 == true)
                             {
-                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], item.Item2));
+                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], found + found2));
                             }
-                        }
-                        //ImprovedVBE._DrawACSIIString("Unknown command, string or int name at line " + i.ToString(), 500, 300, 16777215);
-                    }
-                    */
-                    if (instruction_list[i].Contains(" = "))
-                    {
-                        string s = instruction_list[i].Remove(0, 4);
-                        string[] data = s.Split(" = ");
-                        if (data[1].StartsWith("DateTime."))
-                        {
-                            if (data[1].EndsWith("GetHour"))
-                            {
-                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], DateTime.UtcNow.Hour));
-                            }
-                            if (data[1].EndsWith("GetMinute"))
-                            {
-                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], DateTime.UtcNow.Minute));
-                            }
-                            if (data[1].EndsWith("GetSecond"))
-                            {
-                                Window_Layout.Integers.Add(new Tuple<string, int>(data[0], DateTime.UtcNow.Second));
-                            }
-                        }
-                        else
-                        {
-                            Window_Layout.Integers.Add(new Tuple<string, int>(data[0], int.Parse(data[1])));
-                        }
-                    }
-                    else if (instruction_list[i].Contains(" -= "))
-                    {
-                        string s = instruction_list[i];
-                        string[] data = s.Split(" -= ");
-                        bool foundsg = false;
-                        int found = 0;
-                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
-                        {
-                            if (data[0] == tuple2.Item1)
-                            {
-                                found = tuple2.Item2;
-
-                                foundsg = true;
-                            }
-                        }
-                        bool foundsg2 = false;
-                        int found2 = 0;
-                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
-                        {
-                            if (data[1] == tuple2.Item1)
-                            {
-                                found2 = tuple2.Item2;
-
-                                foundsg2 = true;
-                            }
-                        }
-                        if (foundsg == true && foundsg2 == true)
-                        {
-                            Window_Layout.Integers.Add(new Tuple<string, int>(data[0], found - found2));
-                        }
-                    }
-                    else if (instruction_list[i].Contains(" += "))
-                    {
-                        string s = instruction_list[i];
-                        string[] data = s.Split(" += ");
-                        bool foundsg = false;
-                        int found = 0;
-                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
-                        {
-                            if (data[0] == tuple2.Item1)
-                            {
-                                found = tuple2.Item2;
-
-                                foundsg = true;
-                            }
-                        }
-                        bool foundsg2 = false;
-                        int found2 = 0;
-                        foreach (Tuple<string, int> tuple2 in Window_Layout.Integers)
-                        {
-                            if (data[1] == tuple2.Item1)
-                            {
-                                found2 = tuple2.Item2;
-
-                                foundsg2 = true;
-                            }
-                        }
-                        if (foundsg == true && foundsg2 == true)
-                        {
-                            Window_Layout.Integers.Add(new Tuple<string, int>(data[0], found + found2));
                         }
                     }
                 }
+                
             }
             lasti = 0;
         }

@@ -29,7 +29,7 @@ namespace CrystalOS.SystemFiles
                         {
                             if ((fontbuf[i] & 0x80 >> j) != 0)
                             {
-                                vMWareSVGAII.DrawPoint(new Pen(color), (int)(x + j + c * 8), (int)(y + i + l * 16));
+                                vMWareSVGAII.DrawPoint(color, (int)(x + j + c * 8), (int)(y + i + l * 16));
                             }
                         }
                     }

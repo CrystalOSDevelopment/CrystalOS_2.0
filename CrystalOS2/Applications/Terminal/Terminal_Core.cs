@@ -12,6 +12,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CrystalOS2.Applications.Task_Scheduler;
+using Kernel = CrystalOS2.Kernel;
 
 namespace CrystalOS.Applications.Terminal
 {
@@ -21,71 +23,79 @@ namespace CrystalOS.Applications.Terminal
         public static Bitmap term_base = new Bitmap(Terminal_base);
         public static List<string> prev_commands = new List<string>();
         public static int number_of_command = 0;
-        public static string content = "c:/";
+        public static string content = "c:\\";
         public static string command_input = "";
-        public static string displayed = "c:/";
-        public static string[] last_line;
-        public static string[] lines;
+        public static string displayed = "c:\\";
+        public static string last_line;
+        public static string lines;
         public static bool offed = false;
         public static bool movable = false;
         public static void Terminal()
         {
-                ImprovedVBE.DrawImage(term_base, Int_Manager.Terminal_X, Int_Manager.Terminal_Y);
-                if (MouseManager.MouseState == MouseState.Left)
+            displayed = Task_Manager.Tasks[Task_Manager.indicator].Item5;
+            ImprovedVBE.DrawImageAlpha(term_base, Task_Manager.Tasks[Task_Manager.indicator].Item2, Task_Manager.Tasks[Task_Manager.indicator].Item3);
+            if (MouseManager.MouseState == MouseState.Left)
+            {
+                if (Kernel.X > Task_Manager.Tasks[Task_Manager.indicator].Item2 + 605 && Kernel.X < Task_Manager.Tasks[Task_Manager.indicator].Item2 + 649)
                 {
-                    if (MouseManager.X > Int_Manager.Terminal_X + 605 && MouseManager.X < Int_Manager.Terminal_X + 649)
+                    if (Kernel.Y > Task_Manager.Tasks[Task_Manager.indicator].Item3 && Kernel.Y < Task_Manager.Tasks[Task_Manager.indicator].Item3 + 17)
                     {
-                        if (MouseManager.Y > Int_Manager.Terminal_Y && MouseManager.Y < Int_Manager.Terminal_Y + 17)
-                        {
-                            Bool_Manager.Terminal_Opened = false;
-                        }
+                        //Bool_Manager.Terminal_Opened = false;
+                        Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
                     }
-                    if (movable == false)
+                }
+                if (movable == false)
+                {
+                    if (Kernel.X > Task_Manager.Tasks[Task_Manager.indicator].Item2 && Kernel.X < Task_Manager.Tasks[Task_Manager.indicator].Item2 + 552)
                     {
-                        if (MouseManager.X > Int_Manager.Terminal_X && MouseManager.X < Int_Manager.Terminal_X + 552)
+                        if (Kernel.Y > Task_Manager.Tasks[Task_Manager.indicator].Item3 && Kernel.Y < Task_Manager.Tasks[Task_Manager.indicator].Item3 + 18)
                         {
-                            if (MouseManager.Y > Int_Manager.Terminal_Y && MouseManager.Y < Int_Manager.Terminal_Y + 18)
-                            {
-                                movable = true;
-                            }
+                            int f = (int)Kernel.X;
+                            int g = (int)Kernel.Y;
+                            //string saves = Task_Manager.Tasks[Task_Manager.indicator].Item5;
+                            Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("terminal", f, g, true, displayed, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
                         }
                     }
                 }
+            }
 
-                int i = 0;
-                foreach (char ch in displayed)
+            int i = 0;
+            foreach (char ch in displayed)
+            {
+                if (ch == '\n')
+                {
+                    i++;
+                }
+                else
+                {
+
+                }
+            }
+
+            int charcount = 0;
+            foreach (char ch in displayed)
+            {
+                if (i > 24)
                 {
                     if (ch == '\n')
                     {
-                        i++;
+                        displayed = displayed.Remove(0, charcount + 1);
+                        i -= 1;
+                        charcount = 0;
                     }
                     else
                     {
-
+                        charcount += 1;
                     }
                 }
+            }
 
-                int charcount = 0;
-                foreach (char ch in displayed)
-                {
-                    if (i > 24)
-                    {
-                        if (ch == '\n')
-                        {
-                            displayed = displayed.Remove(0, charcount + 1);
-                            i -= 1;
-                            charcount = 0;
-                        }
-                        else
-                        {
-                            charcount += 1;
-                        }
-                    }
-                }
+            ImprovedVBE._DrawACSIIString(displayed, Task_Manager.Tasks[Task_Manager.indicator].Item2 + 4, Task_Manager.Tasks[Task_Manager.indicator].Item3 + 21, 0);
 
-                ImprovedVBE._DrawACSIIString(displayed, Int_Manager.Terminal_X + 4, Int_Manager.Terminal_Y + 21, 0);
-
-                #region core
+            #region core
+            if (Task_Manager.Tasks[0].Item1 == "terminal" && Task_Manager.indicator == 0)
+            {
                 KeyEvent key;
 
                 if (KeyboardManager.TryReadKey(out key))
@@ -94,42 +104,57 @@ namespace CrystalOS.Applications.Terminal
                     {
                         if (command_input.Length != 0)
                         {
-                            displayed = displayed.Remove(displayed.Length - 1);
+                            //displayed = displayed.Remove(displayed.Length - 1);
+                            Tuple<string, int, int, bool, string, bool, int> s = Task_Manager.Tasks[Task_Manager.indicator];
+                            Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                            string mod = s.Item5.Remove(s.Item5.Length - 1);
+                            Task_Manager.Tasks.Insert(Task_Manager.indicator, new Tuple<string, int, int, bool, string, bool, int>(s.Item1, s.Item2, s.Item3, s.Item4, mod, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
                             command_input = command_input.Remove(command_input.Length - 1);
-                            return;
                         }
                     }
-                    if (key.Key == ConsoleKeyEx.Enter)
+                    else if (key.Key == ConsoleKeyEx.Enter)
                     {
                         Commands(command_input);
                         prev_commands.Add(command_input);
-                        return;
+                        Tuple<string, int, int, bool, string, bool, int> s = Task_Manager.Tasks[Task_Manager.indicator];
+                        Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                        Task_Manager.Tasks.Insert(Task_Manager.indicator, new Tuple<string, int, int, bool, string, bool, int>(s.Item1, s.Item2, s.Item3, s.Item4, displayed, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
                     }
                     else
                     {
                         command_input += key.KeyChar;
-                        displayed += key.KeyChar;
-                        return;
+                        //displayed += key.KeyChar;
+                        Tuple<string, int, int, bool, string, bool, int> s = Task_Manager.Tasks[Task_Manager.indicator];
+                        Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                        string mod = s.Item5;
+                        mod += key.KeyChar;
+                        Task_Manager.Tasks.Insert(Task_Manager.indicator, new Tuple<string, int, int, bool, string, bool, int>(s.Item1, s.Item2, s.Item3, s.Item4, mod, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
                     }
                 }
+            }
 
             #endregion core
 
-            if (movable == true)
+            if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == true)
             {
-                Int_Manager.Terminal_X = (int)MouseManager.X;
-                Int_Manager.Terminal_Y = (int)MouseManager.Y;
+                int f = (int)Kernel.X;
+                int g = (int)Kernel.Y;
+                Task_Manager.Tasks.RemoveAt(0);
+                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("terminal", f, g, true, displayed, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
                 if (MouseManager.MouseState == MouseState.Right)
                 {
-                    movable = false;
+                    Task_Manager.Tasks.RemoveAt(0);
+                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("terminal", f, g, false, displayed, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                    //Task_Manager.Tasks.Reverse();
+                    //movable = false;
                 }
             }
 
             /*
             if (movable == true)
             {
-                Int_Manager.Terminal_X = (int)MouseManager.X;
-                Int_Manager.Terminal_Y = (int)MouseManager.Y;
+                Task_Manager.Tasks[Task_Manager.indicator].Item2 = (int)Kernel.X;
+                Task_Manager.Tasks[Task_Manager.indicator].Item3 = (int)Kernel.Y;
                 if (MouseManager.MouseState == MouseState.Right)
                 {
                     movable = false;
