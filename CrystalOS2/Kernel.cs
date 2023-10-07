@@ -5,6 +5,7 @@ using Cosmos.System;
 using Cosmos.System.Graphics;
 using Cosmos.System.Graphics.Fonts;
 using CrystalOS.Applications.About;
+using CrystalOS.Applications.Menu;
 using CrystalOS.Applications.Programmers_Dream;
 using CrystalOS.SystemFiles;
 using CrystalOS2;
@@ -169,7 +170,15 @@ namespace CrystalOS2
 
                     if (k.Key == ConsoleKeyEx.F3)
                     {
-                        if(Core.Current_Desktop == 0)
+                        Core core = new Core();
+                        core.x = Menumgr.z + 50;
+                        core.y = Menumgr.c + 50;
+                        core.desk_ID = CrystalOS2.Applications.MultiDesk.Core.Current_Desktop;
+                        core.minimised = false;
+
+                        Task_Manager.calculators.Add(core);
+                        /*
+                        if (Core.Current_Desktop == 0)
                         {
                             Core.Current_Desktop = 9;
                         }
@@ -177,6 +186,7 @@ namespace CrystalOS2
                         {
                             Core.Current_Desktop--;
                         }
+                        */
                     }
                     if (k.Key == ConsoleKeyEx.F4)
                     {
@@ -201,7 +211,8 @@ namespace CrystalOS2
 
             if (Bool_Manager.is_locked == false)
             {
-                ImprovedVBE._DrawACSIIString(DateTime.UtcNow.Hour.ToString() + " : " + DateTime.UtcNow.Minute.ToString(), 964, 5, 16777215);
+                ImprovedVBE._DrawACSIIString(DateTime.UtcNow.Hour.ToString() + ":" + DateTime.UtcNow.Minute.ToString(), 964, 2, 16777215);
+                ImprovedVBE._DrawACSIIString("fps: " + FPS, 87, 2, ImprovedVBE.colourToNumber(255, 255, 255));
                 foreach (Tuple<string, string, int, int, Bitmap> s in icons)
                 {
                     ImprovedVBE.DrawImageAlpha2(s.Item5, s.Item3 + 5, s.Item4 + 30);
@@ -259,10 +270,11 @@ namespace CrystalOS2
                 {   
                     Applications.Run.Run.Run_Window();
                     Programmers_Choice.Core();
-                    
+
                     try
                     {
-                        Task_Manager.Task_manager();
+                        Task_Manager t = new Task_Manager();
+                        t.Task_manager();
                         Clock.init(Int_Manager.Clock_X, Int_Manager.Clock_Y, 200, 200);
                         //CrystalOS.Applications.About.About_code.About(Int_Manager.About_X, Int_Manager.About_Y);
                         //Paint.Paint_app(Int_Manager.Paint_X, Int_Manager.Paint_Y);
@@ -341,14 +353,14 @@ namespace CrystalOS2
                     }
                     //CrystalOS.Applications.Solitaire.Solitaire.Solitaire_core();
                     CrystalOS.Applications.Menu.Menumgr.MenuManager();
-                
                 }
                 
             }
 
             //ImprovedVBE.DrawFilledEllipse(100, 100, 100, 50, ImprovedVBE.colourToNumber(255, 255, 255));
             //ImprovedVBE.DrawFilledEllipse(100, 100, 11, 11, ImprovedVBE.colourToNumber(255, 255, 255));
-            Demo_window.App();
+            //Demo_window.App();
+            //ImprovedVBE.DrawGradient();
 
             if (magnify == true)
             {
@@ -402,22 +414,22 @@ namespace CrystalOS2
                 {
                     if(val1 < 0)
                     {
-                        ImprovedVBE.DrawImageAlpha(magnified, 0, 0);
+                        ImprovedVBE.DrawImage(magnified, 0, 0);
                     }
                     else
                     {
-                        ImprovedVBE.DrawImageAlpha(magnified, val1, 0);
+                        ImprovedVBE.DrawImage(magnified, val1, 0);
                     }
                 }
                 else
                 {
                     if(val1 < 0)
                     {
-                        ImprovedVBE.DrawImageAlpha(magnified, 0, (int)Y - 150);
+                        ImprovedVBE.DrawImage(magnified, 0, (int)Y - 150);
                     }
                     else
                     {
-                        ImprovedVBE.DrawImageAlpha(magnified, val1, (int)Y - 150);
+                        ImprovedVBE.DrawImage(magnified, val1, (int)Y - 150);
                     }
                 }
             }
@@ -443,8 +455,6 @@ namespace CrystalOS2
             {
                 Program.Main();
             }
-
-            ImprovedVBE._DrawACSIIString("fps: " + FPS, 10, 10, ImprovedVBE.colourToNumber(255, 255, 255));
 
             btl.Boot_process(canvas);
 

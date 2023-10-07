@@ -23,6 +23,7 @@ using CrystalOS2.Applications.Browser;
 using CrystalOS2.Applications.Calendar;
 using CrystalOS2.Applications.Paint;
 using CrystalOS.NewFolder.NewFolder;
+using CrystalOS2.Applications;
 
 namespace CrystalOS.Applications.Menu
 {

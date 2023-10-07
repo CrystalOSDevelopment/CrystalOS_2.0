@@ -110,6 +110,7 @@ namespace CrystalOS2
 
         public static void DrawFilledRectangle(int color, int X, int Y, int Width, int Height)
         {
+            /*
             int r = (color & 0xff0000) >> 16;
             int g = (color & 0x00ff00) >> 8;
             int b = (color & 0x0000ff);
@@ -132,9 +133,9 @@ namespace CrystalOS2
 
                     DrawPixelfortext(i, j, colourToNumber(r2, g2, b2));
                 }
-            }
-            /*
-            if(X <= width)
+            }*/
+            
+            if(X <= width && Y < height)
             {
                 int[] line = new int[Width];
                 if(X < 0)
@@ -147,17 +148,39 @@ namespace CrystalOS2
                 }
                 Array.Fill(line, color);
 
-                for (int i = Y - 1; i < Y + Height - 1; i++)
+                for (int i = Y; i < Y + Height; i++)
                 {
                     Array.Copy(line, 0, cover.RawData, (i * width) + X, line.Length);
                 }
             }
-            */
+            
         }
 
         //Slower but can be improved with Array.Copy();
         public static void DrawImage(Image image, int x, int y)
         {
+            int[] line = new int[image.Width];
+            if (x < width)
+            {
+                if (x < 0)
+                {
+                    line = new int[image.Width + x];
+                    x = 0;
+                }
+                else if (x + image.Width > width)
+                {
+                    line = new int[image.Width - (x + image.Width - width)];
+                }
+
+                int scan_line = 0;
+                for (int _y = y; _y < y + image.Height; _y++)
+                {
+                    Array.Copy(image.RawData, scan_line * image.Width, cover.RawData, (_y - 1) * width + x, line.Length);
+                    //line.CopyTo(cover.RawData, (_y - 1) * width + x);
+                    scan_line++;
+                }
+            }
+            /*
             int counter = 0;
             int prewy = y;
             for (int _y = y; _y < y + image.Height; _y++)
@@ -173,16 +196,39 @@ namespace CrystalOS2
                         }
                         else
                         {
-                            cover.RawData[((_y * width) - (width - _x))] = image.RawData[counter];
+                            cover.RawData[_y * width + _x] = image.RawData[counter];
                             counter++;
                         }
                     }
                 }
                 prewy++;
             }
+            */
         }
         public static void DrawImageArray(int Width, int Height, int[] RawData, int x, int y)
         {
+            int[] line = new int[Width];
+            if (x < width)
+            {
+                if (x < 0)
+                {
+                    line = new int[Width + x];
+                    x = 0;
+                }
+                else if (x + Width > width)
+                {
+                    line = new int[Width - (x + Width - width)];
+                }
+
+                int scan_line = 0;
+                for (int _y = y; _y < y + Height; _y++)
+                {
+                    Array.Copy(RawData, scan_line * Width, cover.RawData, (_y - 1) * width + x, line.Length);
+                    //line.CopyTo(cover.RawData, (_y - 1) * width + x);
+                    scan_line++;
+                }
+            }
+            /*
             int counter = 0;
             int scan_line = 0;
             for (int _y = y; _y < y + Height; _y++)
@@ -228,6 +274,7 @@ namespace CrystalOS2
                 }
                 scan_line++;
             }
+            */
         }
 
         public static void DrawImageAlpha2(Image image, int x, int y)
@@ -288,15 +335,21 @@ namespace CrystalOS2
 
                     if (line[0] != 0 || line[^1] != 0)
                     {
-                        line.CopyTo(cover.RawData, (_y - 1) * width + x);
-                        //TODO: copy just a specific amount of length
-                        counter += (int)image.Width;
+                        if(_y < height)
+                        {
+                            line.CopyTo(cover.RawData, _y * width + x);
+                            counter += (int)image.Width;
+                        }
+                        else
+                        {
+                            counter += (int)image.Width;
+                        }
                     }
                     else
                     {
                         for (int _x = x; _x < x + image.Width; _x++)
                         {
-                            if (_y <= height - 1)
+                            if (_y < height)
                             {
                                 if (_x <= width)
                                 {
@@ -306,7 +359,7 @@ namespace CrystalOS2
                                     }
                                     else
                                     {
-                                        cover.RawData[((_y * width) - (width - _x))] = image.RawData[counter];
+                                        cover.RawData[_y * width + _x] = image.RawData[counter];
                                         counter++;
                                     }
                                 }
@@ -366,12 +419,14 @@ namespace CrystalOS2
                 }
             }
             */
+            int ext = x;
 
             foreach (char c in s)
             {
                 if (c == '\n')
                 {
                     y += 12;
+                    x = ext;
                 }
                 else if (c == ' ')
                 {
@@ -379,6 +434,10 @@ namespace CrystalOS2
                 }
                 else
                 {
+                    if (c == 'l')
+                    {
+                        x += 6;
+                    }
                     int aIndex = charset.IndexOf(c);
                     int SizePerFont = Size * (Size / 8);
                     byte[] buffer = new byte[SizePerFont];
@@ -398,9 +457,13 @@ namespace CrystalOS2
                             }
                         }
                     }
-                    if (c == 'W' || c == 'w')
+                    if (char.IsUpper(c) == true && c != 'A')
                     {
-                        x += 13;
+                        x += 14;
+                    }
+                    else if(c == 'l')
+                    {
+                        x += 6;
                     }
                     else
                     {
@@ -423,7 +486,7 @@ namespace CrystalOS2
                 {
                     if ((_y * width) - (width - _x) < width * height)
                     {
-                        if (_x > width)
+                        if (_x >= width)
                         {
                             counter++;
                         }
@@ -431,13 +494,13 @@ namespace CrystalOS2
                         {
                             if (counter2 % 3 == 0)
                             {
-                                cover.RawData[((_y * width) - (width - _x))] = image.RawData[counter];
+                                cover.RawData[_y * width + _x] = image.RawData[counter];//((_y * width) - (width - _x))
                                 counter++;
                                 counter2++;
                             }
                             else
                             {
-                                cover.RawData[((_y * width) - (width - _x))] = image.RawData[counter];
+                                cover.RawData[_y * width + _x] = image.RawData[counter];
                                 counter2++;
                             }
                         }
@@ -537,20 +600,58 @@ namespace CrystalOS2
             }
         }*/
 
+        public static void DrawGradient()
+        {
+            int width = 400; int height = 200;
+
+            for (int y = 50; y < height; y++) { for (int x = 0; x < width; x++) { int gradientColor = GetGradientColor(x, 0, width, height); DrawPixelfortext(x, y, gradientColor); } }
+        }
+
+        static int GetGradientColor(int x, int y, int width, int height)
+        {
+            int r = (int)((double)x / width * 255); int g = (int)((double)y / height * 255); int b = 255;
+
+            return colourToNumber(r, g, b);
+        }
+
+        public static void DrawGradientLeftToRight()
+        {
+            int width = 400; int height = 200;
+
+            for (int y = 0; y < height; y++)
+            {
+                int gradientColorStart = GetGradientColor(0, 0, width, height); int gradientColorEnd = GetGradientColor(width - 1, 0, width, height);
+
+                int rStart = Color.FromArgb(gradientColorStart).R; int gStart = Color.FromArgb(gradientColorStart).G; int bStart = Color.FromArgb(gradientColorStart).B;
+
+                int rEnd = Color.FromArgb(gradientColorEnd).R; int gEnd = Color.FromArgb(gradientColorEnd).G; int bEnd = Color.FromArgb(gradientColorEnd).B;
+
+                for (int x = 0; x < width; x++)
+                {
+                    int r = (int)((double)x / width * (rEnd - rStart)) + rStart; int g = (int)((double)x / width * (gEnd - gStart)) + gStart; int b = (int)((double)x / width * (bEnd - bStart)) + bStart;
+
+                    DrawPixelfortext(x + 50, y + 50, colourToNumber(r, g, b));
+                }
+            }
+        }
+
         public static void DrawFilledEllipse(int xCenter, int yCenter, int yR, int xR, int color)
         {
+            /*
             int r = (color & 0xff0000) >> 16;
             int g = (color & 0x00ff00) >> 8;
             int b = (color & 0x0000ff);
 
             float blendFactor = 0.5f;
             float inverseBlendFactor = 1 - blendFactor;
+            */
             for (int y = -yR; y <= yR; y++)
             {
                 for (int x = -xR; x <= xR; x++)
                 {
                     if ((x * x * yR * yR) + (y * y * xR * xR) <= yR * yR * xR * xR)
                     {
+                        /*
                         int r3 = (cover.RawData[(yCenter + y) * width + xCenter + x] & 0xff0000) >> 16;
                         int g3 = (cover.RawData[(yCenter + y) * width + xCenter + x] & 0x00ff00) >> 8;
                         int b3 = (cover.RawData[(yCenter + y) * width + xCenter + x] & 0x0000ff);
@@ -559,8 +660,10 @@ namespace CrystalOS2
                         int r2 = (int)(inverseBlendFactor * r3 + blendFactor * r);
                         int g2 = (int)(inverseBlendFactor * g3 + blendFactor * g);
                         int b2 = (int)(inverseBlendFactor * b3 + blendFactor * b);
+                        */
 
-                        DrawPixelfortext(xCenter + x, yCenter + y, colourToNumber(r2, g2, b2));
+
+                        DrawPixelfortext(xCenter + x, yCenter + y, GetGradientColor(x, 0, width, height));
 
                         //DrawPixelfortext(xCenter + x, yCenter + y, color);
                     }

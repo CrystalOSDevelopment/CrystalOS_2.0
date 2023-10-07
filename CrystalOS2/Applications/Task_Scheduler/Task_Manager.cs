@@ -51,13 +51,13 @@ namespace CrystalOS2.Applications.Task_Scheduler
         [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.button.bmp")] public static byte[] button;
         public static Bitmap Button = new Bitmap(button);
 
-        public static int left = ImprovedVBE.width / 2 - 98;
-        public static int right = ImprovedVBE.width / 2 + 10;
-        public static bool leftorright = false;
+        public int left = ImprovedVBE.width / 2 - 112;//98
+        public int right = ImprovedVBE.width / 2 + 10;
+        public bool leftorright = false;
 
         public static bool clicked = false;
         public static int cycle = 0;
-        public static void Task_manager()
+        public void Task_manager()
         {
             //ImprovedVBE.DrawImageAlpha(based, 0, 50);
             /*
@@ -548,8 +548,8 @@ namespace CrystalOS2.Applications.Task_Scheduler
                     }
                     if (leftorright == true)
                     {
-                        ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                        ImprovedVBE._DrawACSIIString(c.name, left + 12, 7, 16777215);
+                        ImprovedVBE.DrawImageAlpha(Button, left, 2);
+                        ImprovedVBE._DrawACSIIString(c.name, left + 6, 2, 16777215);
 
                         if (MouseManager.MouseState == MouseState.Left)
                         {
@@ -559,7 +559,7 @@ namespace CrystalOS2.Applications.Task_Scheduler
                         {
                             if(MouseManager.MouseState == MouseState.None)
                             {
-                                if (Kernel.X > left && Kernel.X < left + 70)
+                                if (Kernel.X > left && Kernel.X < left + 84)
                                 {
                                     if (Kernel.Y > 5 && Kernel.Y < 30)
                                     {
@@ -577,13 +577,13 @@ namespace CrystalOS2.Applications.Task_Scheduler
                                 }
                             }
                         }
-                        left -= 80;
+                        left -= 94;
                         leftorright = false;
                     }
                     else
                     {
-                        ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                        ImprovedVBE._DrawACSIIString(c.name, right + 12, 7, 16777215);
+                        ImprovedVBE.DrawImageAlpha(Button, right, 2);
+                        ImprovedVBE._DrawACSIIString(c.name, right + 6, 2, 16777215);//16777215
                         if (MouseManager.MouseState == MouseState.Left)
                         {
                             clicked = true;
@@ -592,7 +592,7 @@ namespace CrystalOS2.Applications.Task_Scheduler
                         {
                             if (MouseManager.MouseState == MouseState.None)
                             {
-                                if (Kernel.X > right && Kernel.X < right + 70)
+                                if (Kernel.X > right && Kernel.X < right + 84)
                                 {
                                     if (Kernel.Y > 5 && Kernel.Y < 30)
                                     {
@@ -610,7 +610,7 @@ namespace CrystalOS2.Applications.Task_Scheduler
                                 }
                             }
                         }
-                        right += 80;
+                        right += 94;
                         leftorright = true;
                     }
                 }
@@ -672,9 +672,9 @@ namespace CrystalOS2.Applications.Task_Scheduler
             editor_counter = 0;
             filemgr_counter = 0;
 
-            left = ImprovedVBE.width / 2 - 98;
-            right = ImprovedVBE.width / 2 + 10;
-            leftorright = false;
+            //left = ImprovedVBE.width / 2 - 112;
+            //right = ImprovedVBE.width / 2 + 10;
+            //leftorright = false;
 
             //The task_Manager app itself
             #region start

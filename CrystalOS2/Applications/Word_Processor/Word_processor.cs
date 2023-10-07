@@ -3,6 +3,8 @@ using Cosmos.System.Graphics;
 using IL2CPU.API.Attribs;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -16,7 +18,7 @@ namespace CrystalOS2.Applications.Word_Processor
         [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Word_Processor.app.bmp")] public static byte[] back;
         public static Bitmap bmp = new Bitmap(back);
 
-        public static string charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        //public static string charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         #region fonts
         [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Word_Processor.file.ttf")] public static byte[] Arial;
         #endregion fonts
@@ -105,8 +107,12 @@ namespace CrystalOS2.Applications.Word_Processor
             buffer.CopyTo(ImprovedVBE.cover.RawData, 1024 * 135);
         }
 
+        public static MemoryStream memoryStream = new MemoryStream(ImprovedVBE.Arial);
+        public static int Size = 16;
+        public static string charset = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
         public static int[] draw_text(string text, int x, int y, int color, int[] source, int width, int help)
         {
+            /*
             y = 2;
             for (int c = 0; c < text.Length; c++)
             {
@@ -170,10 +176,49 @@ namespace CrystalOS2.Applications.Word_Processor
                     {
                         Array.Copy(chara.RawData, h * chara.Width, buffer, (y + h) * 1024 + x, chara.Width);
                         h++;
-                    }*/
+                    }*
 
                     //ImprovedVBE.DrawImageAlpha2(chara, x, y);
                     x += 16;
+                }
+            }
+            */
+            int ext = x;
+
+            foreach (char c in text)
+            {
+                if (c == '\n')
+                {
+                    y += 16;
+                    x = ext;
+                }
+                else if (c == ' ')
+                {
+                    x += 13;
+                }
+                else
+                {
+                    int aIndex = charset.IndexOf(c);
+                    int SizePerFont = Size * (Size / 8);
+                    byte[] buffer = new byte[SizePerFont];
+                    memoryStream.Seek(SizePerFont * aIndex, SeekOrigin.Begin);
+                    memoryStream.Read(buffer, 0, buffer.Length);
+
+                    for (int h = 0; h < Size; h++)
+                    {
+                        for (int aw = 0; aw < Size / 8; aw++)
+                        {
+                            for (int ww = 0; ww < 8; ww++)
+                            {
+                                if ((buffer[(h * (Size / 8)) + aw] & (0x80 >> ww)) != 0)
+                                {
+                                    source[(h + y) * width + (aw * 8) + ww + x] = color;
+                                    //DrawPixelfortext((aw * 8) + ww + x, h + y, color);
+                                }
+                            }
+                        }
+                    }
+                    x += 13;
                 }
             }
             return source;

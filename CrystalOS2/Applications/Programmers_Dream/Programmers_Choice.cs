@@ -19,6 +19,10 @@ using CrystalOS2.Applications.Programmers_Dream;
 using Kernel = CrystalOS2.Kernel;
 using Microsoft.VisualBasic;
 using CrystalOS2.Applications.Word_Processor;
+using CrystalOS2.Applications;
+using CrystalOS2.Applications.MultiDesk;
+using Youtube_tut.Applications.Calculator;
+using CrystalOS.Applications.Menu;
 
 namespace CrystalOS.Applications.Programmers_Dream
 {
@@ -43,7 +47,6 @@ namespace CrystalOS.Applications.Programmers_Dream
         public static List<string> modified_text = new List<string>();
         public static bool allowedtopass = true;
         public static string hell = "";
-        public static Canvas c;
 
         public static int width = 0;
         public static int height = 0;
@@ -64,14 +67,14 @@ namespace CrystalOS.Applications.Programmers_Dream
         public static bool update = true;
         public static bool first = true;
         public static int help = 0;
-        public static int last_x = 0;
-        public static int last_y = 0;
+        public static int last_x = 5;
+        public static int last_y = 22;
         public static void Core()
         {
             Graphics_programing1 v = new Graphics_programing1();
             if (Bool_Manager.Programmers_choice == true)
             {
-                //ImprovedVBE.DrawImageAlpha(programmers_dream, 0, 30);
+                ImprovedVBE.DrawImageAlpha(programmers_dream, 0, 30);
 
                 programmers_dream.RawData.CopyTo(ImprovedVBE.cover.RawData, 20 * ImprovedVBE.width);
 
@@ -85,20 +88,20 @@ namespace CrystalOS.Applications.Programmers_Dream
                         }
                     }
                 }
-
                 if(MouseManager.MouseState == MouseState.Left)
                 {
                     if(Kernel.X > 297 && Kernel.X < 384)//184, 248
                     {
-                        if(Kernel.Y > 30 + 42 && Kernel.Y < 30 + 61)
+                        if(Kernel.Y > 20 + 42 && Kernel.Y < 20 + 61)
                         {
                             try
                             {
                                 get_script_and_run = true;
                                 if (get_script_and_run == true)
                                 {
-                                    if(content.StartsWith("/app mode = graphical".ToLower()))
+                                    if(sample.StartsWith("/app mode = graphical".ToLower()))
                                     {
+                                        /*
                                             Window_Layout.text.Clear();
                                             Window_Layout.Integers.Clear();
                                             Window_Layout.buttons_funct.Clear();
@@ -106,6 +109,20 @@ namespace CrystalOS.Applications.Programmers_Dream
                                             Window_Layout.buttons.Clear();
                                             Window_Layout.instructions_list.Clear();
                                         Graphical_Exec(content);
+                                        */
+                                        Demo_window d = new Demo_window();
+                                        d.x = Menu.Menumgr.z;
+                                        d.y = Menu.Menumgr.c;
+                                        d.name = "Demo";
+                                        d.width = 402;
+                                        d.height = 302;
+                                        d.desk_ID = CrystalOS2.Applications.MultiDesk.Core.Current_Desktop;
+                                        d.minimised = false;
+                                        d.z = Menumgr.z_axis;
+                                        d.source = sample;
+
+                                        d.App();
+
                                         get_script_and_run = false;
                                     }
                                     else if(content.StartsWith("/app mode = console".ToLower()))
@@ -173,9 +190,10 @@ namespace CrystalOS.Applications.Programmers_Dream
                         }
                     }
                 }
+                
                 if (allowedtopass == true)
                 {
-                    ImprovedVBE.DrawFilledRectangle(16777215, 4 + char_count * 8, 115 + line_count * 16, 1, 16);
+                    //ImprovedVBE.DrawFilledRectangle(16777215, 4 + char_count * 8, 115 + line_count * 16, 1, 16);
                     /*
                     KeyEvent key;
                     if (KeyboardManager.TryReadKey(out key))
@@ -308,22 +326,23 @@ namespace CrystalOS.Applications.Programmers_Dream
                     }
                     */
 
-                    int x = 8;
-                    int y = 140;
+                    int x = 5;
+                    int y = 20;
                     if (first == true)
                     {
-                        Array.Copy(programmers_dream.RawData, 1024 * 116, buffer, 0, 1024 * 652);
+                        Array.Copy(programmers_dream.RawData, 1024 * 59, buffer, 0, 1024 * 709);//652
 
                         first = false;
                     }
                     if (update == true)
                     {
-                        buffer = Word_processor.draw_text(sample, x, y, ImprovedVBE.colourToNumber(0, 0, 0), buffer, 1024, help);
+                        buffer = Word_processor.draw_text(sample, x, y, ImprovedVBE.colourToNumber(255, 255, 255), buffer, 1024, help);
                         update = false;
                     }
 
                     if (Kernel.Keyboard_cur == false)
                     {
+                        
                         KeyEvent key;
                         if (KeyboardManager.TryReadKey(out key))
                         {
@@ -331,11 +350,32 @@ namespace CrystalOS.Applications.Programmers_Dream
                             {
                                 if (sample.Length != 0)
                                 {
+                                    int wid = 18;
+                                    if (sample[sample.Length - 1] == 'R')
+                                    {
+                                        wid = 20;
+                                    }
                                     sample = sample.Remove(sample.Length - 1);
 
-                                    for (int j = 0; j < 17; j++)
+                                    for (int j = 0; j < 18; j++)
                                     {
-                                        Array.Copy(programmers_dream.RawData, (1024 * 125) + (last_y + j) * 1024 + last_x, buffer, (last_y + j) * 1024 + last_x, 10);
+                                        if (sample.Length > 0)
+                                        {
+                                            if (Last(sample) == 0)
+                                            {
+                                                last_x = (sample.Length - Last(sample)) * 13 + 5;
+                                            }
+                                            else
+                                            {
+                                                last_x = (sample.Length - Last(sample) - 1) * 13 + 5;
+                                            }
+                                            last_y = Count(sample) * 16 + 22;
+                                        }
+                                        else
+                                        {
+                                            last_x = 5;
+                                        }
+                                        Array.Copy(programmers_dream.RawData, 1024 * 80 + 5, buffer, (last_y + j) * 1024 + last_x, wid);
                                     }
                                 }
                                 if (sample.Length >= 10)
@@ -351,19 +391,56 @@ namespace CrystalOS.Applications.Programmers_Dream
                             else if (key.Key == ConsoleKeyEx.Enter || key.Key == ConsoleKeyEx.NumEnter)
                             {
                                 sample += "\n";
-                                help = sample.Length - 10;
+                                if (sample.Length >= 10)
+                                {
+                                    help = sample.Length - 10;
+                                }
+                                else
+                                {
+                                    help = 0;
+                                }
+                                last_x = 5;
+                                last_y += 16;
                                 update = true;
                             }
                             else
                             {
-                                sample += key.KeyChar;
-                                help = sample.Length - 10;
+                                if (ImprovedVBE.charset.Contains(key.KeyChar) || key.KeyChar == ' ')
+                                {
+                                    sample += key.KeyChar;
+                                    last_x = sample.Length * 13 - 13 + 5;
+                                    if (sample.Length >= 10)
+                                    {
+                                        help = sample.Length - 10;
+                                    }
+                                    else
+                                    {
+                                        help = 0;
+                                    }
+                                }
+                                if(sample.Length - Last(sample) > 58)
+                                {
+                                    sample += "\n";
+                                    if (sample.Length >= 10)
+                                    {
+                                        help = sample.Length - 10;
+                                    }
+                                    else
+                                    {
+                                        help = 0;
+                                    }
+                                    last_x = 5;
+                                    last_y += 16;
+                                }
                                 update = true;
                             }
                         }
+                            
                     }
-                    ImprovedVBE.DrawImageArray(71, 22, dropdown, 42, 53 + 20);
-                    buffer.CopyTo(ImprovedVBE.cover.RawData, 1024 * 135);
+
+                    //buffer.CopyTo(ImprovedVBE.cover.RawData, 1024 * 59);
+                    ImprovedVBE.DrawImageArray(1024, 709, buffer, 0, 78);
+                    
                 }
                 if (movable == true)
                 {
@@ -424,9 +501,39 @@ namespace CrystalOS.Applications.Programmers_Dream
                 var_value_int.Clear();
                 modified_text.Clear();
                 ImprovedVBE._DrawACSIIString(hell, 500, 884, 16777215);
+                
             }
         }
 
+        public static int Last(string s)
+        {
+            int i = 0;
+            int temp = 0;
+            if (s.Contains("\n"))
+            {
+                foreach (char c in s)
+                {
+                    if (c == '\n')
+                    {
+                        i = temp;
+                    }
+                    temp++;
+                }
+            }
+            return i;
+        }
+        public static int Count(string s)
+        {
+            int i = 0;
+            foreach (char c in s)
+                {
+                    if (c == '\n')
+                    {
+                        i++;
+                    }
+                }
+            return i;
+        }
         public static void CSharp(string script)
         {
             try

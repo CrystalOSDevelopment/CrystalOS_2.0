@@ -26,7 +26,7 @@ namespace CrystalOS2.Applications.MultiDesk
 
         public string name
         {
-            get { return "Multi..."; }
+            get { return "Mult..."; }
         }
 
         public bool minimised { get; set; }
@@ -37,104 +37,102 @@ namespace CrystalOS2.Applications.MultiDesk
         {
             ImprovedVBE.DrawImageAlpha(App_b, x + 7, y);
 
-            if(MouseManager.MouseState == MouseState.Left)
-            {
-                if(Kernel.Y > y + 28 && Kernel.Y < y + 28 + 46)
-                {
-                    if (Kernel.X > x + 7 && Kernel.X < x + 7 + 99)
-                    {
-                        Current_Desktop = 1;
-                        desk_ID = Current_Desktop;
-                    }
-                    if (Kernel.X > x + 7 + 118 && Kernel.X < x + 7 + 118 + 99)
-                    {
-                        Current_Desktop = 2;
-                        desk_ID = Current_Desktop;
-                    }
-                    if (Kernel.X > x + 7 + 228 && Kernel.X < x + 7 + 228 + 99)
-                    {
-                        Current_Desktop = 3;
-                        desk_ID = Current_Desktop;
-                    }
-                }
-                if (Kernel.Y > y + 86 && Kernel.Y < y + 86 + 46)
-                {
-                    if (Kernel.X > x + 7 && Kernel.X < x + 7 + 99)
-                    {
-                        Current_Desktop = 4;
-                        desk_ID = Current_Desktop;
-                    }
-                    if (Kernel.X > x + 7 + 118 && Kernel.X < x + 7 + 118 + 99)
-                    {
-                        Current_Desktop = 5;
-                        desk_ID = Current_Desktop;
-                    }
-                    if (Kernel.X > x + 7 + 228 && Kernel.X < x + 7 + 228 + 99)
-                    {
-                        Current_Desktop = 6;
-                        desk_ID = Current_Desktop;
-                    }
-                }
-                if (Kernel.Y > y + 144 && Kernel.Y < y + 144 + 46)
-                {
-                    if (Kernel.X > x + 7 && Kernel.X < x + 7 + 99)
-                    {
-                        Current_Desktop = 7;
-                        desk_ID = Current_Desktop;
-                    }
-                    if (Kernel.X > x + 7 + 118 && Kernel.X < x + 7 + 118 + 99)
-                    {
-                        Current_Desktop = 8;
-                        desk_ID = Current_Desktop;
-                    }
-                    if (Kernel.X > x + 7 + 228 && Kernel.X < x + 7 + 228 + 99)
-                    {
-                        Current_Desktop = 9;
-                        desk_ID = Current_Desktop;
-                    }
-                }
-            }
-
-            if (MouseManager.MouseState == MouseState.Left)
-            {
-                if (Kernel.X > x && Kernel.X < x + 220)
-                {
-                    if (Kernel.Y > y && Kernel.Y < y + 20)
-                    {
-                        movable = true;
-                    }
-                }
-            }
-
-            if (MouseManager.MouseState == MouseState.Left)
-            {
-                if (Kernel.X > x + 306 && Kernel.X < x + 320)
-                {
-                    if (Kernel.Y > y && Kernel.Y < y + 20)
-                    {
-                        Task_Manager.calculators.RemoveAt(Task_Manager.indicator);
-                    }
-                }
-            }
-
-            if (movable == true)
-            {
-                if (MouseManager.MouseState == MouseState.Right)
-                {
-                    x = (int)Kernel.X;
-                    y = (int)Kernel.Y;
-                    movable = false;
-                }
-                else
-                {
-                    x = (int)Kernel.X;
-                    y = (int)Kernel.Y;
-                }
-            }
-
             if (Task_Manager.indicator == Task_Manager.calculators.Count - 1)
             {
+                if (MouseManager.MouseState == MouseState.Left)
+                {
+                    if (Kernel.Y > y + 28 && Kernel.Y < y + 28 + 46)
+                    {
+                        if (Kernel.X > x + 7 && Kernel.X < x + 7 + 99)
+                        {
+                            Current_Desktop = 1;
+                            desk_ID = Current_Desktop;
+                        }
+                        if (Kernel.X > x + 7 + 118 && Kernel.X < x + 7 + 118 + 99)
+                        {
+                            Current_Desktop = 2;
+                            desk_ID = Current_Desktop;
+                        }
+                        if (Kernel.X > x + 7 + 228 && Kernel.X < x + 7 + 228 + 99)
+                        {
+                            Current_Desktop = 3;
+                            desk_ID = Current_Desktop;
+                        }
+                    }
+                    if (Kernel.Y > y + 86 && Kernel.Y < y + 86 + 46)
+                    {
+                        if (Kernel.X > x + 7 && Kernel.X < x + 7 + 99)
+                        {
+                            Current_Desktop = 4;
+                            desk_ID = Current_Desktop;
+                        }
+                        if (Kernel.X > x + 7 + 118 && Kernel.X < x + 7 + 118 + 99)
+                        {
+                            Current_Desktop = 5;
+                            desk_ID = Current_Desktop;
+                        }
+                        if (Kernel.X > x + 7 + 228 && Kernel.X < x + 7 + 228 + 99)
+                        {
+                            Current_Desktop = 6;
+                            desk_ID = Current_Desktop;
+                        }
+                    }
+                    if (Kernel.Y > y + 144 && Kernel.Y < y + 144 + 46)
+                    {
+                        if (Kernel.X > x + 7 && Kernel.X < x + 7 + 99)
+                        {
+                            Current_Desktop = 7;
+                            desk_ID = Current_Desktop;
+                        }
+                        if (Kernel.X > x + 7 + 118 && Kernel.X < x + 7 + 118 + 99)
+                        {
+                            Current_Desktop = 8;
+                            desk_ID = Current_Desktop;
+                        }
+                        if (Kernel.X > x + 7 + 228 && Kernel.X < x + 7 + 228 + 99)
+                        {
+                            Current_Desktop = 9;
+                            desk_ID = Current_Desktop;
+                        }
+                    }
+                }
 
+                if (MouseManager.MouseState == MouseState.Left)
+                {
+                    if (Kernel.X > x && Kernel.X < x + 220)
+                    {
+                        if (Kernel.Y > y && Kernel.Y < y + 20)
+                        {
+                            movable = true;
+                        }
+                    }
+                }
+
+                if (MouseManager.MouseState == MouseState.Left)
+                {
+                    if (Kernel.X > x + 306 && Kernel.X < x + 320)
+                    {
+                        if (Kernel.Y > y && Kernel.Y < y + 20)
+                        {
+                            Task_Manager.calculators.RemoveAt(Task_Manager.indicator);
+                        }
+                    }
+                }
+
+                if (movable == true)
+                {
+                    if (MouseManager.MouseState == MouseState.Right)
+                    {
+                        x = (int)Kernel.X;
+                        y = (int)Kernel.Y;
+                        movable = false;
+                    }
+                    else
+                    {
+                        x = (int)Kernel.X;
+                        y = (int)Kernel.Y;
+                    }
+                }
             }
             else
             {

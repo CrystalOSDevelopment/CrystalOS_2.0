@@ -31,7 +31,7 @@ namespace CrystalOS2.SystemFiles.Boot
                 while (Kernel.a != 597)
                 {
                     //ImprovedVBE.DrawFilledRectangle(1, 1, 0, 1919, 1079);
-                    ImprovedVBE.DrawImageAlpha(Boot, 0, 1);
+                    ImprovedVBE.DrawImageAlpha(Boot, 0, 0);
                     ImprovedVBE.DrawImageAlpha(Corner, 185, 470);
                     ImprovedVBE.DrawImageAlpha(Corner, 185 + Kernel.a, 470);
                     ImprovedVBE.DrawFilledRectangle(16777215, 194, 470, Kernel.a, 20);
