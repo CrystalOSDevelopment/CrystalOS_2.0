@@ -3,7 +3,6 @@ using Cosmos.System.Graphics;
 using CrystalOS.Applications.About;
 using CrystalOS.Applications.Text_Editor;
 using CrystalOS.SystemFiles;
-using CrystalOS2;
 using IL2CPU.API.Attribs;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
-using Kernel = CrystalOS2.Kernel;
 
 namespace CrystalOS2.SystemFiles
 {
@@ -32,37 +30,37 @@ namespace CrystalOS2.SystemFiles
             {
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > 829 && Kernel.X < 1357)
+                    if (MouseManager.X > 829 && MouseManager.X < 1357)
                     {
-                        if (Kernel.Y > 440 && Kernel.Y < 478)
+                        if (MouseManager.Y > 440 && MouseManager.Y < 478)
                         {
                             usernameinput = true;
                             passwordinput = false;
                         }
 
-                        if (Kernel.Y > 511 && Kernel.Y < 549)
+                        if (MouseManager.Y > 511 && MouseManager.Y < 549)
                         {
                             usernameinput = false;
                             passwordinput = true;
                         }
                     }
-                    if(Kernel.X > 1453 && Kernel.X < 1589)
+                    if(MouseManager.X > 1453 && MouseManager.X < 1589)
                     {
-                        if(Kernel.Y > 1004 && Kernel.Y < 1057)
+                        if(MouseManager.Y > 1004 && MouseManager.Y < 1057)
                         {
                             trylogin = true;
                         }
                     }
-                    if(Kernel.X > 1615 && Kernel.X < 1751)
+                    if(MouseManager.X > 1615 && MouseManager.X < 1751)
                     {
-                        if(Kernel.Y > 1004 && Kernel.Y < 1057)
+                        if(MouseManager.Y > 1004 && MouseManager.Y < 1057)
                         {
                             Power.Shutdown();
                         }
                     }
-                    if(Kernel.X > 1777 && Kernel.X < 1913)
+                    if(MouseManager.X > 1777 && MouseManager.X < 1913)
                     {
-                        if(Kernel.Y > 1004 && Kernel.Y < 1057)
+                        if(MouseManager.Y > 1004 && MouseManager.Y < 1057)
                         {
                             Power.Reboot();
                         }

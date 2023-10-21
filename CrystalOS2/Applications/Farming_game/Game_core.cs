@@ -31,32 +31,32 @@ namespace CrystalOS2.Applications.Farming_game
             {
                 if(MouseManager.MouseState == MouseState.Left)
                 {
-                    if(Kernel.Y > y + 193 && Kernel.Y < y + 324)
+                    if(MouseManager.Y > y + 193 && MouseManager.Y < y + 324)
                     {
-                        if (Kernel.X > x + 397 && Kernel.X < x + 528)
+                        if (MouseManager.X > x + 397 && MouseManager.X < x + 528)
                         {
                             ImprovedVBE._DrawACSIIString("It is a garden1!", 900, 900, 16777215);
                         }
-                        else if (Kernel.X > x + 589 && Kernel.X < x + 720)
+                        else if (MouseManager.X > x + 589 && MouseManager.X < x + 720)
                         {
                             ImprovedVBE._DrawACSIIString("It is a garden2!", 900, 900, 16777215);
                         }
-                        else if (Kernel.X > x + 777 && Kernel.X < x + 908)
+                        else if (MouseManager.X > x + 777 && MouseManager.X < x + 908)
                         {
                             ImprovedVBE._DrawACSIIString("It is a garden3!", 900, 900, 16777215);
                         }
                     }
-                    else if (Kernel.Y > y + 470 && Kernel.Y < y + 601)
+                    else if (MouseManager.Y > y + 470 && MouseManager.Y < y + 601)
                     {
-                        if (Kernel.X > x + 397 && Kernel.X < x + 528)
+                        if (MouseManager.X > x + 397 && MouseManager.X < x + 528)
                         {
                             ImprovedVBE._DrawACSIIString("It is a garden4!", 900, 900, 16777215);
                         }
-                        else if (Kernel.X > x + 589 && Kernel.X < x + 720)
+                        else if (MouseManager.X > x + 589 && MouseManager.X < x + 720)
                         {
                             ImprovedVBE._DrawACSIIString("It is a garden5!", 900, 900, 16777215);
                         }
-                        else if (Kernel.X > x + 777 && Kernel.X < x + 908)
+                        else if (MouseManager.X > x + 777 && MouseManager.X < x + 908)
                         {
                             ImprovedVBE._DrawACSIIString("It is a garden6!", 900, 900, 16777215);
                         }

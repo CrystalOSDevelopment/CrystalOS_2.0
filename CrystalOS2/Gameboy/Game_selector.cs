@@ -21,9 +21,9 @@ namespace CrystalOS2.Gameboy
 
             if(MouseManager.MouseState == MouseState.Left)
             {
-                if (Kernel.X > Task_Manager.Tasks[Task_Manager.indicator].Item2 + 623 && Kernel.X < Task_Manager.Tasks[Task_Manager.indicator].Item2 + 644)
+                if (MouseManager.X > Task_Manager.Tasks[Task_Manager.indicator].Item2 + 623 && MouseManager.X < Task_Manager.Tasks[Task_Manager.indicator].Item2 + 644)
                 {
-                    if (Kernel.Y > Task_Manager.Tasks[Task_Manager.indicator].Item3 + 8 && Kernel.Y < Task_Manager.Tasks[Task_Manager.indicator].Item3 + 24)
+                    if (MouseManager.Y > Task_Manager.Tasks[Task_Manager.indicator].Item3 + 8 && MouseManager.Y < Task_Manager.Tasks[Task_Manager.indicator].Item3 + 24)
                     {
                         //Bool_Manager.Settings_Opened = false;
                         Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
@@ -31,45 +31,45 @@ namespace CrystalOS2.Gameboy
                 }
                 if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == false)
                 {
-                    if (Kernel.X > x && Kernel.X < x + 570)
+                    if (MouseManager.X > x && MouseManager.X < x + 570)
                     {
-                        if (Kernel.Y > y && Kernel.Y < y + 18)
+                        if (MouseManager.Y > y && MouseManager.Y < y + 18)
                         {
-                            int f = (int)Kernel.X;
-                            int g = (int)Kernel.Y;
+                            int f = (int)MouseManager.X;
+                            int g = (int)MouseManager.Y;
                             Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("Gameboy", f, g, true, "", true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("Gameboy", f, g, true, "", true));
                         }
                     }
                 }
 
-                if(Kernel.Y > y + 23 && Kernel.Y < y + 182)
+                if(MouseManager.Y > y + 23 && MouseManager.Y < y + 182)
                 {
-                    if(Kernel.X > x + 10 && Kernel.X < x + 132)
+                    if(MouseManager.X > x + 10 && MouseManager.X < x + 132)
                     {
                         CrystalOS2.Kernel.power_on = true;
                         CrystalOS2.Kernel.show_gb = true;
                         CrystalOS2.Kernel.gamenum = 1;
                     }
-                    if (Kernel.X > x + 133 && Kernel.X < x + 255)
+                    if (MouseManager.X > x + 133 && MouseManager.X < x + 255)
                     {
                         CrystalOS2.Kernel.power_on = true;
                         CrystalOS2.Kernel.show_gb = true;
                         CrystalOS2.Kernel.gamenum = 3;
                     }
-                    if (Kernel.X > x + 256 && Kernel.X < x + 378)
+                    if (MouseManager.X > x + 256 && MouseManager.X < x + 378)
                     {
                         CrystalOS2.Kernel.power_on = true;
                         CrystalOS2.Kernel.show_gb = true;
                         CrystalOS2.Kernel.gamenum = 0;
                     }
-                    if (Kernel.X > x + 379 && Kernel.X < x + 502)
+                    if (MouseManager.X > x + 379 && MouseManager.X < x + 502)
                     {
                         CrystalOS2.Kernel.power_on = true;
                         CrystalOS2.Kernel.show_gb = true;
                         CrystalOS2.Kernel.gamenum = 2;
                     }
-                    if (Kernel.X > x + 503 && Kernel.X < x + 625)
+                    if (MouseManager.X > x + 503 && MouseManager.X < x + 625)
                     {
                         CrystalOS2.Kernel.power_on = true;
                         CrystalOS2.Kernel.show_gb = true;
@@ -80,21 +80,21 @@ namespace CrystalOS2.Gameboy
 
             if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == true)
             {
-                int f = (int)Kernel.X;
-                int g = (int)Kernel.Y;
+                int f = (int)MouseManager.X;
+                int g = (int)MouseManager.Y;
                 Task_Manager.Tasks.RemoveAt(0);
-                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("Gameboy", f, g, true, "", true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("Gameboy", f, g, true, "", true));
                 if (MouseManager.MouseState == MouseState.Right)
                 {
                     Task_Manager.Tasks.RemoveAt(0);
-                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("Gameboy", f, g, false, "", true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("Gameboy", f, g, false, "", true));
                     Task_Manager.Tasks.Reverse();
                     //movable = false;
                 }
 
-                if (Kernel.X > x && Kernel.X < x + 352)
+                if (MouseManager.X > x && MouseManager.X < x + 352)
                 {
-                    if (Kernel.Y > y && Kernel.Y < y + 18)
+                    if (MouseManager.Y > y && MouseManager.Y < y + 18)
                     {
                         //movable = false;
                     }

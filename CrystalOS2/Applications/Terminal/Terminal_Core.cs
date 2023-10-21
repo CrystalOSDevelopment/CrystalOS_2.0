@@ -13,7 +13,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CrystalOS2.Applications.Task_Scheduler;
-using Kernel = CrystalOS2.Kernel;
 
 namespace CrystalOS.Applications.Terminal
 {
@@ -36,9 +35,9 @@ namespace CrystalOS.Applications.Terminal
             ImprovedVBE.DrawImageAlpha(term_base, Task_Manager.Tasks[Task_Manager.indicator].Item2, Task_Manager.Tasks[Task_Manager.indicator].Item3);
             if (MouseManager.MouseState == MouseState.Left)
             {
-                if (Kernel.X > Task_Manager.Tasks[Task_Manager.indicator].Item2 + 605 && Kernel.X < Task_Manager.Tasks[Task_Manager.indicator].Item2 + 649)
+                if (MouseManager.X > Task_Manager.Tasks[Task_Manager.indicator].Item2 + 605 && MouseManager.X < Task_Manager.Tasks[Task_Manager.indicator].Item2 + 649)
                 {
-                    if (Kernel.Y > Task_Manager.Tasks[Task_Manager.indicator].Item3 && Kernel.Y < Task_Manager.Tasks[Task_Manager.indicator].Item3 + 17)
+                    if (MouseManager.Y > Task_Manager.Tasks[Task_Manager.indicator].Item3 && MouseManager.Y < Task_Manager.Tasks[Task_Manager.indicator].Item3 + 17)
                     {
                         //Bool_Manager.Terminal_Opened = false;
                         Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
@@ -46,15 +45,15 @@ namespace CrystalOS.Applications.Terminal
                 }
                 if (movable == false)
                 {
-                    if (Kernel.X > Task_Manager.Tasks[Task_Manager.indicator].Item2 && Kernel.X < Task_Manager.Tasks[Task_Manager.indicator].Item2 + 552)
+                    if (MouseManager.X > Task_Manager.Tasks[Task_Manager.indicator].Item2 && MouseManager.X < Task_Manager.Tasks[Task_Manager.indicator].Item2 + 552)
                     {
-                        if (Kernel.Y > Task_Manager.Tasks[Task_Manager.indicator].Item3 && Kernel.Y < Task_Manager.Tasks[Task_Manager.indicator].Item3 + 18)
+                        if (MouseManager.Y > Task_Manager.Tasks[Task_Manager.indicator].Item3 && MouseManager.Y < Task_Manager.Tasks[Task_Manager.indicator].Item3 + 18)
                         {
-                            int f = (int)Kernel.X;
-                            int g = (int)Kernel.Y;
+                            int f = (int)MouseManager.X;
+                            int g = (int)MouseManager.Y;
                             //string saves = Task_Manager.Tasks[Task_Manager.indicator].Item5;
                             Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("terminal", f, g, true, displayed, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("terminal", f, g, true, displayed, true));
                         }
                     }
                 }
@@ -105,10 +104,10 @@ namespace CrystalOS.Applications.Terminal
                         if (command_input.Length != 0)
                         {
                             //displayed = displayed.Remove(displayed.Length - 1);
-                            Tuple<string, int, int, bool, string, bool, int> s = Task_Manager.Tasks[Task_Manager.indicator];
+                            Tuple<string, int, int, bool, string, bool> s = Task_Manager.Tasks[Task_Manager.indicator];
                             Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
                             string mod = s.Item5.Remove(s.Item5.Length - 1);
-                            Task_Manager.Tasks.Insert(Task_Manager.indicator, new Tuple<string, int, int, bool, string, bool, int>(s.Item1, s.Item2, s.Item3, s.Item4, mod, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                            Task_Manager.Tasks.Insert(Task_Manager.indicator, new Tuple<string, int, int, bool, string, bool>(s.Item1, s.Item2, s.Item3, s.Item4, mod, true));
                             command_input = command_input.Remove(command_input.Length - 1);
                         }
                     }
@@ -116,19 +115,19 @@ namespace CrystalOS.Applications.Terminal
                     {
                         Commands(command_input);
                         prev_commands.Add(command_input);
-                        Tuple<string, int, int, bool, string, bool, int> s = Task_Manager.Tasks[Task_Manager.indicator];
+                        Tuple<string, int, int, bool, string, bool> s = Task_Manager.Tasks[Task_Manager.indicator];
                         Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
-                        Task_Manager.Tasks.Insert(Task_Manager.indicator, new Tuple<string, int, int, bool, string, bool, int>(s.Item1, s.Item2, s.Item3, s.Item4, displayed, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                        Task_Manager.Tasks.Insert(Task_Manager.indicator, new Tuple<string, int, int, bool, string, bool>(s.Item1, s.Item2, s.Item3, s.Item4, displayed, true));
                     }
                     else
                     {
                         command_input += key.KeyChar;
                         //displayed += key.KeyChar;
-                        Tuple<string, int, int, bool, string, bool, int> s = Task_Manager.Tasks[Task_Manager.indicator];
+                        Tuple<string, int, int, bool, string, bool> s = Task_Manager.Tasks[Task_Manager.indicator];
                         Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
                         string mod = s.Item5;
                         mod += key.KeyChar;
-                        Task_Manager.Tasks.Insert(Task_Manager.indicator, new Tuple<string, int, int, bool, string, bool, int>(s.Item1, s.Item2, s.Item3, s.Item4, mod, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                        Task_Manager.Tasks.Insert(Task_Manager.indicator, new Tuple<string, int, int, bool, string, bool>(s.Item1, s.Item2, s.Item3, s.Item4, mod, true));
                     }
                 }
             }
@@ -137,14 +136,14 @@ namespace CrystalOS.Applications.Terminal
 
             if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == true)
             {
-                int f = (int)Kernel.X;
-                int g = (int)Kernel.Y;
+                int f = (int)MouseManager.X;
+                int g = (int)MouseManager.Y;
                 Task_Manager.Tasks.RemoveAt(0);
-                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("terminal", f, g, true, displayed, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("terminal", f, g, true, displayed, true));
                 if (MouseManager.MouseState == MouseState.Right)
                 {
                     Task_Manager.Tasks.RemoveAt(0);
-                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("terminal", f, g, false, displayed, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("terminal", f, g, false, displayed, true));
                     //Task_Manager.Tasks.Reverse();
                     //movable = false;
                 }
@@ -153,8 +152,8 @@ namespace CrystalOS.Applications.Terminal
             /*
             if (movable == true)
             {
-                Task_Manager.Tasks[Task_Manager.indicator].Item2 = (int)Kernel.X;
-                Task_Manager.Tasks[Task_Manager.indicator].Item3 = (int)Kernel.Y;
+                Task_Manager.Tasks[Task_Manager.indicator].Item2 = (int)MouseManager.X;
+                Task_Manager.Tasks[Task_Manager.indicator].Item3 = (int)MouseManager.Y;
                 if (MouseManager.MouseState == MouseState.Right)
                 {
                     movable = false;

@@ -21,9 +21,9 @@ namespace CrystalOS2.Applications.Programmers_Dream
 
             if (MouseManager.MouseState == MouseState.Left)
             {
-                if (Kernel.X > x + width - 18 && Kernel.X < x + width - 2)
+                if (MouseManager.X > x + width - 18 && MouseManager.X < x + width - 2)
                 {
-                    if (Kernel.Y > y + 2 && Kernel.Y < y + 18)
+                    if (MouseManager.Y > y + 2 && MouseManager.Y < y + 18)
                     {
                         //Bool_Manager.Settings_Opened = false;
                         Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
@@ -31,14 +31,14 @@ namespace CrystalOS2.Applications.Programmers_Dream
                 }
                 if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == false)
                 {
-                    if (Kernel.X > x && Kernel.X < x + width - 10)
+                    if (MouseManager.X > x && MouseManager.X < x + width - 10)
                     {
-                        if (Kernel.Y > y && Kernel.Y < y + 20)
+                        if (MouseManager.Y > y && MouseManager.Y < y + 20)
                         {
-                            int f = (int)Kernel.X;
-                            int g = (int)Kernel.Y;
+                            int f = (int)MouseManager.X;
+                            int g = (int)MouseManager.Y;
                             Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>(title, f, g, true, "", true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>(title, f, g, true, "", true));
                         }
                     }
                 }

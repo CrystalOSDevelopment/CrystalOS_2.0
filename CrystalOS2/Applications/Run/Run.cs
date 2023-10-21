@@ -24,9 +24,9 @@ namespace CrystalOS2.Applications.Run
         {
             if(MouseManager.MouseState == MouseState.Left)
             {
-                if(Kernel.X > 77 && Kernel.X < 145)
+                if(MouseManager.X > 77 && MouseManager.X < 145)
                 {
-                    if(Kernel.Y > 2 && Kernel.Y < 26)
+                    if(MouseManager.Y > 2 && MouseManager.Y < 26)
                     {
                         Bool_Manager.Run_Window = true;
                     }
@@ -37,9 +37,9 @@ namespace CrystalOS2.Applications.Run
                 ImprovedVBE.DrawImageAlpha(base_Window, 3, 32);
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > 374 && Kernel.X < 389)
+                    if (MouseManager.X > 374 && MouseManager.X < 389)
                     {
-                        if (Kernel.Y > 36 && Kernel.Y < 48)
+                        if (MouseManager.Y > 36 && MouseManager.Y < 48)
                         {
                             Bool_Manager.Run_Window = false;
                         }
@@ -69,25 +69,6 @@ namespace CrystalOS2.Applications.Run
                     }
                 }
             }
-            /*
-            if (Task_Manager.indicator == Task_Manager.calculators.Count - 1)
-            {
-
-            }
-            else
-            {
-                if (MouseManager.MouseState == MouseState.Left)
-                {
-                    if (Kernel.X > x && Kernel.X < x + base_Window.Width)
-                    {
-                        if (Kernel.Y > y && Kernel.Y < y + base_Window.Height)
-                        {
-                            z = 999;
-                        }
-                    }
-                }
-            }
-            */
         }
         public static void exec(string command)
         {
@@ -100,7 +81,7 @@ namespace CrystalOS2.Applications.Run
             else if (command.ToLower() == "cmd")
             {
                 Bool_Manager.Terminal_Opened = true;
-                Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string, bool, int>("terminal", Menumgr.z, Menumgr.c, false, "C:\\", true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string, bool>("terminal", Menumgr.z, Menumgr.c, false, "C:\\", true));
                 //Terminal_Core.displayed.Add("C:\\");
                 Menumgr.c += 100;
                 Menumgr.z += 100;
@@ -112,7 +93,7 @@ namespace CrystalOS2.Applications.Run
                 command = command.Replace("/", "\\");
                 Bool_Manager.Text_Editor_Opened = true;
                 string shit = File.ReadAllText(command);
-                Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string, bool, int>("text_editor", 100, 100, false, shit, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string, bool>("text_editor", 100, 100, false, shit, true));
                 line = "";
                 Bool_Manager.Run_Window = false;
             }

@@ -32,8 +32,8 @@ namespace CrystalOS.SystemFiles
         public static int Terminal_X = 50;
         public static int Terminal_Y = 30;
         
-        public static int Clock_X = 650;
-        public static int Clock_Y = 20;
+        public static int Clock_X = 1710;
+        public static int Clock_Y = 30;
 
         public static int Paint_X = 50;
         public static int Paint_Y = 30;

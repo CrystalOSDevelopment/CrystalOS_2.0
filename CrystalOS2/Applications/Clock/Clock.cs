@@ -60,20 +60,20 @@ namespace CrystalOS2.Applications.Clock
                 /*
         if (Mouse.Click())
         {
-            if (Kernel.X > x + 3 && Kernel.X < (x + width) - 53)
+            if (MouseManager.X > x + 3 && MouseManager.X < (x + width) - 53)
             {
-                if (Kernel.Y > y + 3 && Kernel.Y < y + 20)
+                if (MouseManager.Y > y + 3 && MouseManager.Y < y + 20)
                 {
                     moove_enabled = true;
                 }
             }*
                 *
-                if (Kernel.X > x + 3 && Kernel.X < (x + width) - 30)
+                if (MouseManager.X > x + 3 && MouseManager.X < (x + width) - 30)
                 {
-                    if (Kernel.Y > y + 3 && Kernel.Y < y + 20)
+                    if (MouseManager.Y > y + 3 && MouseManager.Y < y + 20)
                     {
-                        Int_Manager.dialogbox_x = (int)Kernel.X - 20;
-                        Int_Manager.dialogbox_y = (int)Kernel.Y - 10;
+                        Int_Manager.dialogbox_x = (int)MouseManager.X - 20;
+                        Int_Manager.dialogbox_y = (int)MouseManager.Y - 10;
                     }
                 }
                 /
@@ -172,7 +172,7 @@ namespace CrystalOS2.Applications.Clock
                 #endregion hourhand
                 //
                 */
-                ImprovedVBE.DrawImageAlpha2(Clock_base, x, y);
+                ImprovedVBE.DrawImageAlpha(Clock_base, x, y);
 
                 int starting_point = x + 92; //x + 89;
 
@@ -180,57 +180,57 @@ namespace CrystalOS2.Applications.Clock
                 {
                     if(c == '1')
                     {
-                        ImprovedVBE.DrawImageAlpha2(first, starting_point, y + 89);
+                        ImprovedVBE.DrawImageAlpha(first, starting_point, y + 89);
                         starting_point += 20;
                     }
                     if (c == '2')
                     {
-                        ImprovedVBE.DrawImageAlpha2(second, starting_point, y + 89);
+                        ImprovedVBE.DrawImageAlpha(second, starting_point, y + 89);
                         starting_point += 26;
                     }
                     if (c == '3')
                     {
-                        ImprovedVBE.DrawImageAlpha2(third, starting_point, y + 89);
+                        ImprovedVBE.DrawImageAlpha(third, starting_point, y + 89);
                         starting_point += 27;
                     }
                     if (c == '4')
                     {
-                        ImprovedVBE.DrawImageAlpha2(fourth, starting_point, y + 89);
+                        ImprovedVBE.DrawImageAlpha(fourth, starting_point, y + 89);
                         starting_point += 29;
                     }
                     if (c == '5')
                     {
-                        ImprovedVBE.DrawImageAlpha2(Five, starting_point, y + 89);
+                        ImprovedVBE.DrawImageAlpha(Five, starting_point, y + 89);
                         starting_point += 27;
                     }
                     if (c == '6')
                     {
-                        ImprovedVBE.DrawImageAlpha2(Six, starting_point, y + 89);
+                        ImprovedVBE.DrawImageAlpha(Six, starting_point, y + 89);
                         starting_point += 26;
                     }
                     if (c == '7')
                     {
-                        ImprovedVBE.DrawImageAlpha2(Seven, starting_point, y + 89);
+                        ImprovedVBE.DrawImageAlpha(Seven, starting_point, y + 89);
                         starting_point += 26;
                     }
                     if (c == '8')
                     {
-                        ImprovedVBE.DrawImageAlpha2(Eight, starting_point, y + 89);
+                        ImprovedVBE.DrawImageAlpha(Eight, starting_point, y + 89);
                         starting_point += 26;
                     }
                     if (c == '9')
                     {
-                        ImprovedVBE.DrawImageAlpha2(Nine, starting_point, y + 89);
+                        ImprovedVBE.DrawImageAlpha(Nine, starting_point, y + 89);
                         starting_point += 26;
                     }
                     if (c == '0')
                     {
-                        ImprovedVBE.DrawImageAlpha2(Zero, starting_point, y + 89);
+                        ImprovedVBE.DrawImageAlpha(Zero, starting_point, y + 89);
                         starting_point += 28;
                     }
                     if (c == ':')
                     {
-                        ImprovedVBE.DrawImageAlpha2(Two_dot, starting_point, y + 89);
+                        ImprovedVBE.DrawImageAlpha(Two_dot, starting_point, y + 89);
                         starting_point += 18;
                     }
                 }
@@ -239,16 +239,16 @@ namespace CrystalOS2.Applications.Clock
 
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > Int_Manager.Clock_X + 59 && Kernel.X < Int_Manager.Clock_X + 76)
+                    if (MouseManager.X > Int_Manager.Clock_X + 59 && MouseManager.X < Int_Manager.Clock_X + 76)
                     {
-                        if (Kernel.Y > Int_Manager.Clock_Y + 106 && Kernel.Y < Int_Manager.Clock_Y + 122)
+                        if (MouseManager.Y > Int_Manager.Clock_Y + 106 && MouseManager.Y < Int_Manager.Clock_Y + 122)
                         {
                             Bool_Manager.Clock = false;
                         }
                     }
-                    else if (Kernel.X > Int_Manager.Clock_X + 37 && Kernel.X < Int_Manager.Clock_X + 263)
+                    else if (MouseManager.X > Int_Manager.Clock_X + 37 && MouseManager.X < Int_Manager.Clock_X + 263)
                     {
-                        if (Kernel.Y > Int_Manager.Clock_Y + 40 && Kernel.Y < Int_Manager.Clock_Y + 143)
+                        if (MouseManager.Y > Int_Manager.Clock_Y + 40 && MouseManager.Y < Int_Manager.Clock_Y + 143)
                         {
                             movable = true;
                         }
@@ -258,14 +258,14 @@ namespace CrystalOS2.Applications.Clock
                 {
                     if (MouseManager.MouseState == MouseState.Right)
                     {
-                        Int_Manager.Clock_X = (int)Kernel.X - 37;
-                        Int_Manager.Clock_Y = (int)Kernel.Y - 40;
+                        Int_Manager.Clock_X = (int)MouseManager.X - 37;
+                        Int_Manager.Clock_Y = (int)MouseManager.Y - 40;
                         movable = false;
                     }
                     else
                     {
-                        Int_Manager.Clock_X = (int)Kernel.X - 37;
-                        Int_Manager.Clock_Y = (int)Kernel.Y - 40;
+                        Int_Manager.Clock_X = (int)MouseManager.X - 37;
+                        Int_Manager.Clock_Y = (int)MouseManager.Y - 40;
                     }
                 }
             }

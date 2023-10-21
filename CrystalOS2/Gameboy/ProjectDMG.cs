@@ -1,11 +1,11 @@
 ﻿using Cosmos.System;
+using CrystalOS2;
 using IL2CPU.API.Attribs;
 using ProjectDMG.Utils;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using Kernel = CrystalOS2.Kernel;
 
 namespace ProjectDMG {
     public class ProjectDMG {
@@ -31,23 +31,23 @@ namespace ProjectDMG {
             timer = new TIMER();
             joypad = new JOYPAD();
 
-            if(Kernel.gamenum == 0)
+            if(CrystalOS2.Kernel.gamenum == 0)
             {
                 mmu.loadGamePak(game);
             }
-            else if (Kernel.gamenum == 1)
+            else if (CrystalOS2.Kernel.gamenum == 1)
             {
                 mmu.loadGamePak(game1);
             }
-            else if (Kernel.gamenum == 2)
+            else if (CrystalOS2.Kernel.gamenum == 2)
             {
                 mmu.loadGamePak(game2);
             }
-            else if (Kernel.gamenum == 3)
+            else if (CrystalOS2.Kernel.gamenum == 3)
             {
                 mmu.loadGamePak(game3);
             }
-            else if (Kernel.gamenum == 4)
+            else if (CrystalOS2.Kernel.gamenum == 4)
             {
                 mmu.loadGamePak(game4);
             }

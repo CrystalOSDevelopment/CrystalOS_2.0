@@ -23,26 +23,26 @@ namespace CrystalOS.Applications.MusicPlayer
             {
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > Int_Manager.Music_Player_X + 406 && Kernel.X < Int_Manager.Music_Player_X + 555)
+                    if (MouseManager.X > Int_Manager.Music_Player_X + 406 && MouseManager.X < Int_Manager.Music_Player_X + 555)
                     {
-                        if (Kernel.Y > Int_Manager.Music_Player_Y && Kernel.Y < Int_Manager.Music_Player_Y + 17)
+                        if (MouseManager.Y > Int_Manager.Music_Player_Y && MouseManager.Y < Int_Manager.Music_Player_Y + 17)
                         {
-                            //Kernel.startmusic = false;
+                            Kernel.startmusic = false;
                             Bool_Manager.Music_Player_Opened = false;
                         }
                     }
-                    if (Kernel.X > Int_Manager.Music_Player_X + 284 && Kernel.X < Int_Manager.Music_Player_X + 346)
+                    if (MouseManager.X > Int_Manager.Music_Player_X + 284 && MouseManager.X < Int_Manager.Music_Player_X + 346)
                     {
-                        if (Kernel.Y > Int_Manager.Music_Player_Y + 234 && Kernel.Y < Int_Manager.Music_Player_Y + 286)
+                        if (MouseManager.Y > Int_Manager.Music_Player_Y + 234 && MouseManager.Y < Int_Manager.Music_Player_Y + 286)
                         {
-                            //Kernel.startmusic = true;
+                            Kernel.startmusic = true;
                         }
                     }
                     if (movable == false)
                     {
-                        if (Kernel.X > Int_Manager.Music_Player_X && Kernel.X < Int_Manager.Music_Player_X + 502)
+                        if (MouseManager.X > Int_Manager.Music_Player_X && MouseManager.X < Int_Manager.Music_Player_X + 502)
                         {
-                            if (Kernel.Y > Int_Manager.Music_Player_Y && Kernel.Y < Int_Manager.Music_Player_Y + 18)
+                            if (MouseManager.Y > Int_Manager.Music_Player_Y && MouseManager.Y < Int_Manager.Music_Player_Y + 18)
                             {
                                 movable = true;
                             }
@@ -54,16 +54,16 @@ namespace CrystalOS.Applications.MusicPlayer
 
                 if (movable == true)
                 {
-                    Int_Manager.Music_Player_X = (int)Kernel.X;
-                    Int_Manager.Music_Player_Y = (int)Kernel.Y;
+                    Int_Manager.Music_Player_X = (int)MouseManager.X;
+                    Int_Manager.Music_Player_Y = (int)MouseManager.Y;
                     if (MouseManager.MouseState == MouseState.Right)
                     {
                         movable = false;
                     }
                     /*
-                    if (Kernel.X > Int_Manager.Music_Player_X && Kernel.X < Int_Manager.Music_Player_X + 352)
+                    if (MouseManager.X > Int_Manager.Music_Player_X && MouseManager.X < Int_Manager.Music_Player_X + 352)
                     {
-                        if (Kernel.Y > Int_Manager.Music_Player_Y && Kernel.Y < Int_Manager.Music_Player_Y + 18)
+                        if (MouseManager.Y > Int_Manager.Music_Player_Y && MouseManager.Y < Int_Manager.Music_Player_Y + 18)
                         {
                             movable = false;
                         }

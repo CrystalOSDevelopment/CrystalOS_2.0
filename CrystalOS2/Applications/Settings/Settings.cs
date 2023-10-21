@@ -14,13 +14,12 @@ using System.Diagnostics;
 using CrystalOS.Applications.About;
 using System.IO;
 using CrystalOS2.SystemFiles;
-using Youtube_tut.Applications.Calculator;
 
 namespace CrystalOS.NewFolder.NewFolder
 {
-    public class Settings : App
+    public static class Settings
     {
-        public bool movable = false;
+        public static bool movable = false;
         [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Settings.Settings.bmp")] public static byte[] settings_base;
         public static Bitmap Settings_base = new Bitmap(settings_base);
         [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Settings.Settings_Cursors.bmp")] public static byte[] settings_base_cur;
@@ -35,70 +34,57 @@ namespace CrystalOS.NewFolder.NewFolder
         public static Bitmap Sel = new Bitmap(sel);
         #endregion buttons
 
-        public string current = "1";
-        public bool clicked = false;
+        public static string current = "1";
+        public static bool clicked = false;
 
-        public bool usernameinput = true;
-        public bool passwordinput = false;
-        public string username = "";
-        public string password = "";
-        public string hidden_pass = "";
-        public bool trylogin = false;
+        public static bool usernameinput = true;
+        public static bool passwordinput = false;
+        public static string username = "";
+        public static string password = "";
+        public static string hidden_pass = "";
+        public static bool trylogin = false;
 
-        public int selected = 0;
-        public int desk_ID { get; set; }
-
-        public int x = 100;
-        public int y = 100;
-
-        public string name
+        public static int selected = 0;
+        public static void settings(int x, int y)
         {
-            get { return "Sett..."; }
-        }
-
-        public bool minimised { get; set; }
-        public int z { get; set; }
-
-        public void App()
-        {
-            if (current == "1")
+            current = Task_Manager.Tasks[Task_Manager.indicator].Item5;
+            if (Task_Manager.Tasks[Task_Manager.indicator].Item5 == "1")
             {
-                if (MouseManager.MouseState == MouseState.None && clicked == true)
+                if (MouseManager.MouseState == MouseState.None)
                 {
                     clicked = false;
-                    current = "2";
                 }
                 ImprovedVBE.DrawImageAlpha(Settings_base, x, y);
 
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > x + 87 && Kernel.X < x + 299)
+                    if (MouseManager.X > x + 87 && MouseManager.X < x + 299)
                     {
-                        if (Kernel.Y > y + 99 && Kernel.Y < y + 219)
+                        if (MouseManager.Y > y + 99 && MouseManager.Y < y + 219)
                         {
                             Kernel.saved = "90_Style";
                             Bool_Manager.wallp = "90_Style";
                         }
                     }
-                    if (Kernel.X > x + 350 && Kernel.X < x + 561)
+                    if (MouseManager.X > x + 350 && MouseManager.X < x + 561)
                     {
-                        if (Kernel.Y > y + 99 && Kernel.Y < y + 219)
+                        if (MouseManager.Y > y + 99 && MouseManager.Y < y + 219)
                         {
                             Kernel.saved = "Midnight_in_NY";
                             Bool_Manager.wallp = "Midnight_in_NY";
                         }
                     }
-                    if (Kernel.X > x + 87 && Kernel.X < x + 299)
+                    if (MouseManager.X > x + 87 && MouseManager.X < x + 299)
                     {
-                        if (Kernel.Y > y + 222 && Kernel.Y < y + 343)
+                        if (MouseManager.Y > y + 222 && MouseManager.Y < y + 343)
                         {
                             Kernel.saved = "autumn";
                             Bool_Manager.wallp = "autumn";
                         }
                     }
-                    if (Kernel.X > x + 350 && Kernel.X < x + 561)
+                    if (MouseManager.X > x + 350 && MouseManager.X < x + 561)
                     {
-                        if (Kernel.Y > y + 222 && Kernel.Y < y + 343)
+                        if (MouseManager.Y > y + 222 && MouseManager.Y < y + 343)
                         {
                             Kernel.saved = "Windows_Puma";
                             Bool_Manager.wallp = "Windows_Puma";
@@ -107,130 +93,166 @@ namespace CrystalOS.NewFolder.NewFolder
 
                     if(clicked == false)
                     {
-                        if (Kernel.X > x + 545 && Kernel.X < x + 645)
+                        if (MouseManager.X > x + 545 && MouseManager.X < x + 645)
                         {
-                            if (Kernel.Y > y + 347 && Kernel.Y < y + 389)
+                            if (MouseManager.Y > y + 347 && MouseManager.Y < y + 389)
                             {
+                                Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", x, y, false, "2", true));
                                 clicked = true;
                             }
                         }
                     }
 
-                    if (Kernel.X > x + 623 && Kernel.X < x + 644)
+                    if (MouseManager.X > Task_Manager.Tasks[Task_Manager.indicator].Item2 + 623 && MouseManager.X < Task_Manager.Tasks[Task_Manager.indicator].Item2 + 644)
                     {
-                        if (Kernel.Y > y + 8 && Kernel.Y < y + 24)
+                        if (MouseManager.Y > Task_Manager.Tasks[Task_Manager.indicator].Item3 + 8 && MouseManager.Y < Task_Manager.Tasks[Task_Manager.indicator].Item3 + 24)
                         {
-                            Task_Manager.calculators.RemoveAt(Task_Manager.indicator);
+                            //Bool_Manager.Settings_Opened = false;
+                            Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
                         }
                     }
-                    if (movable == false)
+                    if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == false)
                     {
-                        if (Kernel.X > x && Kernel.X < x + 570)
+                        if (MouseManager.X > x && MouseManager.X < x + 570)
                         {
-                            if (Kernel.Y > y && Kernel.Y < y + 18)
+                            if (MouseManager.Y > y && MouseManager.Y < y + 18)
                             {
-                                movable = true;
+                                int f = (int)MouseManager.X;
+                                int g = (int)MouseManager.Y;
+                                Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", f, g, true, current, true));
                             }
                         }
                     }
                 }
 
-                if (movable == true)
+                if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == true)
                 {
-                    x = (int)MouseManager.X;
-                    y = (int)MouseManager.Y;
-
+                    int f = (int)MouseManager.X;
+                    int g = (int)MouseManager.Y;
+                    Task_Manager.Tasks.RemoveAt(0);
+                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", f, g, true, current, true));
                     if (MouseManager.MouseState == MouseState.Right)
                     {
-                        movable = false;
+                        Task_Manager.Tasks.RemoveAt(0);
+                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", f, g, false, current, true));
+                        Task_Manager.Tasks.Reverse();
+                        //movable = false;
                     }
+
+                    if (MouseManager.X > x && MouseManager.X < x + 352)
+                    {
+                        if (MouseManager.Y > y && MouseManager.Y < y + 18)
+                        {
+                            //movable = false;
+                        }
+                    }
+
                 }
             }
-            else if(current == "3")
+            else if(Task_Manager.Tasks[Task_Manager.indicator].Item5 == "3")
             {
-                if(MouseManager.MouseState == MouseState.None && clicked == true)
+                if(MouseManager.MouseState == MouseState.None)
                 {
                     clicked = false;
                 }
-                ImprovedVBE.DrawImageAlpha(Settings_base_cur, x, y);
+                    ImprovedVBE.DrawImageAlpha(Settings_base_cur, x, y);
 
-                if (MouseManager.MouseState == MouseState.Left)
-                {
-                    if (Kernel.X > x + 34 && Kernel.X < x + 131)
+                    if (MouseManager.MouseState == MouseState.Left)
                     {
-                        if (Kernel.Y > y + 89 && Kernel.Y < y + 226)
+                        if (MouseManager.X > x + 34 && MouseManager.X < x + 131)
                         {
-                            Kernel.sel_curs = "bas4";
+                            if (MouseManager.Y > y + 89 && MouseManager.Y < y + 226)
+                            {
+                                Kernel.sel_curs = "bas4";
+                            }
                         }
-                    }
-                    if (Kernel.X > x + 149 && Kernel.X < x + 267)
-                    {
-                        if (Kernel.Y > y + 89 && Kernel.Y < y + 226)
+                        if (MouseManager.X > x + 149 && MouseManager.X < x + 267)
                         {
-                            Kernel.sel_curs = "bas3";
+                            if (MouseManager.Y > y + 89 && MouseManager.Y < y + 226)
+                            {
+                                Kernel.sel_curs = "bas3";
+                            }
                         }
-                    }
-                    if (Kernel.X > x + 284 && Kernel.X < x + 386)
-                    {
-                        if (Kernel.Y > y + 89 && Kernel.Y < y + 226)
+                        if (MouseManager.X > x + 284 && MouseManager.X < x + 386)
                         {
-                            Kernel.sel_curs = "bas1";
+                            if (MouseManager.Y > y + 89 && MouseManager.Y < y + 226)
+                            {
+                                Kernel.sel_curs = "bas1";
+                            }
                         }
-                    }
-                    if (Kernel.X > x + 392 && Kernel.X < x + 472)
-                    {
-                        if (Kernel.Y > y + 89 && Kernel.Y < y + 226)
+                        if (MouseManager.X > x + 392 && MouseManager.X < x + 472)
                         {
-                            Kernel.sel_curs = "bas2";
+                            if (MouseManager.Y > y + 89 && MouseManager.Y < y + 226)
+                            {
+                                Kernel.sel_curs = "bas2";
+                            }
                         }
-                    }
 
-                    if (Kernel.X > x + 545 && Kernel.X < x + 645)
+                    if (MouseManager.X > x + 545 && MouseManager.X < x + 645)
                     {
-                        if (Kernel.Y > y + 347 && Kernel.Y < y + 389)
+                        if (MouseManager.Y > y + 347 && MouseManager.Y < y + 389)
                         {
                             if(clicked == false)
                             {
-                                current = "2";
+                                Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", x, y, false, "1", true));
                                 clicked = true;
                             }
                         }
                     }
 
-                    if (Kernel.X > x + 623 && Kernel.X < x + 644)
-                    {
-                        if (Kernel.Y > y + 8 && Kernel.Y < y + 24)
+                    if (MouseManager.X > Task_Manager.Tasks[Task_Manager.indicator].Item2 + 623 && MouseManager.X < Task_Manager.Tasks[Task_Manager.indicator].Item2 + 644)
                         {
-                            //Bool_Manager.Settings_Opened = false;
-                            Task_Manager.calculators.RemoveAt(Task_Manager.indicator);
-                        }
-                    }
-                    if (movable == false)
-                    {
-                        if (Kernel.X > x && Kernel.X < x + 570)
-                        {
-                            if (Kernel.Y > y && Kernel.Y < y + 18)
+                            if (MouseManager.Y > Task_Manager.Tasks[Task_Manager.indicator].Item3 + 8 && MouseManager.Y < Task_Manager.Tasks[Task_Manager.indicator].Item3 + 24)
                             {
-                                movable = true;
+                                //Bool_Manager.Settings_Opened = false;
+                                Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                            }
+                        }
+                        if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == false)
+                        {
+                            if (MouseManager.X > x && MouseManager.X < x + 570)
+                            {
+                                if (MouseManager.Y > y && MouseManager.Y < y + 18)
+                                {
+                                    int f = (int)MouseManager.X;
+                                    int g = (int)MouseManager.Y;
+                                    Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", f, g, true, current, true));
+                                }
                             }
                         }
                     }
-                }
 
-                if (movable == true)
-                {
-                    x = (int)MouseManager.X;
-                    y = (int)MouseManager.Y;
-
-                    if (MouseManager.MouseState == MouseState.Right)
+                    if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == true)
                     {
-                        movable = false;
+                        int f = (int)MouseManager.X;
+                        int g = (int)MouseManager.Y;
+                        Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", f, g, true, current, true));
+                        if (MouseManager.MouseState == MouseState.Right)
+                        {
+                            Task_Manager.Tasks.RemoveAt(0);
+                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", f, g, false, current, true));
+                            Task_Manager.Tasks.Reverse();
+                            //movable = false;
+                        }
+
+                        if (MouseManager.X > x && MouseManager.X < x + 352)
+                        {
+                            if (MouseManager.Y > y && MouseManager.Y < y + 18)
+                            {
+                                //movable = false;
+                            }
+                        }
+
                     }
-                }
             }
-            else if (current == "2")
+            else if (Task_Manager.Tasks[Task_Manager.indicator].Item5 == "2")
             {
-                if (MouseManager.MouseState == MouseState.None && clicked == true)
+                if (MouseManager.MouseState == MouseState.None)
                 {
                     clicked = false;
                 }
@@ -257,65 +279,69 @@ namespace CrystalOS.NewFolder.NewFolder
 
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > x + 158 && Kernel.X < x + 468)
+                    if (MouseManager.X > x + 158 && MouseManager.X < x + 468)
                     {
-                        if (Kernel.Y > y + 186 && Kernel.Y < y + 213)
+                        if (MouseManager.Y > y + 186 && MouseManager.Y < y + 213)
                         {
                             usernameinput = true;
                             passwordinput = false;
                         }
                     }
-                    if (Kernel.X > x + 158 && Kernel.X < x + 468)
+                    if (MouseManager.X > x + 158 && MouseManager.X < x + 468)
                     {
-                        if (Kernel.Y > y + 224 && Kernel.Y < y + 251)
+                        if (MouseManager.Y > y + 224 && MouseManager.Y < y + 251)
                         {
                             usernameinput = false;
                             passwordinput = true;
                         }
                     }
 
-                    if(Kernel.Y > y + 136 && Kernel.Y < y + 152)
+                    if(MouseManager.Y > y + 136 && MouseManager.Y < y + 152)
                     {
-                        if(Kernel.X > x + 43 && Kernel.X < x + 59)
+                        if(MouseManager.X > x + 43 && MouseManager.X < x + 59)
                         {
                             selected = 0;
                         }
-                        if (Kernel.X > x + 162 && Kernel.X < x + 178)
+                        if (MouseManager.X > x + 162 && MouseManager.X < x + 178)
                         {
                             selected = 1;
                         }
-                        if(Kernel.X > x + 333 && Kernel.X < x + 349)
+                        if(MouseManager.X > x + 333 && MouseManager.X < x + 349)
                         {
                             selected = 2;
                         }
                     }
 
-                    if (Kernel.X > x + 545 && Kernel.X < x + 645)
+                    if (MouseManager.X > x + 545 && MouseManager.X < x + 645)
                     {
-                        if (Kernel.Y > y + 347 && Kernel.Y < y + 389)
+                        if (MouseManager.Y > y + 347 && MouseManager.Y < y + 389)
                         {
                             if (clicked == false)
                             {
-                                current = "3";
+                                Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", x, y, false, "3", false));
                                 clicked = true;
                             }
                         }
                     }
 
-                    if (Kernel.X > x + 425 && Kernel.X < x + 526)
+                    if (MouseManager.X > x + 425 && MouseManager.X < x + 526)
                     {
-                        if (Kernel.Y > y + 347 && Kernel.Y < y + 389)
+                        if (MouseManager.Y > y + 347 && MouseManager.Y < y + 389)
                         {
                             if (clicked == false)
                             {
-                                current = "1";
+                                Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", x, y, false, "1", true));
+                                clicked = true;
+
                             }
                         }
                     }
 
-                    if (Kernel.X > x + 11 && Kernel.X < x + 112)
+                    if (MouseManager.X > x + 11 && MouseManager.X < x + 112)
                     {
-                        if (Kernel.Y > y + 347 && Kernel.Y < y + 389)
+                        if (MouseManager.Y > y + 347 && MouseManager.Y < y + 389)
                         {
                             if (clicked == false)
                             {
@@ -324,21 +350,24 @@ namespace CrystalOS.NewFolder.NewFolder
                         }
                     }
 
-                    if (Kernel.X > x + 623 && Kernel.X < x + 644)
+                    if (MouseManager.X > Task_Manager.Tasks[Task_Manager.indicator].Item2 + 623 && MouseManager.X < Task_Manager.Tasks[Task_Manager.indicator].Item2 + 644)
                     {
-                        if (Kernel.Y > y + 8 && Kernel.Y < y + 24)
+                        if (MouseManager.Y > Task_Manager.Tasks[Task_Manager.indicator].Item3 + 8 && MouseManager.Y < Task_Manager.Tasks[Task_Manager.indicator].Item3 + 24)
                         {
                             //Bool_Manager.Settings_Opened = false;
                             Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
                         }
                     }
-                    if (movable == false)
+                    if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == false)
                     {
-                        if (Kernel.X > x && Kernel.X < x + 570)
+                        if (MouseManager.X > x && MouseManager.X < x + 570)
                         {
-                            if (Kernel.Y > y && Kernel.Y < y + 18)
+                            if (MouseManager.Y > y && MouseManager.Y < y + 18)
                             {
-                                movable = true;
+                                int f = (int)MouseManager.X;
+                                int g = (int)MouseManager.Y;
+                                Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", f, g, true, current, true));
                             }
                         }
                     }
@@ -437,32 +466,28 @@ namespace CrystalOS.NewFolder.NewFolder
                     trylogin = false;
                 }
 
-                if (movable == true)
+                if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == true)
                 {
-                    x = (int)MouseManager.X;
-                    y = (int)MouseManager.Y;
-
+                    int f = (int)MouseManager.X;
+                    int g = (int)MouseManager.Y;
+                    Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
+                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", f, g, true, current, true));
                     if (MouseManager.MouseState == MouseState.Right)
                     {
-                        movable = false;
+                        Task_Manager.Tasks.RemoveAt(0);
+                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", f, g, false, current, true));
+                        Task_Manager.Tasks.Reverse();
+                        //movable = false;
                     }
-                }
-            }
-            if (Task_Manager.indicator == Task_Manager.calculators.Count - 1)
-            {
 
-            }
-            else
-            {
-                if (MouseManager.MouseState == MouseState.Left)
-                {
-                    if (Kernel.X > x && Kernel.X < x + Settings_base.Width)
+                    if (MouseManager.X > x && MouseManager.X < x + 352)
                     {
-                        if (Kernel.Y > y && Kernel.Y < y + Settings_base.Height)
+                        if (MouseManager.Y > y && MouseManager.Y < y + 18)
                         {
-                            z = 999;
+                            //movable = false;
                         }
                     }
+
                 }
             }
         }

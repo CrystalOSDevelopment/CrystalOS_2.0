@@ -1,8 +1,6 @@
 ﻿using Cosmos.System;
 using Cosmos.System.Graphics;
-using CrystalOS.Applications.Solitaire;
 using CrystalOS.SystemFiles;
-using CrystalOS2.Applications.Task_Scheduler;
 using IL2CPU.API.Attribs;
 using Microsoft.VisualBasic;
 using System;
@@ -10,11 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Youtube_tut.Applications.Calculator;
 
 namespace CrystalOS2.Applications.Calendar
 {
-    public class Calendar : App
+    public static class Calendar
     {
         public static Canvas c;
         public static int day = DateTime.Today.Day;
@@ -24,24 +21,11 @@ namespace CrystalOS2.Applications.Calendar
 
         public static int dayofweek = 0;
 
-        public int desk_ID { get; set; }
-
-        public int x = 100;
-        public int y = 100;
-
-        public string name
-        {
-            get { return "Cale..."; }
-        }
-
-        public bool minimised { get; set; }
-        public int z { get; set; }
-        public bool movable = false;
-
+        public static bool movable = false;
         public static int offset = 0;
         public static int yearoffset = 0;
 
-        public void App()
+        public static void calendar(int x, int y)
         {
             if(Bool_Manager.Calendar == true)
             {
@@ -95,28 +79,28 @@ namespace CrystalOS2.Applications.Calendar
                     basex += 107;
                 }
 
-                ImprovedVBE._DrawACSIIString("Current date: " + (DateTime.UtcNow.Year + yearoffset).ToString() + ". " + (DateTime.UtcNow.Month + offset).ToString() + ". " + DateTime.UtcNow.Day.ToString(), x + 76, y + 400, 0);
+                ImprovedVBE._DrawACSIIString("Current date: " + (DateTime.UtcNow.Year + yearoffset).ToString() + ". " + (DateTime.UtcNow.Month + offset).ToString() + ". " + DateTime.UtcNow.Day.ToString(), Int_Manager.Calendar_X + 76, Int_Manager.Calendar_Y + 400, 0);
 
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > x && Kernel.X < x + 730)
+                    if (MouseManager.X > Int_Manager.Calendar_X && MouseManager.X < Int_Manager.Calendar_X + 730)
                     {
-                        if (Kernel.Y > y && Kernel.Y < y + 20)
+                        if (MouseManager.Y > Int_Manager.Calendar_Y && MouseManager.Y < Int_Manager.Calendar_Y + 20)
                         {
                             movable = true;
                         }
                     }
-                    if (Kernel.X > x + 735 && Kernel.X < x + 745)
+                    if (MouseManager.X > Int_Manager.Calendar_X + 735 && MouseManager.X < Int_Manager.Calendar_X + 745)
                     {
-                        if (Kernel.Y > y && Kernel.Y < y + 20)
+                        if (MouseManager.Y > Int_Manager.Calendar_Y && MouseManager.Y < Int_Manager.Calendar_Y + 20)
                         {
-                            Task_Manager.calculators.RemoveAt(Task_Manager.indicator);
+                            Bool_Manager.Calendar = false;
                         }
                     }
 
-                    if (Kernel.X > x + 48 && Kernel.X < x + 56)
+                    if (MouseManager.X > Int_Manager.Calendar_X + 48 && MouseManager.X < Int_Manager.Calendar_X + 56)
                     {
-                        if (Kernel.Y > y + 395 && Kernel.Y < y + 412)
+                        if (MouseManager.Y > Int_Manager.Calendar_Y + 395 && MouseManager.Y < Int_Manager.Calendar_Y + 412)
                         {
                             if(offset + DateTime.UtcNow.Month <= 12 && offset + DateTime.UtcNow.Month > 1)
                             {
@@ -129,9 +113,9 @@ namespace CrystalOS2.Applications.Calendar
                             }
                         }
                     }
-                    if (Kernel.X > x + 21 && Kernel.X < x + 39)
+                    if (MouseManager.X > Int_Manager.Calendar_X + 21 && MouseManager.X < Int_Manager.Calendar_X + 39)
                     {
-                        if (Kernel.Y > y + 395 && Kernel.Y < y + 412)
+                        if (MouseManager.Y > Int_Manager.Calendar_Y + 395 && MouseManager.Y < Int_Manager.Calendar_Y + 412)
                         {
                             if(offset + DateTime.UtcNow.Month != 1)
                             {
@@ -149,31 +133,14 @@ namespace CrystalOS2.Applications.Calendar
                 {
                     if (MouseManager.MouseState == MouseState.Right)
                     {
-                        x = (int)Kernel.X;
-                        y = (int)Kernel.Y;
+                        Int_Manager.Calendar_X = (int)MouseManager.X;
+                        Int_Manager.Calendar_Y = (int)MouseManager.Y;
                         movable = false;
                     }
                     else
                     {
-                        x = (int)Kernel.X;
-                        y = (int)Kernel.Y;
-                    }
-                }
-            }
-            if (Task_Manager.indicator == Task_Manager.calculators.Count - 1)
-            {
-
-            }
-            else
-            {
-                if (MouseManager.MouseState == MouseState.Left)
-                {
-                    if (Kernel.X > x && Kernel.X < x + Calendar_base.Width)
-                    {
-                        if (Kernel.Y > y && Kernel.Y < y + Calendar_base.Height)
-                        {
-                            z = 999;
-                        }
+                        Int_Manager.Calendar_X = (int)MouseManager.X;
+                        Int_Manager.Calendar_Y = (int)MouseManager.Y;
                     }
                 }
             }

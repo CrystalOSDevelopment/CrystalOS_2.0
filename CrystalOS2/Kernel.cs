@@ -1,41 +1,57 @@
-﻿using Cosmos.Core;
-using Cosmos.Core.Memory;
-using Cosmos.HAL;
-using Cosmos.System;
-using Cosmos.System.Graphics;
-using Cosmos.System.Graphics.Fonts;
-using CrystalOS.Applications.About;
-using CrystalOS.Applications.Menu;
-using CrystalOS.Applications.Programmers_Dream;
-using CrystalOS.SystemFiles;
-using CrystalOS2;
-using CrystalOS2._3d_demo;
-using CrystalOS2._3d_graphics;
-using CrystalOS2.Applications;
-using CrystalOS2.Applications.Calendar;
-using CrystalOS2.Applications.Clock;
-using CrystalOS2.Applications.MultiDesk;
-using CrystalOS2.Applications.Paint;
-using CrystalOS2.Applications.Task_Scheduler;
-using CrystalOS2.Applications.Video_Player;
-using CrystalOS2.Applications.Word_Processor;
-using CrystalOS2.SystemFiles.Boot;
+﻿using Cosmos.System.Audio.IO;
+using Cosmos.System.Audio;
 using IL2CPU.API.Attribs;
-using ProjectDMG;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Text;
-using TextureMapper.GFFFontRenderer;
-using Youtube_tut.Applications.Calculator;
 using Sys = Cosmos.System;
+using Cosmos.HAL.Audio;
+using Cosmos.System.Graphics;
+using System.Drawing;
+using Cosmos.System;
+using Cosmos.Core.Memory;
+using static System.Net.Mime.MediaTypeNames;
+using System.Threading;
+using CrystalOS.Applications;
+using CrystalOS.NewFolder.NewFolder;
+using CrystalOS.SystemFiles;
+using CrystalOS2.SystemFiles;
+using Cosmos.System.FileSystem;
+using System.IO;
+using CrystalOS.Applications.Programmers_Dream;
+using CrystalOS2.Applications.Task_Scheduler;
+using CrystalOS2.Applications.Calendar;
+using Console = System.Console;
+using CrystalOS2.Applications.Paint;
+using CrystalOS2.Applications.Clock;
+using Cosmos.System.FileSystem.Listing;
+using CrystalOS.SystemFiles.Setup;
+using CrystalOS2.SystemFiles.Boot;
+using ProjectDMG;
+using CrystalOS2.Applications.Programmers_Dream;
+using MOOS.Misc;
+using PPU = ProjectDMG.PPU;
+using CrystalOS2.Applications.Video_Player;
+using CrystalOS2.Applications.Word_Processor;
 
 namespace CrystalOS2
 {
     public class Kernel : Sys.Kernel
     {
-        #region resources
+        /*
+        //[ManifestResourceStream(ResourceName = "CrystalOS2.Startup.wav")] public static byte[] music;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.Startup.wav")] public static byte[] music2;
+        public static MemoryAudioStream memAudioStream = new MemoryAudioStream(new SampleFormat(AudioBitDepth.Bits16, 2, true), 48000, music2);
+        [ManifestResourceStream(ResourceName = "CrystalOS2.bad_apple.wav")] public static byte[] Bad_Apple;
+        public static MemoryAudioStream bad_apple = new MemoryAudioStream(new SampleFormat(AudioBitDepth.Bits16, 2, true), 48000, Bad_Apple);
+        */
+        //public static MemoryAudioStream startupsound = new MemoryAudioStream(new SampleFormat(AudioBitDepth.Bits16, 2, true), 48000, music);
+        //2public static AC97 driver = AC97.Initialize(4096);
+        public static Canvas vbe;// = new Canvas(new Mode(1920, 1080, ColorDepth.ColorDepth32));
+        //Canvas vbe;
+
+        public static bool startmusic = false;
+
         [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.Menu.bmp")] public static byte[] Autumn;
         public static Bitmap img = new Bitmap(Autumn);
         [ManifestResourceStream(ResourceName = "CrystalOS2.Icons.Cursor.bmp")] public static byte[] Cursor;
@@ -63,17 +79,25 @@ namespace CrystalOS2
         public static Bitmap Text = new Bitmap(notes);
 
         [ManifestResourceStream(ResourceName = "CrystalOS2.test.btf")] public static byte[] font1;
-        #endregion resources
 
+        ImprovedVBE vbedr = new ImprovedVBE();
         public static string saved = "90_Style";
 
         public static string sel_curs = "bas3";
 
+        public static Sys.FileSystem.CosmosVFS fs;
+
         public static List<Tuple<string, string, int, int, Bitmap>> icons = new List<Tuple<string, string, int, int, Bitmap>>();
 
-        public VBECanvas canvas = new VBECanvas(new Mode(1280, 800, ColorDepth.ColorDepth32));
+        ProjectDMG.ProjectDMG gameboy = new ProjectDMG.ProjectDMG();
 
-        BallerFont font;
+        public static bool show_gb = false;
+
+        public static int gamenum = 0;
+
+        public static string CustomCharset = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+        public static MemoryStream ModernNo20CustomCharset32 = new MemoryStream(Convert.FromBase64String("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAHAAAABwAAAAcAAAAHAAAAAwAAAAIAAAACAAAAAgAAAAIAAAACAAAAAAAAAAYAAAAGAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABsAAAAbAAAAGwAAABsAAAALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiAAAAIgAAACIAAABEAAAARAAAA/8AAABEAAAAzAAAAIgAAAP/AAAAiAAAAIgAAAEQAAABEAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJAAAAP4AAAGlAAADJIAAAyWAAAOlgAAD9AAAAf4AAAD/AAAAL4AAACWAAAOlgAADpYAAAiWAAAElAAAA/gAAACQAAAAkAAAAJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4gAAAzQAAAM0AAADNAAAAzgAAAHoAAAAEAAAABAAAAAQAAAALwAAADmAAABZgAAAWYAAAFmAAACPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAAMgAAADIAAAAyAAAAPAAAAFvwAACcQAABDIAAAQ8AAAMHEAADBhAAA4MQAAOFkAAByfAAAPDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAGAAAABgAAAAYAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAABAAAAAgAAAAQAAAAIAAAAGAAAABgAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAYAAAAGAAAAAwAAAAEAAAAAgAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAgAAAAEAAAAAgAAAAEAAAABgAAAAIAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAAGAAAABgAAAAwAAAAIAAAAEAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAJoAAADWAAAAOAAAANYAAACaAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAQAAAAEAAAAf8AAAAQAAAAEAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAABwAAAAcAAAADAAAAAgAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+AAAAPgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgAAAA4AAAAOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAABAAAAAgAAAAIAAAACAAAABAAAAAQAAAAIAAAACAAAAAgAAAAQAAAAEAAAACAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHgAAADMAAABxgAAAYYAAAOHAAADhwAAA4cAAAOHAAADhwAAA4cAAAOHAAABhgAAAY4AAADMAAAAeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAA/AAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAAP+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwAAABDAAAAgQAAAIGAAADBgAAAwYAAAMOAAAAHAAAAHgAAADAAAABAgAAAgIAAAOCAAACfgAAAhwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHwAAAGOAAABhwAAAYcAAAAHAAAADAAAAPgAAAAOAAAABwAAA4cAAAOHAAADhwAAAgYAAAEMAAAA+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAABgAAAAYAAAAOAAAADgAAABYAAAAmAAAAJgAAAEYAAACGAAAA/4AAAAYAAAAGAAAABgAAAD+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBAAAAfgAAALwAAACAAAAAgAAAALwAAADGAAAAxwAAAIcAAAAHAAABxwAAAccAAAHGAAAAjAAAAHgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHgAAACMAAABDAAAAQwAAAMAAAADeAAAA4wAAAMGAAADBgAAAwYAAAMGAAADBgAAAQQAAAGMAAAA+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4gAAAfIAAAGeAAABBAAAAQwAAAEIAAAAGAAAABAAAAAQAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4AAAAzAAAAYYAAAGGAAABhgAAAcYAAAH0AAAA/AAAAT4AAAMHAAADAwAAAwMAAAEDAAABhgAAAHgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHgAAADuAAAAxgAAAccAAAHHAAABxwAAAccAAAHHAAAA7wAAAHcAAAAHAAAAxgAAAMYAAACMAAAAeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgAAAA4AAAAOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgAAAA4AAAAOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHAAAABwAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHAAAABwAAAAcAAAABAAAAAwAAAAIAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAEAAAABAAAAAgAAAAYAAAAGAAAABgAAAAIAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/gAAAAAAAAD+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAEAAAAAgAAAAMAAAABgAAAAYAAAAEAAAADAAAAAgAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAEwAAACGAAAA5gAAAOYAAAAGAAAABAAAAAgAAAAwAAAAIAAAACAAAAAAAAAAMAAAAHAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfgAAA4GAAAYAwAAMAGAAGDBgADDWMAAxjjAAY44wAGMMMABnHDAAZxwgAGYYYABmOMAANlmAADOeCAAYABAACAAgAAYAQAADgYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAADAAAAA4AAAAeAAAAFgAAACcAAAAnAAAAI4AAAEOAAAB/wAAAQcAAAIHAAACA4AABgOAAA+f8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//AAABw4AAAcHAAAHBwAABwcAAAcOAAAH/AAABwQAAAcDAAAHA4AABwOAAAcDgAAHA4AABwcAAD/+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPEAAAGPAAADBwAABgMAAAYBAAAOAQAADgEAAA4AAAAOAAAADgEAAA4BAAAHAQAABwIAAAOGAAAA+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/gAAAcGAAAHAwAABwOAAAcBgAAHAcAABwHAAAcBwAAHAcAABwHAAAcBwAAHA4AABwMAAAcGAAA//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//wAABwcAAAcDAAAHEwAABxEAAAcRAAAHMAAAB/AAAAcwgAAHEIAABxCAAAcRgAAHAYAABweAAD//gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//AAAHBwAABxMAAAcTAAAHEQAABzEAAAfwAAAHMAAABxAAAAcQAAAHEAAABwAAAAcAAAAHAAAAP/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfEAAAMPAAAGBwAADgMAAAwBAAAcAQAAHAAAABw/4AAcBwAAHAcAABwHAAAOBwAADgcAAAcNAAAB8QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA///AABwOAAAcDgAAHA4AABwOAAAcDgAAH/4AABwOAAAcDgAAHA4AABwOAAAcDgAAHA4AABwOAAD//8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/gAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAAP+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/gAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAGcAAADnAAAA5wAAAIcAAACOAAAAeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/38AABwMAAAcCAAAHBAAABwgAAAcQAAAHOAAAB/gAAAccAAAHHAAABw4AAAcOAAAHBwAABweAAD//4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/wAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwCAAAcAgAAHAIAABwGAAAcBgAAHB4AAP/+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwP4AA+DwAAFhcAABYXAAAXFwAAExcAABMnAAATpwAAEacAABGnAAARxwAAEccAABDHAAAQhwAA/r/gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+H8AADwcAAAeCAAAFggAABcIAAATiAAAEYgAABHIAAAQyAAAEGgAABB4AAAQOAAAEDgAADgYAAD+CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwAAAGGAAADAwAABwOAAAYBgAAOAcAADgHAAA4BwAAOAcAADgHAAAYBgAAHA4AAAwMAAAGGAAAA+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/gAAAcOAAAHBwAABwcAAAcHAAAHBwAABw4AAAf8AAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAA/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8AAABhgAAAwMAAAcDgAAGAcAADgHAAA4BwAAOAcAADgHAAA4BwAAGAYAAB3uAAAOLAAABzAAAAPxAAAAOQAAADkAAAA/AAAAHgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/8AAAHDgAABwcAAAcHAAAHBwAABw4AAAfwAAAHDAAABw4AAAcOAAAHDgAABw6AAAcOgAAHDoAAP+cAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD5AAABhwAAAwMAAAMBAAADgQAAA8AAAAH8AAAA/wAAAB+AAAIDgAACAYAAAwGAAAOBgAADQwAAAj4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//gAAOc4AADHGAAAxxgAAIcIAACHCAAAhwgAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAB/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/v4AAHA4AABwEAAAcBAAAHAQAABwEAAAcBAAAHAQAABwEAAAcBAAAHAQAABwEAAAcDAAADhgAAAPwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+/AAAcDAAAHAgAAA4IAAAOEAAADhAAAAcQAAAHIAAAByAAAAOgAAADwAAAAcAAAAHAAAABgAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB/v/8ADgcOAA4HBAAPBwQABweIAAcLiAADk5AAA5OQAAPTkAAB0eAAAeHgAADhwAAA4cAAAMDAAABAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//wAADhwAAA4YAAAHEAAAA6AAAAPAAAABwAAAAeAAAAHgAAACcAAAAnAAAAw4AAAcHAAAPh4AAP//gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//AAAcHgAAHAwAAA4IAAAPGAAABxAAAAOgAAAD4AAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAH/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf/AAAHDgAABgwAAAYcAAAEOAAABHAAAABwAAAA4AAAAcEAAAHBAAADgQAABwMAAAcDAAAOBwAAH/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8AAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAHwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAACAAAAAQAAAAEAAAAAgAAAAIAAAACAAAAAQAAAAEAAAAAgAAAAIAAAACAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAB8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAABgAAAA8AAAAJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAGAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8AAAAhgAAAMYAAADGAAAADgAAAPYAAAGGQAABhkAAAY5AAADzgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAABgAAAAYAAAAGAAAABgAAAAbwAAAHGAAABwgAAAYMAAAGDAAABgwAAAYMAAAGCAAABRgAAATwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAYQAAAEMAAADDAAAAwAAAAMAAAADBAAAAQQAAAGIAAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPgAAAAYAAAAGAAAABgAAAAYAAAB2AAABjgAAAQYAAAMGAAADBgAAAwYAAAMGAAADBgAAAY4AAAD3gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAGYAAABDAAAAwwAAAP8AAADAAAAAwQAAAMEAAABiAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgAAABMAAAAzAAAAMAAAADAAAAD8AAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAoAAAB4AAAAzAAAAYYAAAGGAAABhgAAAIwAAAD4AAADAAAAAgAAAAP+AAAB/wAAAQMAAAMDAAADhgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAwAAAAMAAAADAAAAAwAAAAN4AAADjAAAAwwAAAMMAAADDAAAAwwAAAMMAAADDAAAAwwAAA//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAADAAAAAwAAAAAAAAAAAAAADwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAMAAAADAAAAAAAAAAAAAAAPAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAAzAAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAwAAAAMAAAADAAAAAwAAAAM+AAADCAAAAxAAAAMgAAADYAAAA7AAAAM4AAADGAAAAwwAAA//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8AAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPeeAAA44wAAOOMAADDDAAAwwwAAMMMAADDDAAAwwwAAMMMAAP//wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA94AAADjAAAAwwAAAMMAAADDAAAAwwAAAMMAAADDAAAAwwAAA//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAYwAAAEEAAADBgAAAwYAAAMGAAADBgAAAQQAAAGMAAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAe8AAABxgAAAcMAAAGDAAABgwAAAYMAAAGDAAABggAAAcYAAAG4AAABgAAAAYAAAAGAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHkAAADFAAAAgwAAAYMAAAGDAAABgwAAAYMAAACHAAAAxwAAAHsAAAADAAAAAwAAAAMAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD3AAAAOYAAADmAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4AAABGAAAAQgAAAGAAAAB8AAAAPwAAAEcAAABDAAAAYwAAAF4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAEAAAADAAAABwAAAA/gAAADAAAAAwAAAAMAAAADAAAAAyAAAAMgAAADIAAAAyAAAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADzwAAAMMAAADDAAAAwwAAAMMAAADDAAAAwwAAAMcAAADLAAAAe8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPvAAAAwgAAAMQAAABkAAAAZAAAAGgAAAA4AAAAOAAAADAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/98AADGEAAAwhAAAGcgAABpIAAAeaAAADnAAAA5wAAAMMAAABCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/wAAAMQAAABoAAAAcAAAADAAAAAYAAAAPAAAAEwAAADGAAAD/4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPvgAAAwgAAAMIAAABkAAAAZAAAAHQAAAA4AAAAOAAAADAAAAAQAAAAEAAAACAAAAMgAAADQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf4AAAGMAAABGAAAATAAAAAwAAAAYgAAAMIAAACGAAABhgAAA/4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAIAAAACAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAABAAAAAQAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcgAAAHwAAACMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="));
+
         protected override void BeforeRun()
         {
             int x = 0;
@@ -82,30 +106,66 @@ namespace CrystalOS2
             y += 65;
             icons.Add(new Tuple<string, string, int, int, Bitmap>("My files", "FS", x, y, Folder));
             y += 65;
+            #region
+            try
+            {
+                fs = new Sys.FileSystem.CosmosVFS();
+                Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
 
-            MouseManager.ScreenWidth = 1024;
-            MouseManager.ScreenHeight = 768;
+                if (!Directory.Exists("0:\\Desktop"))
+                {
+                    Directory.CreateDirectory("0:\\Desktop");
+                }
+                if (!File.Exists("0:\\Desktop\\Test.txt"))
+                {
+                    File.Create("0:\\Desktop\\Test.txt");
+                }
+                foreach (DirectoryEntry d in fs.GetDirectoryListing("0:\\Desktop"))
+                {
+                    icons.Add(new Tuple<string, string, int, int, Bitmap>(d.mName, d.mFullPath, x, y, Folder));
+                    y += 65;
+                }
+                if (File.Exists(@"0:\System_Data.sys"))
+                {
+                    Bool_Manager.Is_Setup_Running = false;
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Failed to load the filesystem!");
+            }
+            #endregion
 
-            font = FontRenderer.LoadFont(fontBytes);
+            vbe = FullScreenCanvas.GetFullScreenCanvas(new Mode(1920, 1080, ColorDepth.ColorDepth32));
 
-            X = 10;
-            Kernel.Y = 10;
-            canvas.Display();
+            
+
+            gameboy.POWER_ON();
+
+            //vbe = FullScreenCanvas.GetFullScreenCanvas(new Mode(1920, 1080, ColorDepth.ColorDepth32));
+            //var memAudioStream = new MemoryAudioStream(new SampleFormat(AudioBitDepth.Bits16, 2, true), 48000, music);
+            //2var mixer = new AudioMixer();
+            //var audioStream = MemoryAudioStream.FromWave(music);
+            //var driver = AC97.Initialize(4096);
+            //mixer.Streams.Add(memAudioStream);
+            //mixer.Streams.Add(bad_apple);
+
+            vbedr.init();
+
+            MouseManager.ScreenWidth = 1920;
+            MouseManager.ScreenHeight = 1080;
+
+            MouseManager.X = 1920 / 2;
+            MouseManager.Y = 1080 / 2;
+
+            
+            BitFont.RegisterBitFont(new BitFontDescriptor("ModernNo20CustomCharset32", CustomCharset, ModernNo20CustomCharset32.ToArray(), 32));
         }
-
-
-        [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Word_Processor.Font_rendering.ballerosfont.gff")]
-        public static byte[] fontBytes;
-
 
         public static int FPS = 0;
 
         public static int LastS = -1;
         public static int Ticken = 0;
-
-        ProjectDMG.ProjectDMG gameboy = new ProjectDMG.ProjectDMG();
-
-        public static int gamenum = 0;
 
         public static void Update()
         {
@@ -124,101 +184,49 @@ namespace CrystalOS2
             }
             Ticken++;
         }
-
         public static int a = 0;
         public static bool movable = false;
         public static bool power_on = true;
-        public static bool show_gb = false;
-
-        public static uint X = 10;
-        public static uint Y = 10;
-
-        public static bool Keyboard_cur = true;
-
-        public static int kernel_cycle = 0;
-        public static int indic = 0;
-        public static bool magnify = false;
         protected override void Run()
         {
-            Update();
-
             Boot_Login btl = new Boot_Login();
 
-            #region Keyboard_Cursor
-            KeyEvent k;
-            if(KeyboardManager.AltPressed == true || KeyboardManager.ControlPressed)
+            if (power_on == true)
             {
-                if (KeyboardManager.TryReadKey(out k))
-                {
-                    if (k.Key == ConsoleKeyEx.F1)
-                    {
-                        Keyboard_cur = false;
-                    }
-                    if (k.Key == ConsoleKeyEx.F2)
-                    {
-                        Keyboard_cur = true;
-                    }
-
-                    if (k.Key == ConsoleKeyEx.F11)
-                    {
-                        magnify = true;
-                    }
-                    if (k.Key == ConsoleKeyEx.F12)
-                    {
-                        magnify = false;
-                    }
-
-                    if (k.Key == ConsoleKeyEx.F3)
-                    {
-                        Core core = new Core();
-                        core.x = Menumgr.z + 50;
-                        core.y = Menumgr.c + 50;
-                        core.desk_ID = CrystalOS2.Applications.MultiDesk.Core.Current_Desktop;
-                        core.minimised = false;
-
-                        Task_Manager.calculators.Add(core);
-                        /*
-                        if (Core.Current_Desktop == 0)
-                        {
-                            Core.Current_Desktop = 9;
-                        }
-                        else
-                        {
-                            Core.Current_Desktop--;
-                        }
-                        */
-                    }
-                    if (k.Key == ConsoleKeyEx.F4)
-                    {
-                        if (Core.Current_Desktop == 9)
-                        {
-                            Core.Current_Desktop = 0;
-                        }
-                        else
-                        {
-                            Core.Current_Desktop++;
-                        }
-                    }
-
-                    if (k.Key == ConsoleKeyEx.H)
-                    {
-                        //Magnifyer goes here
-                        
-                    }
-                }
+                gameboy.POWER_ON();
+                power_on = false;
             }
-            #endregion Keyboard_Cursor
-
-            if (Bool_Manager.is_locked == false)
+            /*
+            if (startmusic == true)
             {
-                ImprovedVBE._DrawACSIIString(DateTime.UtcNow.Hour.ToString() + ":" + DateTime.UtcNow.Minute.ToString(), 964, 2, 16777215);
-                ImprovedVBE._DrawACSIIString("fps: " + FPS, 87, 2, ImprovedVBE.colourToNumber(255, 255, 255));
+                var audioManager = new AudioManager()
+                {
+                    Stream = bad_apple, //mixer,
+                    Output = driver
+                };
+                audioManager.Enable();
+            }
+            else
+            {
+                var audioManager = new AudioManager()
+                {
+                    Stream = memAudioStream, //mixer,
+                    Output = driver
+                };
+                audioManager.Enable();
+            }
+            */
+            
+            if(Bool_Manager.is_locked == false)
+            {
+                ImprovedVBE._DrawACSIIString("  FPS: " + FPS.ToString(), 150, 2, 16777215);
+                ImprovedVBE._DrawACSIIString(DateTime.UtcNow.Hour.ToString() + " : " + DateTime.UtcNow.Minute.ToString(), 1850, 10, 16777215);
                 foreach (Tuple<string, string, int, int, Bitmap> s in icons)
                 {
-                    ImprovedVBE.DrawImageAlpha2(s.Item5, s.Item3 + 5, s.Item4 + 30);
+                    ImprovedVBE.DrawImageAlpha(s.Item5, s.Item3 + 5, s.Item4 + 30);
                     ImprovedVBE._DrawACSIIString(s.Item1, s.Item3 + 5, (int)(s.Item4 + 35 + s.Item5.Height), 16777215);
                 }
-                if ((Bool_Manager.Text_Editor_Opened == false && Bool_Manager.Programmers_choice == false && Bool_Manager.Terminal_Opened == false && show_gb == false) || Keyboard_cur == true)
+                if (Bool_Manager.Text_Editor_Opened == false && Bool_Manager.Programmers_choice == false && Bool_Manager.Terminal_Opened == false)
                 {
                     KeyEvent key;
                     if (KeyboardManager.TryReadKey(out key))
@@ -233,233 +241,130 @@ namespace CrystalOS2
                         {
                             Bool_Manager.Run_Window = true;
                         }
-
-                        if (Keyboard_cur == true)
-                        {
-                            if (key.Key == ConsoleKeyEx.D)
-                            {
-                                X += 4;
-                                kernel_cycle = 0;
-                            }
-                            if (key.Key == ConsoleKeyEx.A)
-                            {
-                                X -= 4;
-                                kernel_cycle = 0;
-                            }
-                            if (key.Key == ConsoleKeyEx.S)
-                            {
-                                Y += 4;
-                                kernel_cycle = 0;
-                            }
-                            if (key.Key == ConsoleKeyEx.W)
-                            {
-                                Y -= 4;
-                                kernel_cycle = 0;
-                            }
-                        }
                     }
-
-                    kernel_cycle++;
                 }
-                if(Keyboard_cur == false)
+                CrystalOS2.Applications.Run.Run.Run_Window();
+                Programmers_Choice.Core();
+                try
                 {
-                    Kernel.X = MouseManager.X;
-                    Kernel.Y = MouseManager.Y;
+                    Task_Manager.Task_manager();
+                    Clock.init(Int_Manager.Clock_X, Int_Manager.Clock_Y, 200, 200);
+                    CrystalOS.Applications.About.About_code.About(Int_Manager.About_X, Int_Manager.About_Y);
+                    Paint.Paint_app(Int_Manager.Paint_X, Int_Manager.Paint_Y);
+                    Calendar.calendar(Int_Manager.Calendar_X, Int_Manager.Calendar_Y);
+                    Word_processor.Core();
+                    if(Boot_Login.opened == "yes")
+                    {
+                        Player_base.Player();
+                    }
+                    //Game_core.Core(0, 50);
                 }
-                if(kernel_cycle < 1005)
-                {   
-                    Applications.Run.Run.Run_Window();
-                    Programmers_Choice.Core();
-
-                    try
-                    {
-                        Task_Manager t = new Task_Manager();
-                        t.Task_manager();
-                        Clock.init(Int_Manager.Clock_X, Int_Manager.Clock_Y, 200, 200);
-                        //CrystalOS.Applications.About.About_code.About(Int_Manager.About_X, Int_Manager.About_Y);
-                        //Paint.Paint_app(Int_Manager.Paint_X, Int_Manager.Paint_Y);
-                       // Calendar.calendar(Int_Manager.Calendar_X, Int_Manager.Calendar_Y);
-
-                        //Word_processor.Core();
-
-                        if (Boot_Login.opened == "yes")
-                        {
-                            Player_base.Player();
-                        }
-
-                        if (power_on == true)
-                        {
-                            gameboy.POWER_ON();
-                            power_on = false;
-                        }
-
-                        if (show_gb == true)
-                        {
-
-                            #region move
-                            if (MouseManager.MouseState == MouseState.Left)
-                            {
-                                if (X > PPU.x + 3 * 160 - 18 && X < PPU.x + 3 * 160 - 2)
-                                {
-                                    if (Kernel.Y > PPU.y - 18 && Kernel.Y < PPU.y - 2)
-                                    {
-                                        show_gb = false;
-                                    }
-                                }
-                                if (movable == false)
-                                {
-                                    if (X > PPU.x && X < PPU.x + 3 * 142)
-                                    {
-                                        if (Kernel.Y > PPU.y - 20 && Kernel.Y < PPU.y)
-                                        {
-                                            movable = true;
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (movable == true)
-                            {
-                                PPU.x = (int)X;
-                                PPU.y = (int)Kernel.Y + 20;
-                                if (MouseManager.MouseState == MouseState.Right)
-                                {
-                                    movable = false;
-                                }
-                            }
-                            #endregion move
-
-                            #region window
-                            //ImprovedVBE.DrawFilledRectangle(16777215, PPU.x - 1, PPU.y - 20, 162, 165);
-                            ImprovedVBE.DrawFilledRectangle(120, PPU.x - 1, PPU.y - 20, 162 * 3 - 4, 165 * 3 - 42);
-                            ImprovedVBE.DrawFilledRectangle(16724530, PPU.x + 3 * 160 - 18, PPU.y - 18, 16, 16);
-                            ImprovedVBE._DrawACSIIString("Gameboy", PPU.x + 2, PPU.y - 18, 16777215);
-                            #endregion window
-
-                            gameboy.EXECUTE();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        ImprovedVBE._DrawACSIIString("Debugger: " + ex.Message + "\nTask len: " + Task_Manager.Tasks.Count, 600, 50, 0);
-                    }
-                    
-                    if (MouseManager.MouseState == MouseState.Left)
-                    {
-                        if (X > 40 && X < 70 && Kernel.Y > 0 && Kernel.Y < 30)
-                        {
-                            ImprovedVBE.DrawImageAlpha(Search, 0, 32);
-                        }
-                    }
-                    //CrystalOS.Applications.Solitaire.Solitaire.Solitaire_core();
-                    CrystalOS.Applications.Menu.Menumgr.MenuManager();
+                catch(Exception ex)
+                {
+                    ImprovedVBE._DrawACSIIString("Debugger: " + ex.Message + "\nTask len: " + Task_Manager.Tasks.Count, 600, 50, 0);
                 }
-                
+                if(MouseManager.MouseState == MouseState.Left)
+                {
+                    if(MouseManager.X > 40 && MouseManager.X < 70 && MouseManager.Y > 0 && MouseManager.Y < 30)
+                    {
+                        ImprovedVBE.DrawImageAlpha(Search, 0, 32);
+                    }
+                }
+                //CrystalOS.Applications.Solitaire.Solitaire.Solitaire_core();
+                CrystalOS.Applications.Menu.Menumgr.MenuManager();
             }
 
-            //ImprovedVBE.DrawFilledEllipse(100, 100, 100, 50, ImprovedVBE.colourToNumber(255, 255, 255));
-            //ImprovedVBE.DrawFilledEllipse(100, 100, 11, 11, ImprovedVBE.colourToNumber(255, 255, 255));
-            //Demo_window.App();
-            //ImprovedVBE.DrawGradient();
-
-            if (magnify == true)
+            if (show_gb == true)
             {
-                Bitmap magnified = new Bitmap(300, 300, ColorDepth.ColorDepth32);
-                int startoff = 0;
-                if(X < 50)
+
+                #region move
+                if (MouseManager.MouseState == MouseState.Left)
                 {
-                    startoff = (int)(((Y - 50) * ImprovedVBE.width + X) - X);
-                }
-                else
-                {
-                    startoff = (int)((Y - 50) * ImprovedVBE.width + X) - 50;
-                }
-                int index = 0;
-                int lin = 101;
-                for (int j = 1; j < lin;)
-                {
-                    try
+                    if(MouseManager.X > PPU.x + 3 * 160 - 18 && MouseManager.X < PPU.x + 3 * 160 - 2)
                     {
-                        for (int i = 0; i < 100; i++)
+                        if(MouseManager.Y > PPU.y - 18 && MouseManager.Y < PPU.y - 2)
                         {
-                            magnified.RawData[index] = ImprovedVBE.cover.RawData[startoff + i + (j * ImprovedVBE.width)];
-                            magnified.RawData[index + 1] = ImprovedVBE.cover.RawData[startoff + i + (j * ImprovedVBE.width)];
-                            magnified.RawData[index + 2] = ImprovedVBE.cover.RawData[startoff + i + (j * ImprovedVBE.width)];
-                            index += 3;
+                            show_gb = false;
                         }
-                        for (int i = 0; i < 100; i++)
+                    }
+                    if (movable == false)
+                    {
+                        if (MouseManager.X > PPU.x && MouseManager.X < PPU.x + 3 * 142)
                         {
-                            magnified.RawData[index] = ImprovedVBE.cover.RawData[startoff + i + (j * ImprovedVBE.width)];
-                            magnified.RawData[index + 1] = ImprovedVBE.cover.RawData[startoff + i + (j * ImprovedVBE.width)];
-                            magnified.RawData[index + 2] = ImprovedVBE.cover.RawData[startoff + i + (j * ImprovedVBE.width)];
-                            index += 3;
+                            if (MouseManager.Y > PPU.y - 20 && MouseManager.Y < PPU.y)
+                            {
+                                movable = true;
+                            }
                         }
-                        for (int i = 0; i < 100; i++)
-                        {
-                            magnified.RawData[index] = ImprovedVBE.cover.RawData[startoff + i + (j * ImprovedVBE.width)];
-                            magnified.RawData[index + 1] = ImprovedVBE.cover.RawData[startoff + i + (j * ImprovedVBE.width)];
-                            magnified.RawData[index + 2] = ImprovedVBE.cover.RawData[startoff + i + (j * ImprovedVBE.width)];
-                            index += 3;
-                        }
-                        j++;
-                    }
-                    catch
-                    {
-                        j++;
-                        lin++;
                     }
                 }
-                int val1 = (int)X - 150;
-                if (Y < 150)
+
+                if (movable == true)
                 {
-                    if(val1 < 0)
+                    PPU.x = (int)MouseManager.X;
+                    PPU.y = (int)MouseManager.Y + 20;
+                    if (MouseManager.MouseState == MouseState.Right)
                     {
-                        ImprovedVBE.DrawImage(magnified, 0, 0);
-                    }
-                    else
-                    {
-                        ImprovedVBE.DrawImage(magnified, val1, 0);
+                        movable = false;
                     }
                 }
-                else
-                {
-                    if(val1 < 0)
-                    {
-                        ImprovedVBE.DrawImage(magnified, 0, (int)Y - 150);
-                    }
-                    else
-                    {
-                        ImprovedVBE.DrawImage(magnified, val1, (int)Y - 150);
-                    }
-                }
+                #endregion move
+
+                #region window
+                //ImprovedVBE.DrawFilledRectangle(16777215, PPU.x - 1, PPU.y - 20, 162, 165);
+                ImprovedVBE.DrawFilledRectangle(120, PPU.x - 1, PPU.y - 20, 162 * 3 - 4, 165 * 3 - 42);
+                ImprovedVBE.DrawFilledRectangle(16724530, PPU.x + 3 * 160 - 18, PPU.y - 18, 16, 16);
+                ImprovedVBE._DrawACSIIString("Gameboy", PPU.x + 2, PPU.y - 18, 16777215);
+                #endregion window
+
+                gameboy.EXECUTE();
             }
 
+            /*
+            if (Bool_Manager.Is_Setup_Running == true)
+            {
+                Installer.Installer_Run();
+            }
+            else
+            {
+                Lock_Screen.lock_screen();
+            }
+            */
             if (sel_curs == "bas1")
             {
-                ImprovedVBE.DrawImageAlpha2(cursor, (int)X, (int)Y);
+                ImprovedVBE.DrawImageAlpha(cursor, (int)MouseManager.X, (int)MouseManager.Y);
             }
             else if (sel_curs == "bas2")
             {
-                ImprovedVBE.DrawImageAlpha2(cursor2, (int)X, (int)Y);
+                ImprovedVBE.DrawImageAlpha(cursor2, (int)MouseManager.X, (int)MouseManager.Y);
             }
             else if (sel_curs == "bas3")
             {
-                ImprovedVBE.DrawImageAlpha2(cursor3, (int)X, (int)Y);
+                ImprovedVBE.DrawImageAlpha(cursor3, (int)MouseManager.X, (int)MouseManager.Y);
             }
             else if (sel_curs == "bas4")
             {
-                ImprovedVBE.DrawImageAlpha2(cursor4, (int)X, (int)Y);
+                ImprovedVBE.DrawImageAlpha(cursor4, (int)MouseManager.X, (int)MouseManager.Y);
             }
 
-            if(kernel_cycle > 1000)
+            int y = 50;
+            foreach (Tuple<string, string, string> t in Graphics_programing1.strings)
             {
-                Program.Main();
+                ImprovedVBE._DrawACSIIString("Debugger: " + t.Item2 + ", " + t.Item3, 600, y, 0);
+                y += 20;
             }
+            //ImprovedVBE._DrawACSIIString("Debugger: " + Graphics_programing1.current_namespace, 600, y, 0);
+            y += 20;
 
-            btl.Boot_process(canvas);
+            btl.Boot_process();
 
-            ImprovedVBE.display(canvas);
-            canvas.Display();
+            //ImprovedVBE._DrawACSIIString("FPS: " + FPS.ToString(), 500, 500, 16777215);
+
+            //BitFont.DrawString("ModernNo20CustomCharset32", 0, "a", 10, 10);
+
+            vbedr.display(vbe);
+            Update();
+            vbe.Display();
             Heap.Collect();
         }
     }

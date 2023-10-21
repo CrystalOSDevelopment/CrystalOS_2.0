@@ -2,6 +2,8 @@
 using Cosmos.HAL.Audio;
 using Cosmos.System;
 using Cosmos.System.Audio.IO;
+using Cosmos.System.FileSystem;
+using Cosmos.System.FileSystem.VFS;
 using Cosmos.System.Graphics;
 using CrystalOS.Applications;
 using CrystalOS.Applications.Text_Editor;
@@ -13,7 +15,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kernel = CrystalOS2.Kernel;
 
 namespace CrystalOS.SystemFiles.Setup
 {
@@ -69,9 +70,9 @@ namespace CrystalOS.SystemFiles.Setup
                     {
                         if(clicked_since > 90)
                         {
-                            if (Kernel.X > 1250 && Kernel.X < 1330)
+                            if (MouseManager.X > 1250 && MouseManager.X < 1330)
                             {
-                                if (Kernel.Y > 733 && Kernel.Y < 766)
+                                if (MouseManager.Y > 733 && MouseManager.Y < 766)
                                 {
                                     Bool_Manager.Collecting_Window = true;
                                     Bool_Manager.Welcome_Window = false;
@@ -91,25 +92,25 @@ namespace CrystalOS.SystemFiles.Setup
 
                     if(MouseManager.MouseState == MouseState.Left)
                     {
-                        if(Kernel.X > 764 && Kernel.X < 1101)
+                        if(MouseManager.X > 764 && MouseManager.X < 1101)
                         {
-                            if(Kernel.Y > 502 && Kernel.Y < 532)
+                            if(MouseManager.Y > 502 && MouseManager.Y < 532)
                             {
                                 active = "name";
                                 clicked_since = 0;
                             }
-                            if (Kernel.Y > 562 && Kernel.Y < 592)
+                            if (MouseManager.Y > 562 && MouseManager.Y < 592)
                             {
                                 active = "username";
                                 clicked_since = 0;
                             }
-                            if (Kernel.Y > 622 && Kernel.Y < 652)
+                            if (MouseManager.Y > 622 && MouseManager.Y < 652)
                             {
                                 active = "password";
                                 clicked_since = 0;
                             }
                             /*
-                            if (Kernel.Y > 350 + 203 && Kernel.Y < 350 + 224)
+                            if (MouseManager.Y > 350 + 203 && MouseManager.Y < 350 + 224)
                             {
                                 active = "password2";
                                 clicked_since = 0;
@@ -118,9 +119,9 @@ namespace CrystalOS.SystemFiles.Setup
                         }
                         if (clicked_since > 90)
                         {
-                            if (Kernel.X > 1250 && Kernel.X < 1330)
+                            if (MouseManager.X > 1250 && MouseManager.X < 1330)
                             {
-                                if (Kernel.Y > 733 && Kernel.Y < 766)
+                                if (MouseManager.Y > 733 && MouseManager.Y < 766)
                                 {
                                     Bool_Manager.Visual_pref1 = true;
                                     Bool_Manager.Collecting_Window = false;
@@ -241,9 +242,9 @@ namespace CrystalOS.SystemFiles.Setup
                     {
                         if (clicked_since > 90)
                         {
-                            if (Kernel.X > 1250 && Kernel.X < 1330)
+                            if (MouseManager.X > 1250 && MouseManager.X < 1330)
                             {
-                                if (Kernel.Y > 733 && Kernel.Y < 766)
+                                if (MouseManager.Y > 733 && MouseManager.Y < 766)
                                 {
                                     clicked_since = 0;
                                     Bool_Manager.Visual_pref2 = true;
@@ -251,21 +252,21 @@ namespace CrystalOS.SystemFiles.Setup
                                 }
                             }
                         }
-                        if (Kernel.Y > 382 && Kernel.Y < 551)
+                        if (MouseManager.Y > 382 && MouseManager.Y < 551)
                         {
-                            if (Kernel.X > 606 && Kernel.X < 725)
+                            if (MouseManager.X > 606 && MouseManager.X < 725)
                             {
                                 selected_cursor = "bas4";
                             }
-                            if (Kernel.X > 739 && Kernel.X < 858)
+                            if (MouseManager.X > 739 && MouseManager.X < 858)
                             {
                                 selected_cursor = "bas3";
                             }
-                            if (Kernel.X > 859 && Kernel.X < 969)
+                            if (MouseManager.X > 859 && MouseManager.X < 969)
                             {
                                 selected_cursor = "bas1";
                             }
-                            if (Kernel.X > 870 && Kernel.X < 989)
+                            if (MouseManager.X > 870 && MouseManager.X < 989)
                             {
                                 selected_cursor = "bas2";
                             }
@@ -283,9 +284,9 @@ namespace CrystalOS.SystemFiles.Setup
                     {
                         if (clicked_since > 90)
                         {
-                            if (Kernel.X > 1250 && Kernel.X < 1330)
+                            if (MouseManager.X > 1250 && MouseManager.X < 1330)
                             {
-                                if (Kernel.Y > 733 && Kernel.Y < 766)
+                                if (MouseManager.Y > 733 && MouseManager.Y < 766)
                                 {
                                     clicked_since = 0;
                                     passw = Encoder(password);
@@ -298,34 +299,34 @@ namespace CrystalOS.SystemFiles.Setup
                                 }
                             }
                         }/*
-                        if (Kernel.Y > 350 + 360 && Kernel.Y < 350 + 381)
+                        if (MouseManager.Y > 350 + 360 && MouseManager.Y < 350 + 381)
                         {
-                            if (Kernel.X > 850 + 447 && Kernel.X < 850 + 530)
+                            if (MouseManager.X > 850 + 447 && MouseManager.X < 850 + 530)
                             {
                                 File.Create(@"0:\System_Data.sys");
                                 File.WriteAllText(@"0:\System_Data.sys", name + "\n" + username + "\n" + password + "\n" + password2 + "\n" + wallpaper + "\n" + selected_cursor);
                                 Bool_Manager.Visual_pref2 = false;
                             }
                         }*/
-                        if (Kernel.Y > 388 && Kernel.Y < 523)
+                        if (MouseManager.Y > 388 && MouseManager.Y < 523)
                         {
-                            if (Kernel.X > 680 && Kernel.X < 937)
+                            if (MouseManager.X > 680 && MouseManager.X < 937)
                             {
                                 wallpaper = "90_Style";
                             }
-                            if (Kernel.X > 997 && Kernel.X < 1252)
+                            if (MouseManager.X > 997 && MouseManager.X < 1252)
                             {
                                 wallpaper = "Midnight_in_NY";
                             }
                             
                         }
-                        if (Kernel.Y > 553 && Kernel.Y < 687)
+                        if (MouseManager.Y > 553 && MouseManager.Y < 687)
                         {
-                            if (Kernel.X > 680 && Kernel.X < 937)
+                            if (MouseManager.X > 680 && MouseManager.X < 937)
                             {
                                 wallpaper = "autumn";
                             }
-                            if (Kernel.X > 997 && Kernel.X < 1252)
+                            if (MouseManager.X > 997 && MouseManager.X < 1252)
                             {
                                 wallpaper = "Windows_Puma";
                             }
@@ -343,9 +344,9 @@ namespace CrystalOS.SystemFiles.Setup
                     {
                         if (MouseManager.MouseState == MouseState.Left)
                         {
-                            if (Kernel.X > 1252 && Kernel.X < 1332)
+                            if (MouseManager.X > 1252 && MouseManager.X < 1332)
                             {
-                                if (Kernel.Y > 733 && Kernel.Y < 766)
+                                if (MouseManager.Y > 733 && MouseManager.Y < 766)
                                 {
                                     Cosmos.System.Power.Reboot();
                                     Bool_Manager.Is_Setup_Running = false;

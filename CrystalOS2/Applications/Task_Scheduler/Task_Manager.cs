@@ -17,17 +17,12 @@ using CrystalOS2.Applications.Programmers_Dream;
 using ProjectDMG;
 using System.Diagnostics.Metrics;
 using CrystalOS2.Gameboy;
-using Youtube_tut.Applications.Calculator;
-using CrystalOS.Applications.Menu;
 
 namespace CrystalOS2.Applications.Task_Scheduler
 {
     public class Task_Manager
     {
-        public static List<Tuple<string, int, int, bool, string, bool, int>> Tasks = new List<Tuple<string, int, int, bool, string, bool, int>>();
-
-        public static List<App> calculators = new List<App>();
-
+        public static List<Tuple<string, int, int, bool, string, bool>> Tasks = new List<Tuple<string, int, int, bool, string, bool>>();
         public static int indicator = 0;
         public static bool reversed = false;
         public static int x = 4;
@@ -51,238 +46,233 @@ namespace CrystalOS2.Applications.Task_Scheduler
         [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.button.bmp")] public static byte[] button;
         public static Bitmap Button = new Bitmap(button);
 
-        public int left = ImprovedVBE.width / 2 - 112;//98
-        public int right = ImprovedVBE.width / 2 + 10;
-        public bool leftorright = false;
+        public static int left = 810;
+        public static int right = 973;
+        public static bool leftorright = false;
 
-        public static bool clicked = false;
-        public static int cycle = 0;
-        public void Task_manager()
+        public static void Task_manager()
         {
             //ImprovedVBE.DrawImageAlpha(based, 0, 50);
-            /*
-            foreach(Tuple<string, int, int, bool, string, bool, int> t in Tasks) //Tuple<string, int, int, bool, string> t in 
+
+            for(indicator = 0; indicator < Tasks.Count; indicator++) //Tuple<string, int, int, bool, string> t in 
             {
-                if (t.Item6 == true && t.Item7 == CrystalOS2.Applications.MultiDesk.Core.Current_Desktop)
+                if (Tasks[indicator].Item6 == true)
                 {
 
-                    if (t.Item1 == "settings")
+                    if (Tasks[indicator].Item1 == "settings")
                     {
-                        CrystalOS.NewFolder.NewFolder.Settings.settings(t.Item2, t.Item3);
+                        CrystalOS.NewFolder.NewFolder.Settings.settings(Tasks[indicator].Item2, Tasks[indicator].Item3);
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);
                             if (MouseManager.MouseState == MouseState.Left)
                             {
-                                if (Kernel.X > left && Kernel.X < left + 100)
+                                if (MouseManager.X > left && MouseManager.X < left + 100)
                                 {
-                                    if (Kernel.Y > 5 && Kernel.Y < 30)
+                                    if (MouseManager.Y > 5 && MouseManager.Y < 30)
                                     {
-                                        Task_Manager.Tasks.Insert(indicator, new Tuple<string, int, int, bool, string, bool, int>("settings", t.Item2, t.Item3, false, t.Item5, false, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                                        Task_Manager.Tasks.Insert(indicator, new Tuple<string, int, int, bool, string, bool>("settings", Tasks[indicator].Item2, Tasks[indicator].Item3, false, Tasks[indicator].Item5, false));
                                         Task_Manager.Tasks.RemoveAt(indicator + 1);
                                     }
                                 }
                             }
-                            left -= 80;
+                            left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
                             if (MouseManager.MouseState == MouseState.Left)
                             {
-                                if (Kernel.X > right && Kernel.X > right + 100)
+                                if (MouseManager.X > right && MouseManager.X > right + 100)
                                 {
-                                    if (Kernel.Y > 5 && Kernel.Y < 30)
+                                    if (MouseManager.Y > 5 && MouseManager.Y < 30)
                                     {
-                                        Task_Manager.Tasks.Insert(indicator, new Tuple<string, int, int, bool, string, bool, int>("settings", t.Item2, t.Item3, false, t.Item5, false, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                                        Task_Manager.Tasks.Insert(indicator, new Tuple<string, int, int, bool, string, bool>("settings", Tasks[indicator].Item2, Tasks[indicator].Item3, false, Tasks[indicator].Item5, false));
                                         Task_Manager.Tasks.RemoveAt(indicator + 1);
                                     }
                                 }
                             }
-                            right += 80;
+                            right += 109;
                             leftorright = true;
                         }
                     }
-                    /*
-                    else if (t.Item1 == "calculator")
+                    else if (Tasks[indicator].Item1 == "calculator")
                     {
-                        Task_Manager.calculators.Add(new Calculator());
-                        //Youtube_tut.Applications.Calculator.Calculator.calculator(t.Item2, t.Item3);
+                        Youtube_tut.Applications.Calculator.Calculator.calculator(Tasks[indicator].Item2, Tasks[indicator].Item3);
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1.Remove(5), left + 12, 7, 16777215);
-                            left -= 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1.Remove(8), left + 12, 7, 16777215);
+                            left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1.Remove(5), right + 12, 7, 16777215);
-                            right += 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1.Remove(8), right + 12, 7, 16777215);
+                            right += 109;
                             leftorright = true;
                         }
                     }
-                    /
-                    else if (t.Item1 == "text_editor")
+                    else if (Tasks[indicator].Item1 == "text_editor")
                     {
-                        CrystalOS.Applications.Text_Editor.Text_Editor.text_editor(t.Item2, t.Item3);
+                        CrystalOS.Applications.Text_Editor.Text_Editor.text_editor(Tasks[indicator].Item2, Tasks[indicator].Item3);
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1.Remove(5), left + 12, 7, 16777215);
-                            left -= 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1.Remove(8), left + 12, 7, 16777215);
+                            left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1.Remove(5), right + 12, 7, 16777215);
-                            right += 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1.Remove(8), right + 12, 7, 16777215);
+                            right += 109;
                             leftorright = true;
                         }
                         editor_counter++;
                     }
-                    else if (t.Item1 == "explorer")
+                    else if (Tasks[indicator].Item1 == "explorer")
                     {
-                        File_Explorer.File_Explorer.file_explorer(c, t.Item2, t.Item3);
+                        File_Explorer.File_Explorer.file_explorer(c, Tasks[indicator].Item2, Tasks[indicator].Item3);
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);
-                            left -= 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);
+                            left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
-                            right += 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
+                            right += 109;
                             leftorright = true;
                         }
                         filemgr_counter++;
                     }
-                    else if (t.Item1 == "terminal")
+                    else if (Tasks[indicator].Item1 == "terminal")
                     {
                         Terminal_Core.Terminal();
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);
-                            left -= 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);
+                            left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
-                            right += 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
+                            right += 109;
                             leftorright = true;
                         }
                     }
-                    else if (t.Item1 == "Calendar")
+                    else if (Tasks[indicator].Item1 == "Calendar")
                     {
-                        Calendar.Calendar.calendar(t.Item2, t.Item3);
+                        Calendar.Calendar.calendar(Tasks[indicator].Item2, Tasks[indicator].Item3);
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);
-                            left -= 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);
+                            left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
-                            right += 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
+                            right += 109;
                             leftorright = true;
                         }
                     }
-                    else if (t.Item1 == "Browser")
+                    else if (Tasks[indicator].Item1 == "Browser")
                     {
-                        Browser.Browser.Browser_app(t.Item2, t.Item3, t.Item5);
+                        Browser.Browser.Browser_app(Tasks[indicator].Item2, Tasks[indicator].Item3, Tasks[indicator].Item5);
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);
-                            left -= 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);
+                            left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
-                            right += 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
+                            right += 109;
                             leftorright = true;
                         }
                     }
-                    else if (t.Item1 == "Gameboy")
+                    else if (Tasks[indicator].Item1 == "Gameboy")
                     {
 
-                        Game_selector.Game_selector_(t.Item2, t.Item3);
+                        Game_selector.Game_selector_(Tasks[indicator].Item2, Tasks[indicator].Item3);
 
                         //ProjectDMG.ProjectDMG gameboy = new ProjectDMG.ProjectDMG();
                         //gameboy.EXECUTE();
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);
-                            left -= 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);
+                            left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
-                            right += 80;
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
+                            right += 109;
                             leftorright = true;
                         }
                     }
                     else
                     {
                         /*
-                        string[] pos = t.Item5.Split(" ");
+                        string[] pos = Tasks[indicator].Item5.Split(" ");
                         int x = int.Parse(pos[0]);
                         int y = int.Parse(pos[1]);
-                        if(t.Item1.Length > 8)
+                        if(Tasks[indicator].Item1.Length > 8)
                         {
                             if (leftorright == true)
                             {
                                 ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                                ImprovedVBE._DrawACSIIString(t.Item1.Remove(8), left + 12, 7, 16777215);//Fix this modafoka, because sometimes it is possible that it out of ranges
-                                left -= 80;
+                                ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1.Remove(8), left + 12, 7, 16777215);//Fix this modafoka, because sometimes it is possible that it out of ranges
+                                left -= 109;
                                 leftorright = false;
                             }
                             else
                             {
                                 ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                                ImprovedVBE._DrawACSIIString(t.Item1.Remove(8), right + 12, 7, 16777215);
-                                right += 80;
+                                ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1.Remove(8), right + 12, 7, 16777215);
+                                right += 109;
                                 leftorright = true;
                             }
                         }
-                        if (t.Item1.Length < 8)
+                        if (Tasks[indicator].Item1.Length < 8)
                         {
                             if (leftorright == true)
                             {
                                 ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                                ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);//Fix this modafoka, because sometimes it is possible that it out of ranges
-                                left -= 80;
+                                ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);//Fix this modafoka, because sometimes it is possible that it out of ranges
+                                left -= 109;
                                 leftorright = false;
                             }
                             else
                             {
                                 ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                                ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
-                                right += 80;
+                                ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
+                                right += 109;
                                 leftorright = true;
                             }
                         }
 
-                        Window_Layout.Draw_Window(t.Item1, t.Item2, t.Item3, x, y);
+                        Window_Layout.Draw_Window(Tasks[indicator].Item1, Tasks[indicator].Item2, Tasks[indicator].Item3, x, y);
 
                         ImprovedVBE._DrawACSIIString("Debugger: " + x + ", " + y, 600, 300, 0);
                         */
@@ -292,28 +282,28 @@ namespace CrystalOS2.Applications.Task_Scheduler
                         //Graphics_programing1.is_started = false;
                         //Graphics_programing1.Windows.Clear();
 
-                        //Graphics_programing1.graphic_window_exec(t.Item5);
+                        //Graphics_programing1.graphic_window_exec(Tasks[indicator].Item5);
 
                         /*
-                        //ImprovedVBE.DrawFilledRectangle(120, t.Item2, t.Item3, data[counter], data[counter+1]);
+                        //ImprovedVBE.DrawFilledRectangle(120, Tasks[indicator].Item2, Tasks[indicator].Item3, data[counter], data[counter+1]);
                         try
                         {
-                            //Window_Layout.Draw_Window(t.Item1, t.Item2, t.Item3, data[counter], data[counter + 1]);
+                            //Window_Layout.Draw_Window(Tasks[indicator].Item1, Tasks[indicator].Item2, Tasks[indicator].Item3, data[counter], data[counter + 1]);
                             if (leftorright == true)
                             {
                                 ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                                ImprovedVBE._DrawACSIIString(t.Item1.Remove(8), left + 12, 7, 16777215);
-                                left -= 80;
+                                ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1.Remove(8), left + 12, 7, 16777215);
+                                left -= 109;
                                 leftorright = false;
                             }
                             else
                             {
                                 ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                                ImprovedVBE._DrawACSIIString(t.Item1.Remove(8), right + 12, 7, 16777215);
-                                right += 80;
+                                ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1.Remove(8), right + 12, 7, 16777215);
+                                right += 109;
                                 leftorright = true;
                             }
-                            Graphics_programing1.graphic_window_exec(t.Item5);
+                            Graphics_programing1.graphic_window_exec(Tasks[indicator].Item5);
                         }
                         catch(Exception e)
                         {
@@ -321,30 +311,30 @@ namespace CrystalOS2.Applications.Task_Scheduler
                         }
                         counter += 2;
                         foo += 1;
-                        /
+                        */
                     }
                 }
-                if (t.Item6 == false)
+                if (Tasks[indicator].Item6 == false)
                 {
 
-                    if (t.Item1 == "settings")
+                    if (Tasks[indicator].Item1 == "settings")
                     {
-                        //CrystalOS.NewFolder.NewFolder.Settings.settings(t.Item2, t.Item3);
+                        //CrystalOS.NewFolder.NewFolder.Settings.settings(Tasks[indicator].Item2, Tasks[indicator].Item3);
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);
                             if (leftorright == true)
                             {
                                 ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                                ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);
+                                ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);
                                 if (MouseManager.MouseState == MouseState.Left)
                                 {
-                                    if (Kernel.X > left && Kernel.X < left + 100)
+                                    if (MouseManager.X > left && MouseManager.X < left + 100)
                                     {
-                                        if (Kernel.Y > 5 && Kernel.Y < 30)
+                                        if (MouseManager.Y > 5 && MouseManager.Y < 30)
                                         {
-                                            Task_Manager.Tasks.Insert(indicator, new Tuple<string, int, int, bool, string, bool, int>("settings", t.Item2, t.Item3, false, t.Item5, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                                            Task_Manager.Tasks.Insert(indicator, new Tuple<string, int, int, bool, string, bool>("settings", Tasks[indicator].Item2, Tasks[indicator].Item3, false, Tasks[indicator].Item5, true));
                                             Task_Manager.Tasks.RemoveAt(indicator + 1);
                                         }
                                     }
@@ -355,14 +345,14 @@ namespace CrystalOS2.Applications.Task_Scheduler
                             else
                             {
                                 ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                                ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
+                                ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
                                 if (MouseManager.MouseState == MouseState.Left)
                                 {
-                                    if (Kernel.X > right && Kernel.X > right + 100)
+                                    if (MouseManager.X > right && MouseManager.X > right + 100)
                                     {
-                                        if (Kernel.Y > 5 && Kernel.Y < 30)
+                                        if (MouseManager.Y > 5 && MouseManager.Y < 30)
                                         {
-                                            Task_Manager.Tasks.Insert(indicator, new Tuple<string, int, int, bool, string, bool, int>("settings", t.Item2, t.Item3, false, t.Item5, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                                            Task_Manager.Tasks.Insert(indicator, new Tuple<string, int, int, bool, string, bool>("settings", Tasks[indicator].Item2, Tasks[indicator].Item3, false, Tasks[indicator].Item5, true));
                                             Task_Manager.Tasks.RemoveAt(indicator + 1);
                                         }
                                     }
@@ -374,15 +364,15 @@ namespace CrystalOS2.Applications.Task_Scheduler
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
                             if (MouseManager.MouseState == MouseState.Left)
                             {
-                                if (Kernel.X > left && Kernel.X < left + 100)
+                                if (MouseManager.X > left && MouseManager.X < left + 100)
                                 {
-                                    if (Kernel.Y > 5 && Kernel.Y < 30)
+                                    if (MouseManager.Y > 5 && MouseManager.Y < 30)
                                     {
                                         Task_Manager.Tasks.RemoveAt(0);
-                                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("settings", t.Item2, t.Item3, false, t.Item5, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("settings", Tasks[indicator].Item2, Tasks[indicator].Item3, false, Tasks[indicator].Item5, true));
                                     }
                                 }
                             }
@@ -390,112 +380,112 @@ namespace CrystalOS2.Applications.Task_Scheduler
                             leftorright = true;
                         }
                     }
-                    else if (t.Item1 == "calculator")
+                    else if (Tasks[indicator].Item1 == "calculator")
                     {
-                        //Youtube_tut.Applications.Calculator.Calculator.calculator(t.Item2, t.Item3);
+                        //Youtube_tut.Applications.Calculator.Calculator.calculator(Tasks[indicator].Item2, Tasks[indicator].Item3);
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1.Remove(8), left + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1.Remove(8), left + 12, 7, 16777215);
                             left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1.Remove(8), right + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1.Remove(8), right + 12, 7, 16777215);
                             right += 109;
                             leftorright = true;
                         }
                     }
-                    else if (t.Item1 == "text_editor")
+                    else if (Tasks[indicator].Item1 == "text_editor")
                     {
-                        //CrystalOS.Applications.Text_Editor.Text_Editor.text_editor(t.Item2, t.Item3);
+                        //CrystalOS.Applications.Text_Editor.Text_Editor.text_editor(Tasks[indicator].Item2, Tasks[indicator].Item3);
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1.Remove(8), left + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1.Remove(8), left + 12, 7, 16777215);
                             left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1.Remove(8), right + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1.Remove(8), right + 12, 7, 16777215);
                             right += 109;
                             leftorright = true;
                         }
                         editor_counter++;
                     }
-                    else if (t.Item1 == "explorer")
+                    else if (Tasks[indicator].Item1 == "explorer")
                     {
-                        //File_Explorer.File_Explorer.file_explorer(c, t.Item2, t.Item3);
+                        //File_Explorer.File_Explorer.file_explorer(c, Tasks[indicator].Item2, Tasks[indicator].Item3);
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);
                             left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
                             right += 109;
                             leftorright = true;
                         }
                         filemgr_counter++;
                     }
-                    else if (t.Item1 == "terminal")
+                    else if (Tasks[indicator].Item1 == "terminal")
                     {
                         //Terminal_Core.Terminal();
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);
                             left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
                             right += 109;
                             leftorright = true;
                         }
                     }
-                    else if (t.Item1 == "Calendar")
+                    else if (Tasks[indicator].Item1 == "Calendar")
                     {
-                        //Calendar.Calendar.calendar(t.Item2, t.Item3);
+                        //Calendar.Calendar.calendar(Tasks[indicator].Item2, Tasks[indicator].Item3);
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);
                             left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
                             right += 109;
                             leftorright = true;
                         }
                     }
-                    else if (t.Item1 == "Browser")
+                    else if (Tasks[indicator].Item1 == "Browser")
                     {
-                        //Browser.Browser.Browser_app(t.Item2, t.Item3, t.Item5);
+                        //Browser.Browser.Browser_app(Tasks[indicator].Item2, Tasks[indicator].Item3, Tasks[indicator].Item5);
                         if (leftorright == true)
                         {
                             ImprovedVBE.DrawImageAlpha(Button, left, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, left + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, left + 12, 7, 16777215);
                             left -= 109;
                             leftorright = false;
                         }
                         else
                         {
                             ImprovedVBE.DrawImageAlpha(Button, right, 5);
-                            ImprovedVBE._DrawACSIIString(t.Item1, right + 12, 7, 16777215);
+                            ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, right + 12, 7, 16777215);
                             right += 109;
                             leftorright = true;
                         }
@@ -507,115 +497,13 @@ namespace CrystalOS2.Applications.Task_Scheduler
                         
                         //Graphics_programing1.Windows.Clear();
 
-                        //Graphics_programing1.graphic_window_exec(t.Item5);
+                        //Graphics_programing1.graphic_window_exec(Tasks[indicator].Item5);
                     }
                 }
                 //indicator++;
-                //ImprovedVBE._DrawACSIIString(t.Item1, x, y, 16777215);
-                //ImprovedVBE._DrawACSIIString(t.Item4.ToString(), x + 200, y, 16777215);
+                //ImprovedVBE._DrawACSIIString(Tasks[indicator].Item1, x, y, 16777215);
+                //ImprovedVBE._DrawACSIIString(Tasks[indicator].Item4.ToString(), x + 200, y, 16777215);
                 //y += 25;
-            }
-            */
-            int y_y = 100;
-
-            //ImprovedVBE._DrawACSIIString(Task_Manager.calculators.Count.ToString(), 100, y_y, 0);
-
-            for (int i = 0; i < calculators.Count; i++)
-            {
-                for (int j = 0; j < calculators.Count - i - 1; j++)
-                {
-                    if (calculators[j].z > calculators[j + 1].z)
-                    {
-                        // Swap objects
-                        App temp = calculators[j];
-                        calculators[j] = calculators[j + 1];
-                        calculators[j + 1] = temp;
-                    }
-                }
-            }
-            for(int i = 0; i < calculators.Count; i++)
-            {
-                calculators[i].z = i;
-            }
-            Menumgr.z_axis = calculators.Count + 1;
-            foreach (var c in Task_Manager.calculators)
-            {
-                if (c.desk_ID == Applications.MultiDesk.Core.Current_Desktop)
-                {
-                    if (c.minimised == false)
-                    {
-                        c.App();
-                    }
-                    if (leftorright == true)
-                    {
-                        ImprovedVBE.DrawImageAlpha(Button, left, 2);
-                        ImprovedVBE._DrawACSIIString(c.name, left + 6, 2, 16777215);
-
-                        if (MouseManager.MouseState == MouseState.Left)
-                        {
-                            clicked = true;
-                        }
-                        if(clicked == true)
-                        {
-                            if(MouseManager.MouseState == MouseState.None)
-                            {
-                                if (Kernel.X > left && Kernel.X < left + 84)
-                                {
-                                    if (Kernel.Y > 5 && Kernel.Y < 30)
-                                    {
-                                        if (c.minimised == true)
-                                        {
-                                            c.minimised = false;
-                                            clicked = false;
-                                        }
-                                        else
-                                        {
-                                            c.minimised = true;
-                                            clicked = false;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        left -= 94;
-                        leftorright = false;
-                    }
-                    else
-                    {
-                        ImprovedVBE.DrawImageAlpha(Button, right, 2);
-                        ImprovedVBE._DrawACSIIString(c.name, right + 6, 2, 16777215);//16777215
-                        if (MouseManager.MouseState == MouseState.Left)
-                        {
-                            clicked = true;
-                        }
-                        if (clicked == true)
-                        {
-                            if (MouseManager.MouseState == MouseState.None)
-                            {
-                                if (Kernel.X > right && Kernel.X < right + 84)
-                                {
-                                    if (Kernel.Y > 5 && Kernel.Y < 30)
-                                    {
-                                        if (c.minimised == true)
-                                        {
-                                            c.minimised = false;
-                                            clicked = false;
-                                        }
-                                        else
-                                        {
-                                            c.minimised = true;
-                                            clicked = false;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        right += 94;
-                        leftorright = true;
-                    }
-                }
-
-                indicator++;
             }
 
             try
@@ -672,9 +560,9 @@ namespace CrystalOS2.Applications.Task_Scheduler
             editor_counter = 0;
             filemgr_counter = 0;
 
-            //left = ImprovedVBE.width / 2 - 112;
-            //right = ImprovedVBE.width / 2 + 10;
-            //leftorright = false;
+            left = 810;
+            right = 973;
+            leftorright = false;
 
             //The task_Manager app itself
             #region start
@@ -682,9 +570,9 @@ namespace CrystalOS2.Applications.Task_Scheduler
             {
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > Int_Manager.Calculator_X + 623 && Kernel.X < Int_Manager.Calculator_X + 644)
+                    if (MouseManager.X > Int_Manager.Calculator_X + 623 && MouseManager.X < Int_Manager.Calculator_X + 644)
                     {
-                        if (Kernel.Y > Int_Manager.Calculator_Y + 8 && Kernel.Y < Int_Manager.Calculator_Y + 24)
+                        if (MouseManager.Y > Int_Manager.Calculator_Y + 8 && MouseManager.Y < Int_Manager.Calculator_Y + 24)
                         {
                             count = -1;
                             Bool_Manager.Taskman = false;
@@ -704,13 +592,13 @@ namespace CrystalOS2.Applications.Task_Scheduler
                     ImprovedVBE.DrawFilledRectangle(7030482, Int_Manager.Calculator_X + 1, Int_Manager.Calculator_Y + 43 + count * 20, 648, 20);
                 }
 
-                foreach (Tuple<string, int, int, bool, string, bool, int> s in Tasks)
+                foreach (Tuple<string, int, int, bool, string, bool> s in Tasks)
                 {
                     if(MouseManager.MouseState == MouseState.Left)
                     {
-                        if (Kernel.X > Int_Manager.Calculator_X && Kernel.X < Int_Manager.Calculator_X + 650)
+                        if (MouseManager.X > Int_Manager.Calculator_X && MouseManager.X < Int_Manager.Calculator_X + 650)
                         {
-                            if (Kernel.Y > Int_Manager.Calculator_Y + a && Kernel.Y < Int_Manager.Calculator_Y + a + 20)
+                            if (MouseManager.Y > Int_Manager.Calculator_Y + a && MouseManager.Y < Int_Manager.Calculator_Y + a + 20)
                             {
                                 count = (a - 45) / 20;
                             }
@@ -723,9 +611,9 @@ namespace CrystalOS2.Applications.Task_Scheduler
 
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > Int_Manager.Calculator_X + 541 && Kernel.X < Int_Manager.Calculator_X + 642)
+                    if (MouseManager.X > Int_Manager.Calculator_X + 541 && MouseManager.X < Int_Manager.Calculator_X + 642)
                     {
-                        if (Kernel.Y > Int_Manager.Calculator_Y + 351 && Kernel.Y < Int_Manager.Calculator_Y + 393)
+                        if (MouseManager.Y > Int_Manager.Calculator_Y + 351 && MouseManager.Y < Int_Manager.Calculator_Y + 393)
                         {
                             try
                             {
@@ -742,9 +630,9 @@ namespace CrystalOS2.Applications.Task_Scheduler
 
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > Int_Manager.Calculator_X && Kernel.X < Int_Manager.Calculator_X + 420)
+                    if (MouseManager.X > Int_Manager.Calculator_X && MouseManager.X < Int_Manager.Calculator_X + 420)
                     {
-                        if (Kernel.Y > Int_Manager.Calculator_Y && Kernel.Y < Int_Manager.Calculator_Y + 20)
+                        if (MouseManager.Y > Int_Manager.Calculator_Y && MouseManager.Y < Int_Manager.Calculator_Y + 20)
                         {
                             movable = true;
                         }
@@ -754,24 +642,18 @@ namespace CrystalOS2.Applications.Task_Scheduler
                 {
                     if (MouseManager.MouseState == MouseState.Right)
                     {
-                        Int_Manager.Calculator_X = (int)Kernel.X;
-                        Int_Manager.Calculator_Y = (int)Kernel.Y;
+                        Int_Manager.Calculator_X = (int)MouseManager.X;
+                        Int_Manager.Calculator_Y = (int)MouseManager.Y;
                         movable = false;
                     }
                     else
                     {
-                        Int_Manager.Calculator_X = (int)Kernel.X;
-                        Int_Manager.Calculator_Y = (int)Kernel.Y;
+                        Int_Manager.Calculator_X = (int)MouseManager.X;
+                        Int_Manager.Calculator_Y = (int)MouseManager.Y;
                     }
                 }
             }
             #endregion start
-            cycle++;
-            if (MouseManager.MouseState == MouseState.None && cycle > 25)
-            {
-                clicked = false;
-                cycle = 0;
-            }
         }
     }
 }

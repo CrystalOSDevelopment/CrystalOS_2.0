@@ -1,61 +1,62 @@
 ﻿using Cosmos.Core.IOGroup;
 using Cosmos.HAL.Drivers;
-using Cosmos.System;
 using Cosmos.System.Graphics;
 using CrystalOS.SystemFiles;
-using CrystalOS2;
 using IL2CPU.API.Attribs;
+using CrystalOS2.SystemFiles;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Numerics;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using Image = Cosmos.System.Graphics.Image;
+using MOOS.Misc;
 
 namespace CrystalOS2
 {
     public class ImprovedVBE
     {
-        [ManifestResourceStream(ResourceName = "CrystalOS2.90_Style.bmp")] public static byte[] VBECanvas;
-        //Comment out from here
-        [ManifestResourceStream(ResourceName = "CrystalOS2.autumn.bmp")] public static byte[] autumn;
-        [ManifestResourceStream(ResourceName = "CrystalOS2.Midnight_in_NY.bmp")] public static byte[] midnight_in_NY;
-        [ManifestResourceStream(ResourceName = "CrystalOS2.Windows_puma.bmp")] public static byte[] Windows_Puma;
+        //public static byte[] frame_buffer;
+        //public static Bitmap frame = new Bitmap(frame_buffer);
 
-        [ManifestResourceStream(ResourceName = "CrystalOS2.Arial_16.btf")] public static byte[] Arial;
-        //All the way to here
-
-        //These are black images matching the size exacly the resolution
-        public static Bitmap cover = new Bitmap(VBECanvas);//The base canvas
-        public static Bitmap data = new Bitmap(VBECanvas);//To reset the base canvas
-        //You could comment these out
+        [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.90_Style.bmp")] public static byte[] Canvas;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.autumn.bmp")] public static byte[] autumn;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.Midnight_in_NY.bmp")] public static byte[] midnight_in_NY;
+        [ManifestResourceStream(ResourceName = "CrystalOS2.SystemFiles.Windows_puma.bmp")] public static byte[] Windows_Puma;
+        //public static int[] data;
+        public static Bitmap cover = new Bitmap(Canvas);
+        public static Bitmap data = new Bitmap(Canvas);
         public static Bitmap data2 = new Bitmap(autumn);
         public static Bitmap data3 = new Bitmap(midnight_in_NY);
         public static Bitmap data4 = new Bitmap(Windows_Puma);
-        //till here
 
-        public static int width = 1024;
-        public static int height = 768;
-
-        public static void display(VBECanvas c)
+        public void init()
         {
-            c.DrawImage(cover, 0, 0);
+            //cover = new Bitmap(Canvas);
+        }
+        public void display(Canvas c)
+        {
+            c.DrawImage(cover, 1, 1);
             //clear(c, Color.Black);
             //cover.RawData = data.RawData;
             clear(c, Color.Black);
         }
 
-        public static void clear(VBECanvas c, Color col)
+        public static void clear(Canvas c, Color col)
         {
             int x = 0;
-            if (Bool_Manager.wallp == "autumn")
+            if(Bool_Manager.wallp == "autumn")
             {
-                data2.RawData.CopyTo(cover.RawData, 0);//Use one of these to copy the clean bitmap onto the used one.
+                /*
+                foreach (int i in cover.RawData)
+                {
+                    cover.RawData[x] = data2.RawData[x];
+                    x++;
+                }*/
+                data2.RawData.CopyTo(cover.RawData, 0);
             }
             else if (Bool_Manager.wallp == "90_Style")
             {
@@ -88,7 +89,7 @@ namespace CrystalOS2
                 }*/
                 data3.RawData.CopyTo(cover.RawData, 0);
             }
-            else if (Bool_Manager.wallp == "Lock_Screen")
+            else if(Bool_Manager.wallp == "Lock_Screen")
             {
                 /*
                 foreach (int i in cover.RawData)
@@ -96,185 +97,329 @@ namespace CrystalOS2
                     cover.RawData[x] = Lock_Screen.screen.RawData[x];
                     x++;
                 }*/
-                //Lock_Screen.screen.RawData.CopyTo(cover.RawData, 0);
+                Lock_Screen.screen.RawData.CopyTo(cover.RawData, 0);
+            }
+        }
+        public static void DrawPixel(Canvas c, int x, int y, Color col)
+        {
+            if (y * 1920 == 0)
+            {
+                y = 1;
+                cover.RawData[x * y] = col.ToArgb();
+            }
+            else
+            {
+                cover.RawData[(y * 1920) - (1920 - x)] = col.ToArgb();
             }
         }
         public static void DrawPixelfortext(int x, int y, int color)
         {
             //16777215 white
-            if (x > 0 && x < width && y > 0 && y < height)
+            try
             {
-                cover.RawData[y * width + x] = color;
+                if((y * 1920) - (1920 - x) < 1920 * 1080)
+                {
+                    if (y * 1920 == 0)
+                    {
+                        y = 1;
+                        cover.RawData[x * y] = color;
+                    }
+                    else
+                    {
+                        cover.RawData[(y * 1920) - (1920 - x)] = color;
+                    }
+                }
             }
+            catch { }
         }
 
         public static void DrawFilledRectangle(int color, int X, int Y, int Width, int Height)
         {
-            /*
-            int r = (color & 0xff0000) >> 16;
-            int g = (color & 0x00ff00) >> 8;
-            int b = (color & 0x0000ff);
-
-            float blendFactor = 0.5f;
-            float inverseBlendFactor = 1 - blendFactor;
-
             for (int j = Y; j < Y + Height; j++)
             {
                 for (int i = X; i < X + Width; i++)
                 {
-                    int r3 = (cover.RawData[j * width + i] & 0xff0000) >> 16;
-                    int g3 = (cover.RawData[j * width + i] & 0x00ff00) >> 8;
-                    int b3 = (cover.RawData[j * width + i] & 0x0000ff);
-                    //Color c = Color.FromArgb(cover.RawData[j * width + i]);
+                    try
+                    {
+                        cover.RawData[(j * 1920) - (1920 - i)] = color;
+                    }
+                    catch
+                    {
 
-                    int r2 = (int)(inverseBlendFactor * r3 + blendFactor * r);
-                    int g2 = (int)(inverseBlendFactor * g3 + blendFactor * g);
-                    int b2 = (int)(inverseBlendFactor * b3 + blendFactor * b);
-
-                    DrawPixelfortext(i, j, colourToNumber(r2, g2, b2));
-                }
-            }*/
-            
-            if(X <= width && Y < height)
-            {
-                int[] line = new int[Width];
-                if(X < 0)
-                {
-                    line = new int[Width + X];
-                }
-                else if (X + Width > width)
-                {
-                    line = new int[Width - (X + Width - width)];
-                }
-                Array.Fill(line, color);
-
-                for (int i = Y; i < Y + Height; i++)
-                {
-                    Array.Copy(line, 0, cover.RawData, (i * width) + X, line.Length);
+                    }
                 }
             }
-            
+        }
+        /*public static void DrawLine(int color, int dx, int dy, int x1, int y1)
+        {
+            //DrawFilledRectangle(color, X, Y, 1, Height);
+
+            int i, sdx, sdy, dxabs, dyabs, x, y, px, py;
+
+            dxabs = Math.Abs(dx);
+            dyabs = Math.Abs(dy);
+            sdx = Math.Sign(dx);
+            sdy = Math.Sign(dy);
+            x = dyabs >> 1;
+            y = dxabs >> 1;
+            px = x1;
+            py = y1;
+
+            if (dxabs >= dyabs) /* the line is more horizontal than vertical /
+            {
+                for (i = 0; i < dxabs; i++)
+                {
+                    y += dyabs;
+                    if (y >= dxabs)
+                    {
+                        y -= dxabs;
+                        py += sdy;
+                    }
+                    px += sdx;
+                    DrawPixelfortext(px, py, color);
+                }
+            }
+            else /* the line is more vertical than horizontal /
+            {
+                for (i = 0; i < dyabs; i++)
+                {
+                    x += dxabs;
+                    if (x >= dyabs)
+                    {
+                        x -= dyabs;
+                        px += sdx;
+                    }
+                    py += sdy;
+                    DrawPixelfortext(px, py, color);
+                }
+            }
+        }*/
+
+        public static void DrawDiagonalLine(int color, int dx, int dy, int x1, int y1)
+        {
+            int i, sdx, sdy, dxabs, dyabs, x, y, px, py;
+
+            dxabs = Math.Abs(dx);
+            dyabs = Math.Abs(dy);
+            sdx = Math.Sign(dx);
+            sdy = Math.Sign(dy);
+            x = dyabs >> 1;
+            y = dxabs >> 1;
+            px = x1;
+            py = y1;
+
+            if (dxabs >= dyabs) /* the line is more horizontal than vertical */
+            {
+                for (i = 0; i < dxabs; i++)
+                {
+                    y += dyabs;
+                    if (y >= dxabs)
+                    {
+                        y -= dxabs;
+                        py += sdy;
+                    }
+                    px += sdx;
+                    DrawPixelfortext(px, py, color);
+                }
+            }
+            else /* the line is more vertical than horizontal */
+            {
+                for (i = 0; i < dyabs; i++)
+                {
+                    x += dxabs;
+                    if (x >= dyabs)
+                    {
+                        x -= dyabs;
+                        px += sdx;
+                    }
+                    py += sdy;
+                    DrawPixelfortext(px, py, color);
+                }
+            }
         }
 
-        //Slower but can be improved with Array.Copy();
+        public static void TrimLine(ref int x1, ref int y1, ref int x2, ref int y2)
+        {
+            // in case of vertical lines, no need to perform complex operations
+            if (x1 == x2)
+            {
+                x1 = (int)Math.Min(1920 - 1, Math.Max(0, x1));
+                x2 = x1;
+                y1 = (int)Math.Min(1080 - 1, Math.Max(0, y1));
+                y2 = (int)Math.Min(1080 - 1, Math.Max(0, y2));
+
+                return;
+            }
+
+            // never attempt to remove this part,
+            // if we didn't calculate our new values as floats, we would end up with inaccurate output
+            float x1_out = x1, y1_out = y1;
+            float x2_out = x2, y2_out = y2;
+
+            // calculate the line slope, and the entercepted part of the y axis
+            float m = (y2_out - y1_out) / (x2_out - x1_out);
+            float c = y1_out - m * x1_out;
+
+            // handle x1
+            if (x1_out < 0)
+            {
+                x1_out = 0;
+                y1_out = c;
+            }
+            else if (x1_out >= 1920)
+            {
+                x1_out = 1920 - 1;
+                y1_out = (1920 - 1) * m + c;
+            }
+
+            // handle x2
+            if (x2_out < 0)
+            {
+                x2_out = 0;
+                y2_out = c;
+            }
+            else if (x2_out >= 1920)
+            {
+                x2_out = 1920 - 1;
+                y2_out = (1920 - 1) * m + c;
+            }
+
+            // handle y1
+            if (y1_out < 0)
+            {
+                x1_out = -c / m;
+                y1_out = 0;
+            }
+            else if (y1_out >= 1080)
+            {
+                x1_out = (1080 - 1 - c) / m;
+                y1_out = 1080 - 1;
+            }
+
+            // handle y2
+            if (y2_out < 0)
+            {
+                x2_out = -c / m;
+                y2_out = 0;
+            }
+            else if (y2_out >= 1080)
+            {
+                x2_out = (1080 - 1 - c) / m;
+                y2_out = 1080 - 1;
+            }
+
+            // final check, to avoid lines that are totally outside bounds
+            if (x1_out < 0 || x1_out >= 1920 || y1_out < 0 || y1_out >= 1080)
+            {
+                x1_out = 0; x2_out = 0;
+                y1_out = 0; y2_out = 0;
+            }
+
+            if (x2_out < 0 || x2_out >= 1920 || y2_out < 0 || y2_out >= 1080)
+            {
+                x1_out = 0; x2_out = 0;
+                y1_out = 0; y2_out = 0;
+            }
+
+            // replace inputs with new values
+            x1 = (int)x1_out; y1 = (int)y1_out;
+            x2 = (int)x2_out; y2 = (int)y2_out;
+        }
+
+        public static void DrawHorizontalLine(int color, int dx, int x1, int y1)
+        {
+            uint i;
+
+            for (i = 0; i < dx; i++)
+            {
+                DrawPixelfortext((int)(x1 + i), y1, color);
+            }
+        }
+        public static void DrawVerticalLine(int color, int dy, int x1, int y1)
+        {
+            int i;
+
+            for (i = 0; i < dy; i++)
+            {
+                DrawPixelfortext((int)x1, (int)(y1 + i), color);
+            }
+        }
+
+        public static void DrawLine(int color, int x1, int y1, int x2, int y2)
+        {
+            // trim the given line to fit inside the canvas boundries
+            TrimLine(ref x1, ref y1, ref x2, ref y2);
+
+            int dx, dy;
+
+            dx = x2 - x1;      /* the horizontal distance of the line */
+            dy = y2 - y1;      /* the vertical distance of the line */
+
+            if (dy == 0) /* The line is horizontal */
+            {
+                DrawHorizontalLine(color, dx, x1, y1);
+                return;
+            }
+
+            if (dx == 0) /* the line is vertical */
+            {
+                DrawVerticalLine(color, dy, x1, y1);
+                return;
+            }
+
+            /* the line is neither horizontal neither vertical, is diagonal then! */
+            DrawDiagonalLine(color, dx, dy, x1, y1);
+        }
+
         public static void DrawImage(Image image, int x, int y)
         {
-            int[] line = new int[image.Width];
-            if (x < width)
-            {
-                if (x < 0)
-                {
-                    line = new int[image.Width + x];
-                    x = 0;
-                }
-                else if (x + image.Width > width)
-                {
-                    line = new int[image.Width - (x + image.Width - width)];
-                }
-
-                int scan_line = 0;
-                for (int _y = y; _y < y + image.Height; _y++)
-                {
-                    Array.Copy(image.RawData, scan_line * image.Width, cover.RawData, (_y - 1) * width + x, line.Length);
-                    //line.CopyTo(cover.RawData, (_y - 1) * width + x);
-                    scan_line++;
-                }
-            }
-            /*
             int counter = 0;
             int prewy = y;
             for (int _y = y; _y < y + image.Height; _y++)
             {
                 for (int _x = x; _x < x + image.Width; _x++)
                 {
-                    if ((_y * width) - (width - _x) < width * height)
+                    if ((_y * 1920) - (1920 - _x) < 1920 * 1080)
                     {
-                        if (_x > width || _x < 0)
+                        if (_x > 1900)
                         {
-                            //cover.RawData[((_y * width) - (width - _x))] = 0;
+                            //cover.RawData[((_y * 1920) - (1920 - _x))] = 0;
                             counter++;
                         }
                         else
                         {
-                            cover.RawData[_y * width + _x] = image.RawData[counter];
+                            cover.RawData[((_y * 1920) - (1920 - _x))] = image.RawData[counter];
                             counter++;
                         }
                     }
                 }
                 prewy++;
             }
-            */
         }
         public static void DrawImageArray(int Width, int Height, int[] RawData, int x, int y)
         {
-            int[] line = new int[Width];
-            if (x < width)
-            {
-                if (x < 0)
-                {
-                    line = new int[Width + x];
-                    x = 0;
-                }
-                else if (x + Width > width)
-                {
-                    line = new int[Width - (x + Width - width)];
-                }
-
-                int scan_line = 0;
-                for (int _y = y; _y < y + Height; _y++)
-                {
-                    Array.Copy(RawData, scan_line * Width, cover.RawData, (_y - 1) * width + x, line.Length);
-                    //line.CopyTo(cover.RawData, (_y - 1) * width + x);
-                    scan_line++;
-                }
-            }
-            /*
             int counter = 0;
-            int scan_line = 0;
+            int prewy = y;
             for (int _y = y; _y < y + Height; _y++)
             {
-                int[] line = new int[Width];
-
-                Array.Copy(RawData, scan_line * Width, line, 0, Width);
-
-                if (line[0] != 0 || line[^1] != 0)
+                for (int _x = x; _x < x + Width; _x++)
                 {
-                    line.CopyTo(cover.RawData, (_y - 1) * width + x);
-                    //TODO: copy just a specific amount of length
-                    counter += (int)Width;
-                }
-                else
-                {
-                    for (int _x = x; _x < x + Width; _x++)
+                    if ((_y * 1920) - (1920 - _x) < 1920 * 1080)
                     {
-                        if (_y <= height - 1)
+                        if (_x > 1900)
                         {
-                            if (_x <= width)
-                            {
-                                if (RawData[counter] == 0)
-                                {
-                                    counter++;
-                                }
-                                else
-                                {
-                                    cover.RawData[((_y * width) - (width - _x))] = RawData[counter];
-                                    counter++;
-                                }
-                            }
-                            else
-                            {
-                                counter++;
-                            }
+                            cover.RawData[((_y * 1920) - (1920 - _x))] = 0;
+                            counter++;
                         }
                         else
                         {
-                            counter += (int)Width;
+                            cover.RawData[((_y * 1920) - (1920 - _x))] = RawData[counter];
+                            counter++;
                         }
                     }
                 }
-                scan_line++;
+                prewy++;
             }
-            */
         }
 
         public static void DrawImageAlpha2(Image image, int x, int y)
@@ -284,9 +429,9 @@ namespace CrystalOS2
             {
                 for (int _x = x; _x < x + image.Width; _x++)
                 {
-                    if (_y <= height - 1)
+                    if (_y <= 1079)
                     {
-                        if (_x <= width)
+                        if (_x <= 1920)
                         {
                             if (image.RawData[counter] == 0)
                             {
@@ -294,7 +439,7 @@ namespace CrystalOS2
                             }
                             else
                             {
-                                cover.RawData[((_y * width) - (width - _x))] = image.RawData[counter];
+                                cover.RawData[((_y * 1920) - (1920 - _x))] = 0;
                                 counter++;
                             }
                         }
@@ -311,70 +456,36 @@ namespace CrystalOS2
             }
         }
 
-        //Don't use this!
         public static void DrawImageAlpha(Image image, int x, int y)
         {
-            int[] line = new int[image.Width];
-            if(x < width)
+            int counter = 0;
+            for (int _y = y; _y < y + image.Height; _y++)
             {
-                if (x < 0)
+                for (int _x = x; _x < x + image.Width; _x++)
                 {
-                    line = new int[image.Width + x];
-                    x = 0;
-                }
-                else if (x + image.Width > width)
-                {
-                    line = new int[image.Width - (x + image.Width - width)];
-                }
-
-                int counter = 0;
-                int scan_line = 0;
-                for (int _y = y; _y < y + image.Height; _y++)
-                {
-                    Array.Copy(image.RawData, scan_line * image.Width, line, 0, line.Length);
-
-                    if (line[0] != 0 || line[^1] != 0)
+                    if (_y <= 1079)
                     {
-                        if(_y < height)
+                        if (_x <= 1920)
                         {
-                            line.CopyTo(cover.RawData, _y * width + x);
-                            counter += (int)image.Width;
+                            if (image.RawData[counter] == 0)
+                            {
+                                counter++;
+                            }
+                            else
+                            {
+                                cover.RawData[((_y * 1920) - (1920 - _x))] = image.RawData[counter];
+                                counter++;
+                            }
                         }
                         else
                         {
-                            counter += (int)image.Width;
+                            counter++;
                         }
                     }
                     else
                     {
-                        for (int _x = x; _x < x + image.Width; _x++)
-                        {
-                            if (_y < height)
-                            {
-                                if (_x <= width)
-                                {
-                                    if (image.RawData[counter] == 0)
-                                    {
-                                        counter++;
-                                    }
-                                    else
-                                    {
-                                        cover.RawData[_y * width + _x] = image.RawData[counter];
-                                        counter++;
-                                    }
-                                }
-                                else
-                                {
-                                    counter++;
-                                }
-                            }
-                            else
-                            {
-                                counter += (int)image.Width;
-                            }
-                        }
+                        counter += (int)image.Width;
                     }
-                    scan_line++;
                 }
             }
         }
@@ -382,13 +493,8 @@ namespace CrystalOS2
         static string ASC16Base64 = "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AAB4zMzM2MzGxsbMAAAAAAAA/sbGwMDAwMDAwAAAAAAAAAAA/mxsbGxsbGwAAAAAAAAA/sZgMBgwYMb+AAAAAAAAAAAAftjY2NjYcAAAAAAAAAAAZmZmZmZ8YGDAAAAAAAAAAHbcGBgYGBgYAAAAAAAAAH4YPGZmZjwYfgAAAAAAAAA4bMbG/sbGbDgAAAAAAAA4bMbGxmxsbGzuAAAAAAAAHjAYDD5mZmZmPAAAAAAAAAAAAH7b29t+AAAAAAAAAAAAAwZ+29vzfmDAAAAAAAAAHDBgYHxgYGAwHAAAAAAAAAB8xsbGxsbGxsYAAAAAAAAAAP4AAP4AAP4AAAAAAAAAAAAYGH4YGAAA/wAAAAAAAAAwGAwGDBgwAH4AAAAAAAAADBgwYDAYDAB+AAAAAAAADhsbGBgYGBgYGBgYGBgYGBgYGBgYGNjY2HAAAAAAAAAAABgYAH4AGBgAAAAAAAAAAAAAdtwAdtwAAAAAAAAAOGxsOAAAAAAAAAAAAAAAAAAAAAAAABgYAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAADwwMDAwM7GxsPBwAAAAAANhsbGxsbAAAAAAAAAAAAABw2DBgyPgAAAAAAAAAAAAAAAAAfHx8fHx8fAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==";
         static MemoryStream ASC16FontMS = new MemoryStream(Convert.FromBase64String(ASC16Base64));
 
-        public static MemoryStream memoryStream = new MemoryStream(Arial);
-        public static int Size = 16;
-        public static string charset = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-
         public static void _DrawACSIIString(string s, int x, int y, int color)
         {
-            /*
             string[] lines = s.Split('\n');
             for (int l = 0; l < lines.Length; l++)
             {
@@ -405,7 +511,7 @@ namespace CrystalOS2
                         {
                             if ((fontbuf[i] & (0x80 >> j)) != 0)
                             {
-                                if (x + c * 8 > width)
+                                if(x + c * 8 > 1920)
                                 {
 
                                 }
@@ -418,61 +524,45 @@ namespace CrystalOS2
                     }
                 }
             }
-            */
-            int ext = x;
+        }
 
-            foreach (char c in s)
+        public static void getimagepart(Bitmap image, int x, int y, int width, int height, int draw_x, int draw_y)
+        {
+            int counter = 0;
+            for (int _y = draw_y; _y < draw_y + image.Height; _y++)
             {
-                if (c == '\n')
+                for (int _x = draw_x; _x < draw_x + image.Width; _x++)
                 {
-                    y += 12;
-                    x = ext;
-                }
-                else if (c == ' ')
-                {
-                    x += 10;
-                }
-                else
-                {
-                    if (c == 'l')
+                    if(_y >= draw_y + y && _y <= draw_y + y + height)
                     {
-                        x += 6;
-                    }
-                    int aIndex = charset.IndexOf(c);
-                    int SizePerFont = Size * (Size / 8);
-                    byte[] buffer = new byte[SizePerFont];
-                    memoryStream.Seek(SizePerFont * aIndex, SeekOrigin.Begin);
-                    memoryStream.Read(buffer, 0, buffer.Length);
-
-                    for (int h = 0; h < Size; h++)
-                    {
-                        for (int aw = 0; aw < Size / 8; aw++)
+                        if (_x >= draw_x + x && _x <= draw_x + x + width)
                         {
-                            for (int ww = 0; ww < 8; ww++)
+                            if (image.RawData[counter] == 0)
                             {
-                                if ((buffer[(h * (Size / 8)) + aw] & (0x80 >> ww)) != 0)
-                                {
-                                    DrawPixelfortext((aw * 8) + ww + x, h + y, color);
-                                }
+                                counter++;
+                            }
+                            else
+                            {
+                                cover.RawData[((_y * 1920) - (1920 - _x))] = image.RawData[counter];
+                                counter++;
+                                draw_x++;
                             }
                         }
-                    }
-                    if (char.IsUpper(c) == true && c != 'A')
-                    {
-                        x += 14;
-                    }
-                    else if(c == 'l')
-                    {
-                        x += 6;
+                        else
+                        {
+                            counter++;
+                        }
                     }
                     else
                     {
-                        x += 9;
+                        counter++;
                     }
                 }
+                draw_y++;
             }
         }
 
+        public static int[] temp;
         public static void ScaleImage(Image image, int x, int y)
         {
             int counter = 0;
@@ -484,9 +574,9 @@ namespace CrystalOS2
             {
                 for (int _x = x; _x < x + image.Width * 3; _x++)
                 {
-                    if ((_y * width) - (width - _x) < width * height)
+                    if ((_y * 1920) - (1920 - _x) < 1920 * 1080)
                     {
-                        if (_x >= width)
+                        if (_x > 1920)
                         {
                             counter++;
                         }
@@ -494,13 +584,13 @@ namespace CrystalOS2
                         {
                             if (counter2 % 3 == 0)
                             {
-                                cover.RawData[_y * width + _x] = image.RawData[counter];//((_y * width) - (width - _x))
+                                cover.RawData[((_y * 1920) - (1920 - _x))] = image.RawData[counter];
                                 counter++;
                                 counter2++;
                             }
                             else
                             {
-                                cover.RawData[_y * width + _x] = image.RawData[counter];
+                                cover.RawData[((_y * 1920) - (1920 - _x))] = image.RawData[counter];
                                 counter2++;
                             }
                         }
@@ -510,9 +600,9 @@ namespace CrystalOS2
                 _y += 1;
                 for (int _x = x; _x < x + image.Width * 3; _x++)
                 {
-                    if ((_y * width) - (width - _x) < width * height)
+                    if ((_y * 1920) - (1920 - _x) < 1920 * 1080)
                     {
-                        if (_x > width)
+                        if (_x > 1920)
                         {
                             counter++;
                         }
@@ -520,13 +610,13 @@ namespace CrystalOS2
                         {
                             if (counter2 % 3 == 0)
                             {
-                                cover.RawData[((_y * width) - (width - _x))] = image.RawData[counter];
+                                cover.RawData[((_y * 1920) - (1920 - _x))] = image.RawData[counter];
                                 counter++;
                                 counter2++;
                             }
                             else
                             {
-                                cover.RawData[((_y * width) - (width - _x))] = image.RawData[counter];
+                                cover.RawData[((_y * 1920) - (1920 - _x))] = image.RawData[counter];
                                 counter2++;
                             }
                         }
@@ -536,9 +626,9 @@ namespace CrystalOS2
                 _y += 1;
                 for (int _x = x; _x < x + image.Width * 3; _x++)
                 {
-                    if ((_y * width) - (width - _x) < width * height)
+                    if ((_y * 1920) - (1920 - _x) < 1920 * 1080)
                     {
-                        if (_x > width)
+                        if (_x > 1920)
                         {
                             counter++;
                         }
@@ -546,13 +636,13 @@ namespace CrystalOS2
                         {
                             if (counter2 % 3 == 0)
                             {
-                                cover.RawData[((_y * width) - (width - _x))] = image.RawData[counter];
+                                cover.RawData[((_y * 1920) - (1920 - _x))] = image.RawData[counter];
                                 counter++;
                                 counter2++;
                             }
                             else
                             {
-                                cover.RawData[((_y * width) - (width - _x))] = image.RawData[counter];
+                                cover.RawData[((_y * 1920) - (1920 - _x))] = image.RawData[counter];
                                 counter2++;
                             }
                         }
@@ -566,109 +656,6 @@ namespace CrystalOS2
         public static int colourToNumber(int r, int g, int b)
         {
             return (r << 16) + (g << 8) + (b);
-        }
-
-        public static void line(float x1, float y1, float x2, float y2, int color)
-        {
-            float dx = x2 - x1;
-            float dy = y2 - y1;
-
-            float length = (float)Math.Sqrt(dx * dx + dy * dy);
-
-            float angle = (float)Math.Atan2(dy, dx);
-
-            for (float i = 0; i < length; i++)
-            {
-                ImprovedVBE.DrawPixelfortext((int)(x1 + Math.Cos(angle) * i), (int)(y1 + Math.Sin(angle) * i), color);
-            }
-        }
-
-        /*public static void DrawFilledCircle(int X, int Y, int Width, int Height, int color)
-        {
-            int centerX = Width / 2;
-            int centerY = Height / 2;
-            int radius = Math.Min(centerX, centerY) - 10; // Subtracting a value to leave some margin
-
-            // Draw the circle using vertical lines
-            for (int x = centerX - radius; x <= centerX + radius; x++)
-            {
-                int deltaY = (int)Math.Sqrt(radius * radius - (x - centerX) * (x - centerX));
-                for (int y = centerY - deltaY; y <= centerY + deltaY; y++)
-                {
-                    DrawPixelfortext(x + X, y + Y, color);
-                }
-            }
-        }*/
-
-        public static void DrawGradient()
-        {
-            int width = 400; int height = 200;
-
-            for (int y = 50; y < height; y++) { for (int x = 0; x < width; x++) { int gradientColor = GetGradientColor(x, 0, width, height); DrawPixelfortext(x, y, gradientColor); } }
-        }
-
-        static int GetGradientColor(int x, int y, int width, int height)
-        {
-            int r = (int)((double)x / width * 255); int g = (int)((double)y / height * 255); int b = 255;
-
-            return colourToNumber(r, g, b);
-        }
-
-        public static void DrawGradientLeftToRight()
-        {
-            int width = 400; int height = 200;
-
-            for (int y = 0; y < height; y++)
-            {
-                int gradientColorStart = GetGradientColor(0, 0, width, height); int gradientColorEnd = GetGradientColor(width - 1, 0, width, height);
-
-                int rStart = Color.FromArgb(gradientColorStart).R; int gStart = Color.FromArgb(gradientColorStart).G; int bStart = Color.FromArgb(gradientColorStart).B;
-
-                int rEnd = Color.FromArgb(gradientColorEnd).R; int gEnd = Color.FromArgb(gradientColorEnd).G; int bEnd = Color.FromArgb(gradientColorEnd).B;
-
-                for (int x = 0; x < width; x++)
-                {
-                    int r = (int)((double)x / width * (rEnd - rStart)) + rStart; int g = (int)((double)x / width * (gEnd - gStart)) + gStart; int b = (int)((double)x / width * (bEnd - bStart)) + bStart;
-
-                    DrawPixelfortext(x + 50, y + 50, colourToNumber(r, g, b));
-                }
-            }
-        }
-
-        public static void DrawFilledEllipse(int xCenter, int yCenter, int yR, int xR, int color)
-        {
-            /*
-            int r = (color & 0xff0000) >> 16;
-            int g = (color & 0x00ff00) >> 8;
-            int b = (color & 0x0000ff);
-
-            float blendFactor = 0.5f;
-            float inverseBlendFactor = 1 - blendFactor;
-            */
-            for (int y = -yR; y <= yR; y++)
-            {
-                for (int x = -xR; x <= xR; x++)
-                {
-                    if ((x * x * yR * yR) + (y * y * xR * xR) <= yR * yR * xR * xR)
-                    {
-                        /*
-                        int r3 = (cover.RawData[(yCenter + y) * width + xCenter + x] & 0xff0000) >> 16;
-                        int g3 = (cover.RawData[(yCenter + y) * width + xCenter + x] & 0x00ff00) >> 8;
-                        int b3 = (cover.RawData[(yCenter + y) * width + xCenter + x] & 0x0000ff);
-                        //Color c = Color.FromArgb(cover.RawData[j * width + i]);
-
-                        int r2 = (int)(inverseBlendFactor * r3 + blendFactor * r);
-                        int g2 = (int)(inverseBlendFactor * g3 + blendFactor * g);
-                        int b2 = (int)(inverseBlendFactor * b3 + blendFactor * b);
-                        */
-
-
-                        DrawPixelfortext(xCenter + x, yCenter + y, GetGradientColor(x, 0, width, height));
-
-                        //DrawPixelfortext(xCenter + x, yCenter + y, color);
-                    }
-                }
-            }
         }
     }
 }

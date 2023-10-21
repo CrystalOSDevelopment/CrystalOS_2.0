@@ -11,8 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Cosmos.HAL.BlockDevice.Registers;
 using System.Diagnostics.Metrics;
+using CrystalOS2.Graphic_engines;
 using Cosmos.System;
-using CrystalOS2.Applications.Task_Scheduler;
 
 namespace CrystalOS2.Applications.Video_Player
 {
@@ -25,6 +25,8 @@ namespace CrystalOS2.Applications.Video_Player
         [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Video_Player.Shrek.wav")] public static byte[] music;
 
         [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Video_Player.video2.bvf")] public static byte[] video;
+
+        [ManifestResourceStream(ResourceName = "CrystalOS2.test2.png")] public static byte[] image;
         //public static Bitmap frame;
         public static byte[] data = new byte[20054];
 
@@ -54,33 +56,26 @@ namespace CrystalOS2.Applications.Video_Player
             ImprovedVBE.DrawImageAlpha(basic, x, y);
             if(first_startup == true)
             {
-                try
+                var mixer = new AudioMixer();
+                var audioStream = new MemoryAudioStream(new SampleFormat(AudioBitDepth.Bits16, 1, true), 48000, music);
+                var driver = AC97.Initialize(4096);
+                mixer.Streams.Add(audioStream);
+
+                var audioManager = new AudioManager()
                 {
-                    var mixer = new AudioMixer();
-                    var audioStream = new MemoryAudioStream(new SampleFormat(AudioBitDepth.Bits16, 1, true), 48000, music);
-                    var driver = AC97.Initialize(4096);
-                    mixer.Streams.Add(audioStream);
+                    Stream = mixer,
+                    Output = driver
+                };
 
-                    var audioManager = new AudioManager()
-                    {
-                        Stream = mixer,
-                        Output = driver
-                    };
-
-                    if (pause == true)
-                    {
-                        pos = (uint)(48000 * (time + 2));
-                        audioManager.Disable();
-                    }
-                    else
-                    {
-                        audioManager.Enable();
-                        audioStream.Position = pos;
-                    }
+                if (pause == true)
+                {
+                    pos = (uint)(48000 * (time + 2));
+                    audioManager.Disable();
                 }
-                catch
+                else
                 {
-
+                    audioManager.Enable();
+                    audioStream.Position = pos;
                 }
                 first_startup = false;
                 //Array.Copy(video, 0, data, 0, 20053);
@@ -153,9 +148,9 @@ namespace CrystalOS2.Applications.Video_Player
 
             if (MouseManager.MouseState == MouseState.Left)
             {
-                if (Kernel.X > x + 345 && Kernel.X < x + 386)
+                if (MouseManager.X > x + 345 && MouseManager.X < x + 386)
                 {
-                    if (Kernel.Y > y + 96 && Kernel.Y < y + 137)
+                    if (MouseManager.Y > y + 96 && MouseManager.Y < y + 137)
                     {
                         Clicked = true;
                         
@@ -181,9 +176,9 @@ namespace CrystalOS2.Applications.Video_Player
             {
                 if(MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > x && Kernel.X < x + 370)
+                    if (MouseManager.X > x && MouseManager.X < x + 370)
                     {
-                        if (Kernel.Y > y && Kernel.Y < y + 20)
+                        if (MouseManager.Y > y && MouseManager.Y < y + 20)
                         {
                             moove = true;
                         }
@@ -192,30 +187,14 @@ namespace CrystalOS2.Applications.Video_Player
             }
             if(moove == true)
             {
-                x = (int)Kernel.X - 10;
-                y = (int)Kernel.Y - 10;
+                x = (int)MouseManager.X - 10;
+                y = (int)MouseManager.Y - 10;
                 if(MouseManager.MouseState == MouseState.Right)
                 {
                     moove = false;
                 }
             }
-            if (Task_Manager.indicator == Task_Manager.calculators.Count - 1)
-            {
-
-            }
-            else
-            {
-                if (MouseManager.MouseState == MouseState.Left)
-                {
-                    if (Kernel.X > x && Kernel.X < x + basic.Width)
-                    {
-                        if (Kernel.Y > y && Kernel.Y < y + basic.Height)
-                        {
-                            //z = 999;
-                        }
-                    }
-                }
-            }
+            //PNG.FromPNG(image);
         }
 
         public static int FPS = 0;

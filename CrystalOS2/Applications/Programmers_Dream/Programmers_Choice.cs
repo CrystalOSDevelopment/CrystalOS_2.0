@@ -16,13 +16,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Console = System.Console;
 using CrystalOS2.Applications.Programmers_Dream;
-using Kernel = CrystalOS2.Kernel;
-using Microsoft.VisualBasic;
-using CrystalOS2.Applications.Word_Processor;
-using CrystalOS2.Applications;
-using CrystalOS2.Applications.MultiDesk;
-using Youtube_tut.Applications.Calculator;
-using CrystalOS.Applications.Menu;
 
 namespace CrystalOS.Applications.Programmers_Dream
 {
@@ -47,6 +40,7 @@ namespace CrystalOS.Applications.Programmers_Dream
         public static List<string> modified_text = new List<string>();
         public static bool allowedtopass = true;
         public static string hell = "";
+        public static Canvas c;
 
         public static int width = 0;
         public static int height = 0;
@@ -59,49 +53,51 @@ namespace CrystalOS.Applications.Programmers_Dream
 
         [ManifestResourceStream(ResourceName = "CrystalOS2.Applications.Programmers_Dream.programmers_Dream.bmp")] public static byte[] Programmers_Dream;
         public static Bitmap programmers_dream = new Bitmap(Programmers_Dream);
-
-        public static int[] buffer = new int[1024 * 749];
-
-        public static int[] dropdown = new int[71 * 22];
-        public static string sample = "";
-        public static bool update = true;
-        public static bool first = true;
-        public static int help = 0;
-        public static int last_x = 5;
-        public static int last_y = 22;
         public static void Core()
         {
             Graphics_programing1 v = new Graphics_programing1();
             if (Bool_Manager.Programmers_choice == true)
             {
-                ImprovedVBE.DrawImageAlpha(programmers_dream, 0, 30);
+                //ImprovedVBE.DrawImageAlpha(programmers_dream, 0, 30);
 
-                programmers_dream.RawData.CopyTo(ImprovedVBE.cover.RawData, 20 * ImprovedVBE.width);
+                programmers_dream.RawData.CopyTo(ImprovedVBE.cover.RawData, 29 * 1920);
 
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > 1875 && Kernel.X < 1919)
+                    if (MouseManager.X > 1875 && MouseManager.X < 1919)
                     {
-                        if (Kernel.Y > 30 && Kernel.Y < 47)
+                        if (MouseManager.Y > 30 && MouseManager.Y < 47)
                         {
                             Bool_Manager.Programmers_choice = false;
                         }
                     }
+                    /*
+                    if (movable == false)
+                    {
+                        if (MouseManager.X > Int_Manager.Text_Editor_X && MouseManager.X < Int_Manager.Text_Editor_X + 352)
+                        {
+                            if (MouseManager.Y > Int_Manager.Text_Editor_Y && MouseManager.Y < Int_Manager.Text_Editor_Y + 18)
+                            {
+                                movable = true;
+                            }
+                        }
+                    }
+                    */
                 }
+
                 if(MouseManager.MouseState == MouseState.Left)
                 {
-                    if(Kernel.X > 297 && Kernel.X < 384)//184, 248
+                    if(MouseManager.X > 297 && MouseManager.X < 384)//184, 248
                     {
-                        if(Kernel.Y > 20 + 42 && Kernel.Y < 20 + 61)
+                        if(MouseManager.Y > 30 + 42 && MouseManager.Y < 30 + 61)
                         {
                             try
                             {
                                 get_script_and_run = true;
                                 if (get_script_and_run == true)
                                 {
-                                    if(sample.StartsWith("/app mode = graphical".ToLower()))
+                                    if(content.StartsWith("/app mode = graphical".ToLower()))
                                     {
-                                        /*
                                             Window_Layout.text.Clear();
                                             Window_Layout.Integers.Clear();
                                             Window_Layout.buttons_funct.Clear();
@@ -109,20 +105,6 @@ namespace CrystalOS.Applications.Programmers_Dream
                                             Window_Layout.buttons.Clear();
                                             Window_Layout.instructions_list.Clear();
                                         Graphical_Exec(content);
-                                        */
-                                        Demo_window d = new Demo_window();
-                                        d.x = Menu.Menumgr.z;
-                                        d.y = Menu.Menumgr.c;
-                                        d.name = "Demo";
-                                        d.width = 402;
-                                        d.height = 302;
-                                        d.desk_ID = CrystalOS2.Applications.MultiDesk.Core.Current_Desktop;
-                                        d.minimised = false;
-                                        d.z = Menumgr.z_axis;
-                                        d.source = sample;
-
-                                        d.App();
-
                                         get_script_and_run = false;
                                     }
                                     else if(content.StartsWith("/app mode = console".ToLower()))
@@ -170,16 +152,16 @@ namespace CrystalOS.Applications.Programmers_Dream
                             }
                         }
                     }
-                    if(Kernel.X > 10 && Kernel.X < 115)
+                    if(MouseManager.X > 10 && MouseManager.X < 115)
                     {
-                        if(Kernel.Y > 52 && Kernel.Y < 78)
+                        if(MouseManager.Y > 52 && MouseManager.Y < 78)
                         {
                             //Add & remove method
                         }
                     }
-                    if(Kernel.X > 126 && Kernel.X < 166)
+                    if(MouseManager.X > 126 && MouseManager.X < 166)
                     {
-                        if(Kernel.Y > 52 && Kernel.Y < 78)
+                        if(MouseManager.Y > 52 && MouseManager.Y < 78)
                         {
                             if (File.Exists("0:\\demo.run"))
                             {
@@ -190,11 +172,9 @@ namespace CrystalOS.Applications.Programmers_Dream
                         }
                     }
                 }
-                
                 if (allowedtopass == true)
                 {
-                    //ImprovedVBE.DrawFilledRectangle(16777215, 4 + char_count * 8, 115 + line_count * 16, 1, 16);
-                    /*
+                    ImprovedVBE.DrawFilledRectangle(16777215, 4 + char_count * 8, 115 + line_count * 16, 1, 16);
                     KeyEvent key;
                     if (KeyboardManager.TryReadKey(out key))
                     {
@@ -324,128 +304,11 @@ namespace CrystalOS.Applications.Programmers_Dream
                             }
                         }
                     }
-                    */
-
-                    int x = 5;
-                    int y = 20;
-                    if (first == true)
-                    {
-                        Array.Copy(programmers_dream.RawData, 1024 * 59, buffer, 0, 1024 * 709);//652
-
-                        first = false;
-                    }
-                    if (update == true)
-                    {
-                        buffer = Word_processor.draw_text(sample, x, y, ImprovedVBE.colourToNumber(255, 255, 255), buffer, 1024, help);
-                        update = false;
-                    }
-
-                    if (Kernel.Keyboard_cur == false)
-                    {
-                        
-                        KeyEvent key;
-                        if (KeyboardManager.TryReadKey(out key))
-                        {
-                            if (key.Key == ConsoleKeyEx.Backspace)
-                            {
-                                if (sample.Length != 0)
-                                {
-                                    int wid = 18;
-                                    if (sample[sample.Length - 1] == 'R')
-                                    {
-                                        wid = 20;
-                                    }
-                                    sample = sample.Remove(sample.Length - 1);
-
-                                    for (int j = 0; j < 18; j++)
-                                    {
-                                        if (sample.Length > 0)
-                                        {
-                                            if (Last(sample) == 0)
-                                            {
-                                                last_x = (sample.Length - Last(sample)) * 13 + 5;
-                                            }
-                                            else
-                                            {
-                                                last_x = (sample.Length - Last(sample) - 1) * 13 + 5;
-                                            }
-                                            last_y = Count(sample) * 16 + 22;
-                                        }
-                                        else
-                                        {
-                                            last_x = 5;
-                                        }
-                                        Array.Copy(programmers_dream.RawData, 1024 * 80 + 5, buffer, (last_y + j) * 1024 + last_x, wid);
-                                    }
-                                }
-                                if (sample.Length >= 10)
-                                {
-                                    help = sample.Length - 10;
-                                }
-                                else
-                                {
-                                    help = 0;
-                                }
-                                update = true;
-                            }
-                            else if (key.Key == ConsoleKeyEx.Enter || key.Key == ConsoleKeyEx.NumEnter)
-                            {
-                                sample += "\n";
-                                if (sample.Length >= 10)
-                                {
-                                    help = sample.Length - 10;
-                                }
-                                else
-                                {
-                                    help = 0;
-                                }
-                                last_x = 5;
-                                last_y += 16;
-                                update = true;
-                            }
-                            else
-                            {
-                                if (ImprovedVBE.charset.Contains(key.KeyChar) || key.KeyChar == ' ')
-                                {
-                                    sample += key.KeyChar;
-                                    last_x = sample.Length * 13 - 13 + 5;
-                                    if (sample.Length >= 10)
-                                    {
-                                        help = sample.Length - 10;
-                                    }
-                                    else
-                                    {
-                                        help = 0;
-                                    }
-                                }
-                                if(sample.Length - Last(sample) > 58)
-                                {
-                                    sample += "\n";
-                                    if (sample.Length >= 10)
-                                    {
-                                        help = sample.Length - 10;
-                                    }
-                                    else
-                                    {
-                                        help = 0;
-                                    }
-                                    last_x = 5;
-                                    last_y += 16;
-                                }
-                                update = true;
-                            }
-                        }
-                            
-                    }
-
-                    //buffer.CopyTo(ImprovedVBE.cover.RawData, 1024 * 59);
-                    ImprovedVBE.DrawImageArray(1024, 709, buffer, 0, 78);
-                    
                 }
                 if (movable == true)
                 {
-                    Int_Manager.Text_Editor_X = (int)Kernel.X;
-                    Int_Manager.Text_Editor_Y = (int)Kernel.Y;
+                    Int_Manager.Text_Editor_X = (int)MouseManager.X;
+                    Int_Manager.Text_Editor_Y = (int)MouseManager.Y;
                     if (MouseManager.MouseState == MouseState.Right)
                     {
                         movable = false;
@@ -501,39 +364,9 @@ namespace CrystalOS.Applications.Programmers_Dream
                 var_value_int.Clear();
                 modified_text.Clear();
                 ImprovedVBE._DrawACSIIString(hell, 500, 884, 16777215);
-                
             }
         }
 
-        public static int Last(string s)
-        {
-            int i = 0;
-            int temp = 0;
-            if (s.Contains("\n"))
-            {
-                foreach (char c in s)
-                {
-                    if (c == '\n')
-                    {
-                        i = temp;
-                    }
-                    temp++;
-                }
-            }
-            return i;
-        }
-        public static int Count(string s)
-        {
-            int i = 0;
-            foreach (char c in s)
-                {
-                    if (c == '\n')
-                    {
-                        i++;
-                    }
-                }
-            return i;
-        }
         public static void CSharp(string script)
         {
             try
@@ -807,7 +640,7 @@ namespace CrystalOS.Applications.Programmers_Dream
                         Things_to_Display.Add(cont);
                         cont = "";
                     }
-                    if ((instruction_list[i].StartsWith("CrystalOS2.CreateFile(\"") || instruction_list[i].StartsWith("filesystem.createfile(\"")) && instruction_list[i].EndsWith("\")"))
+                    if ((instruction_list[i].StartsWith("FileSystem.CreateFile(\"") || instruction_list[i].StartsWith("filesystem.createfile(\"")) && instruction_list[i].EndsWith("\")"))
                     {
                         string s = instruction_list[i].Remove(0, 23);
                         s = s.Remove(s.Length - 2);
@@ -838,7 +671,7 @@ namespace CrystalOS.Applications.Programmers_Dream
                             }
                         }
                     }
-                    if ((instruction_list[i].StartsWith("CrystalOS2.RemoveFile(\"") || instruction_list[i].StartsWith("filesystem.removefile(\"")) && instruction_list[i].EndsWith("\")"))
+                    if ((instruction_list[i].StartsWith("FileSystem.RemoveFile(\"") || instruction_list[i].StartsWith("filesystem.removefile(\"")) && instruction_list[i].EndsWith("\")"))
                     {
                         string s = instruction_list[i].Remove(0, 23);
                         s = s.Remove(s.Length - 2);
@@ -869,7 +702,7 @@ namespace CrystalOS.Applications.Programmers_Dream
                             }
                         }
                     }
-                    if ((instruction_list[i].StartsWith("CrystalOS2.CreateFolder(\"") || instruction_list[i].StartsWith("filesystem.createfolder(\"")) && instruction_list[i].EndsWith("\")"))
+                    if ((instruction_list[i].StartsWith("FileSystem.CreateFolder(\"") || instruction_list[i].StartsWith("filesystem.createfolder(\"")) && instruction_list[i].EndsWith("\")"))
                     {
                         string s = instruction_list[i].Remove(0, 25);
                         s = s.Remove(s.Length - 2);
@@ -900,7 +733,7 @@ namespace CrystalOS.Applications.Programmers_Dream
                             }
                         }
                     }
-                    if ((instruction_list[i].StartsWith("CrystalOS2.RemoveFolder(\"") || instruction_list[i].StartsWith("filesystem.removefolder(\"")) && instruction_list[i].EndsWith("\")"))
+                    if ((instruction_list[i].StartsWith("FileSystem.RemoveFolder(\"") || instruction_list[i].StartsWith("filesystem.removefolder(\"")) && instruction_list[i].EndsWith("\")"))
                     {
                         string s = instruction_list[i].Remove(0, 25);
                         s = s.Remove(s.Length - 2);
@@ -931,7 +764,7 @@ namespace CrystalOS.Applications.Programmers_Dream
                             }
                         }
                     }
-                    if ((instruction_list[i].StartsWith("CrystalOS2.ReadFromFile(\"") || instruction_list[i].StartsWith("filesystem.readfromfile(\"")) && instruction_list[i].EndsWith("\")"))
+                    if ((instruction_list[i].StartsWith("FileSystem.ReadFromFile(\"") || instruction_list[i].StartsWith("filesystem.readfromfile(\"")) && instruction_list[i].EndsWith("\")"))
                     {
                         //25
                         string cleaned = instruction_list[i].Remove(0, 25);
@@ -1034,7 +867,7 @@ namespace CrystalOS.Applications.Programmers_Dream
                                 Task_Manager.Tasks.RemoveAt(x);
                             }
                         }
-                        Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string, bool, int>("new_app " + lasti.ToString(), int.Parse(data[0]), int.Parse(data[1]), false, code, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                        Task_Manager.Tasks.Add(new Tuple<string, int, int, bool, string, bool>("new_app " + lasti.ToString(), int.Parse(data[0]), int.Parse(data[1]), false, code, true));
                         lasti++;
                         //ImprovedVBE.DrawFilledRectangle(150, int.Parse(data[0]), int.Parse(data[1]), int.Parse(data[2]), int.Parse(data[3]));
                     }

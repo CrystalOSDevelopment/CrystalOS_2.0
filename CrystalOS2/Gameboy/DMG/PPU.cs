@@ -26,7 +26,7 @@ namespace ProjectDMG {
 
         public PPU() {
             bmp = new DirectBitmap();
-            //ImprovedVBE.DrawImage(bmp.Bitmap, x, y);
+            ImprovedVBE.DrawImage(bmp.Bitmap, x, y);
         }
 
         public void update(int cycles, MMU mmu) {
@@ -254,7 +254,7 @@ namespace ProjectDMG {
         public void RenderFrame() {
             //window.pictureBox.Refresh();
             //ImprovedVBE.DrawImage(bmp.Bitmap, x, y);
-            //ImprovedVBE.ScaleImage(bmp.Bitmap, x, y);
+            ImprovedVBE.ScaleImage(bmp.Bitmap, x, y);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

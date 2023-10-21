@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kernel = CrystalOS2.Kernel;
 
 namespace CrystalOS.Applications.Text_Editor
 {
@@ -41,9 +40,9 @@ namespace CrystalOS.Applications.Text_Editor
             {
                 if (MouseManager.MouseState == MouseState.Left)
                 {
-                    if (Kernel.X > x + 722 && Kernel.X < x + 750)//780 or add 30 to gain back
+                    if (MouseManager.X > x + 722 && MouseManager.X < x + 750)//780 or add 30 to gain back
                     {
-                        if (Kernel.Y > y + 7 && Kernel.Y < y + 30)
+                        if (MouseManager.Y > y + 7 && MouseManager.Y < y + 30)
                         {
                             //Bool_Manager.Text_Editor_Opened = false;
                             line.RemoveAt(Task_Manager.editor_counter);
@@ -52,15 +51,15 @@ namespace CrystalOS.Applications.Text_Editor
                     }
                     if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == false)
                     {
-                        if (Kernel.X > x && Kernel.X < x + 667)
+                        if (MouseManager.X > x && MouseManager.X < x + 667)
                         {
-                            if (Kernel.Y > y && Kernel.Y < y + 33)
+                            if (MouseManager.Y > y && MouseManager.Y < y + 33)
                             {
-                                int f = (int)Kernel.X;
-                                int g = (int)Kernel.Y;
+                                int f = (int)MouseManager.X;
+                                int g = (int)MouseManager.Y;
                                 //string saves = Task_Manager.Tasks[Task_Manager.indicator].Item5;
                                 Task_Manager.Tasks.RemoveAt(Task_Manager.indicator);
-                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("text_editor", f, g, true, content, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("text_editor", f, g, true, content, true));
                                 int var = line[Task_Manager.editor_counter];
                                 line.RemoveAt(Task_Manager.editor_counter);
                                 line.Insert(0, var);
@@ -79,20 +78,20 @@ namespace CrystalOS.Applications.Text_Editor
                             {
                                 Applications.Text_Editor.Text_Editor.content = Applications.Text_Editor.Text_Editor.content.Remove(Applications.Text_Editor.Text_Editor.content.Length - 1);
                                 Task_Manager.Tasks.RemoveAt(0);
-                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("text_editor", x, y, false, content, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                                Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("text_editor", x, y, false, content, true));
                             }
                         }
                         else if (key.Key == ConsoleKeyEx.Enter)
                         {
                             Text_Editor.content += "\n";
                             Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("text_editor", x, y, false, content, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("text_editor", x, y, false, content, true));
                         }
                         else
                         {
                             Text_Editor.content += key.KeyChar;
                             Task_Manager.Tasks.RemoveAt(0);
-                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("text_editor", x, y, false, content, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                            Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("text_editor", x, y, false, content, true));
                         }
 
                         if (count >= 0)
@@ -153,14 +152,14 @@ namespace CrystalOS.Applications.Text_Editor
                 if (MouseManager.MouseState == MouseState.Left)
                 {
 
-                    if(Kernel.X > x + 734 && Kernel.X < x + 750)
+                    if(MouseManager.X > x + 734 && MouseManager.X < x + 750)
                     {
                         //223
-                        if(Kernel.Y > y + 36 && Kernel.Y < y + 259)
+                        if(MouseManager.Y > y + 36 && MouseManager.Y < y + 259)
                         {
                             line[Task_Manager.editor_counter] -= 1;
                         }
-                        else if (Kernel.Y > y + 259 && Kernel.Y < y + 500)
+                        else if (MouseManager.Y > y + 259 && MouseManager.Y < y + 500)
                         {
                             line[Task_Manager.editor_counter] += 1;
                         }
@@ -340,17 +339,17 @@ namespace CrystalOS.Applications.Text_Editor
                                 */
                 if (Task_Manager.Tasks[Task_Manager.indicator].Item4 == true)
                 {
-                    int f = (int)Kernel.X;
-                    int g = (int)Kernel.Y;
+                    int f = (int)MouseManager.X;
+                    int g = (int)MouseManager.Y;
                     Task_Manager.Tasks.RemoveAt(0);
-                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("text_editor", f, g, true, content, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                    Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("text_editor", f, g, true, content, true));
                     int var = line[Task_Manager.editor_counter];
                     line.RemoveAt(Task_Manager.editor_counter);
                     line.Insert(0, var);
                     if (MouseManager.MouseState == MouseState.Right)
                     {
                         Task_Manager.Tasks.RemoveAt(0);
-                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool, int>("text_editor", f, g, false, content, true, CrystalOS2.Applications.MultiDesk.Core.Current_Desktop));
+                        Task_Manager.Tasks.Insert(0, new Tuple<string, int, int, bool, string, bool>("text_editor", f, g, false, content, true));
                         int var2 = line[Task_Manager.editor_counter];
                         line.RemoveAt(Task_Manager.editor_counter);
                         line.Insert(0, var2);
